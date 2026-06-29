@@ -47,6 +47,9 @@ export default async function InsightsPage({ params }: { params: Promise<{ local
 
         {/* ── ARTICLES ── */}
         <section style={{ padding: '80px 0', background: '#F8FAFC' }}>
+          <style>{`
+            @media(max-width:768px){.insights-grid{grid-template-columns:1fr!important}}
+          `}</style>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
             {articles.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '80px 24px' }}>
@@ -63,7 +66,7 @@ export default async function InsightsPage({ params }: { params: Promise<{ local
                 </p>
               </div>
             ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
+              <div className="insights-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
                 {articles.map(art => {
                   const cat = (art.category as Record<string, string>)?.[lk] ?? '';
                   const title = (art.title as Record<string, string>)?.[lk] ?? '';

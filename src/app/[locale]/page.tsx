@@ -97,7 +97,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
                 <a href="/about" style={btnGhost}>{isEn ? 'About Our Team' : isSc ? '认识我们的团队' : '認識我們的團隊'}</a>
               </div>
               {/* Stats */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 1, background: 'rgba(255,255,255,.15)', border: '1px solid rgba(255,255,255,.15)', marginTop: 40 }}>
+              <div className="hero-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 1, background: 'rgba(255,255,255,.15)', border: '1px solid rgba(255,255,255,.15)', marginTop: 40 }}>
                 {[
                   { num: '4', label: isEn ? 'Core Divisions' : isSc ? '核心业务' : '核心業務' },
                   { num: '10+', label: isEn ? 'Years Experience' : isSc ? '年行业经验' : '年行業經驗' },
@@ -148,7 +148,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         </section>
 
         {/* ══ TICKER ══ */}
-        <div style={{ background: '#091A3E', padding: '10px 0', overflow: 'hidden', borderBottom: '1px solid rgba(255,255,255,.06)' }}>
+        <div style={{ background: '#091A3E', padding: '10px 0', overflow: 'clip', borderBottom: '1px solid rgba(255,255,255,.06)' }}>
           <div style={{ display: 'flex', gap: 0, whiteSpace: 'nowrap', animation: 'ticker-scroll 30s linear infinite' }}>
             {Array(2).fill([
               'MSO 牌照申請', 'SFC 牌照', '美國 MSB / MTL', 'DPMS 登記', 'AML 合規系統',
@@ -191,7 +191,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
               <h2 style={sectionTitle}>{isEn ? 'Four Core Divisions' : isSc ? '四大核心业务' : '四大核心業務'}</h2>
               <div style={goldBar} />
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 0, border: '1px solid #E2E8F0' }}>
+            <div className="divisions-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 0, border: '1px solid #E2E8F0' }}>
               {[
                 {
                   icon: <LicenceIcon />,
@@ -263,7 +263,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         {/* ══ WHY CHOOSE US ══ */}
         <section style={{ padding: '80px 0' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 60, alignItems: 'start' }}>
+            <div className="why-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 60, alignItems: 'start' }}>
               <div>
                 <span style={sectionLabel}>{isEn ? 'OUR ADVANTAGE' : isSc ? '我们的优势' : '我們的優勢'}</span>
                 <h2 style={{ ...sectionTitle, marginBottom: 6 }} dangerouslySetInnerHTML={{ __html: isEn ? 'Why Choose<br/>Sandbox Group?' : isSc ? '为什么选择<br/>Sandbox Group？' : '為什麼選擇<br/>Sandbox Group？' }} />
@@ -281,7 +281,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
                     : '我們不賣理論，我們交付結果。從文件準備、監管溝通到批准後合規，我們幫助企業在不妥協標準的前提下實現目標。'}
                 </p>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, background: '#E2E8F0' }}>
+              <div className="why-cards" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, background: '#E2E8F0' }}>
                 {[
                   { num: '01', title: isEn ? 'Institutional Background' : isSc ? '机构背景' : '機構背景', desc: isEn ? 'Our team brings real-world experience as compliance officers and MLROs at major financial institutions.' : isSc ? '团队成员拥有顶级金融机构合规主管及 MLRO 实战经验。' : '團隊成員擁有頂級金融機構合規主管及 MLRO 實戰經驗。' },
                   { num: '02', title: isEn ? 'One-stop Service' : isSc ? '一站式服务' : '一站式服務', desc: isEn ? 'Licensing, ongoing compliance, corporate services and technology — all under one roof.' : isSc ? '牌照、持续合规、企业服务及科技——尽在一处。' : '牌照、持續合規、企業服務及科技——盡在一處。' },
@@ -309,7 +309,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
               </h2>
               <div style={{ width: 44, height: 3, background: '#C9A84C', margin: '12px auto 36px' }} />
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 2, background: 'rgba(255,255,255,.08)', marginTop: 12 }}>
+            <div className="services-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 2, background: 'rgba(255,255,255,.08)', marginTop: 12 }}>
               {[
                 { href: '/mso', icon: <LicenceIcon />, en: 'MSO Licensing', zh: isSc ? 'MSO 牌照' : 'MSO 牌照', desc: isEn ? 'MSO licence applications, renewals, transfers and AML compliance systems.' : isSc ? 'MSO 牌照申请、续期、转让及 AML 合规系统。' : 'MSO 牌照申請、續期、轉讓及 AML 合規系統。' },
                 { href: '/licensing', icon: <GlobeIcon />, en: 'Cross-border Licensing', zh: isSc ? '跨境牌照' : '跨境牌照', desc: isEn ? 'SFC, US MSB/MTL, Canada MSB, DPMS, Insurance Broker and Money Lenders licences.' : isSc ? 'SFC、美国 MSB/MTL、加拿大 MSB、DPMS、保险中介人及放债人牌照。' : 'SFC、美國 MSB/MTL、加拿大 MSB、DPMS、保險中介人及放債人牌照。' },
@@ -343,7 +343,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
               <h2 style={sectionTitle}>{isEn ? '5-Step Application Process' : isSc ? '五步申请流程' : '五步申請流程'}</h2>
               <div style={{ ...goldBar, margin: '12px auto 36px' }} />
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 0, position: 'relative', marginTop: 48 }}>
+            <div className="steps-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 0, position: 'relative', marginTop: 48 }}>
               {[
                 { title: isEn ? 'Free Initial Consultation' : isSc ? '免费初步咨询' : '免費初步諮詢', desc: isEn ? 'Contact us by WhatsApp or phone. Our advisors respond same-day.' : isSc ? '透过 WhatsApp 或电话联络我们，顾问当天回复。' : '透過 WhatsApp 或電話聯絡我們，顧問當天回覆。' },
                 { title: isEn ? 'Due Diligence Assessment' : isSc ? '尽职审查评估' : '盡職審查評估', desc: isEn ? 'We assess eligibility, corporate structure and AML framework.' : isSc ? '评估申请资格、公司架构及 AML 框架。' : '評估申請資格、公司架構及 AML 框架。' },
@@ -391,7 +391,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
                   {isEn ? 'All Insights' : isSc ? '全部文章' : '全部文章'} →
                 </a>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
+              <div className="articles-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
                 {articles.map(art => {
                   const cat = (art.category as Record<string, string>)?.[lk] ?? '';
                   const title = (art.title as Record<string, string>)?.[lk] ?? '';
@@ -478,9 +478,55 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
 
       <style>{`
         @keyframes ticker-scroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-        @media(max-width:960px){.hero-inner{grid-template-columns:1fr!important;padding:72px 24px!important}}
-        @media(max-width:960px){.hero-card{display:none!important}}
-        @media(max-width:900px){.divisions-grid div{border-right:none!important}}
+
+        /* Hero */
+        @media(max-width:768px){
+          .hero-inner{grid-template-columns:1fr!important;padding:56px 20px 48px!important}
+          .hero-card{display:none!important}
+          .hero-stats{grid-template-columns:repeat(3,1fr)!important}
+        }
+
+        /* Four divisions */
+        @media(max-width:768px){
+          .divisions-grid{grid-template-columns:1fr 1fr!important}
+          .divisions-grid a{border-right:1px solid #E2E8F0!important}
+        }
+        @media(max-width:480px){
+          .divisions-grid{grid-template-columns:1fr!important}
+        }
+
+        /* Why choose us */
+        @media(max-width:768px){
+          .why-grid{grid-template-columns:1fr!important;gap:40px!important}
+          .why-cards{grid-template-columns:1fr 1fr!important}
+        }
+        @media(max-width:480px){
+          .why-cards{grid-template-columns:1fr!important}
+        }
+
+        /* Services grid */
+        @media(max-width:768px){
+          .services-grid{grid-template-columns:1fr 1fr!important}
+        }
+        @media(max-width:480px){
+          .services-grid{grid-template-columns:1fr!important}
+        }
+
+        /* 5-step process */
+        @media(max-width:900px){
+          .steps-grid{grid-template-columns:1fr 1fr!important}
+        }
+        @media(max-width:480px){
+          .steps-grid{grid-template-columns:1fr!important}
+        }
+
+        /* Articles */
+        @media(max-width:768px){
+          .articles-grid{grid-template-columns:1fr!important}
+        }
+
+        /* Prevent horizontal scroll site-wide */
+        body{overflow-x:hidden}
       `}</style>
     </>
   );

@@ -175,11 +175,12 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
               )}
             </div>
 
-            {/* WhatsApp CTA */}
+            {/* WhatsApp CTA — hidden on mobile, shown on desktop */}
             <a
               href={waHref}
               target="_blank"
               rel="noopener noreferrer"
+              className="wa-cta-desktop"
               style={{
                 background: '#EF4444', color: '#fff',
                 padding: '8px 16px', fontFamily: "'Noto Sans TC',sans-serif",
@@ -266,6 +267,7 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
       <style>{`
         @media(min-width:901px){.hamburger{display:none!important}}
         @media(max-width:900px){.desktop-nav{display:none!important}}
+        @media(max-width:900px){.wa-cta-desktop{display:none!important}}
         .dropdown:hover > div:last-child{display:block!important}
       `}</style>
     </>

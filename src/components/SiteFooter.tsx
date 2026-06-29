@@ -11,9 +11,23 @@ export default function SiteFooter({ locale = 'zh-Hant', waNumber = '+8529231825
   const waHref = `https://wa.me/${waNumber.replace(/\D/g, '')}?text=${encodeURIComponent('Hi，我想查詢合規及牌照服務')}`;
 
   return (
-    <footer style={{ background: '#091A3E', color: '#fff', paddingTop: 60 }}>
+    <footer style={{ background: '#091A3E', color: '#fff', paddingTop: 60, overflowX: 'hidden' }}>
+      <style>{`
+        @media(max-width:768px){
+          .footer-grid{
+            grid-template-columns:1fr 1fr!important;
+            gap:32px!important;
+          }
+        }
+        @media(max-width:480px){
+          .footer-grid{
+            grid-template-columns:1fr!important;
+            gap:28px!important;
+          }
+        }
+      `}</style>
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 48, paddingBottom: 48, borderBottom: '1px solid rgba(255,255,255,.1)' }}>
+        <div className="footer-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 48, paddingBottom: 48, borderBottom: '1px solid rgba(255,255,255,.1)' }}>
           {/* Brand */}
           <div>
             <div style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: '1.2rem', color: '#fff', letterSpacing: '.05em', marginBottom: 12 }}>
