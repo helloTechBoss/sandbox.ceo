@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const { locale } = await params;
   const isEn = locale === 'en';
   const isSc = locale === 'zh-Hans';
-  const title = isEn ? 'SFC & Cross-border Licensing — Sandbox Group' : isSc ? 'SFC及跨境牌照 — Sandbox Group' : 'SFC及跨境牌照 — Sandbox Group';
+  const title = isEn ? 'SFC & Cross-border Licensing' : isSc ? 'SFC及跨境牌照' : 'SFC及跨境牌照';
   const description = isEn
     ? 'SFC Type 1–9 licensing, Hong Kong TCSP, US MSB/MTL and cross-border financial licensing. Expert advisory from former regulatory professionals.'
     : isSc
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     description,
     keywords: ['SFC牌照', 'Type 1牌照', 'TCSP牌照', 'MSB牌照', 'MTL牌照', '跨境牌照', 'SFC licensing Hong Kong', 'cross-border licensing'],
     alternates: hreflang('/licensing'),
-    openGraph: { title, description, url: 'https://www.sandbox.ceo/licensing', images: ogImage(title) },
+    openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/licensing', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },
   };
 }

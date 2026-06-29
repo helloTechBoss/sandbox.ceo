@@ -8,14 +8,20 @@ import { OrgJsonLd } from '@/components/JsonLd';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
 
+const HOME_DEFAULTS = {
+  tc: { title: 'Sandbox Group | 香港企業合規與牌照申請專家', description: 'Sandbox Group 為企業提供 MSO 牌照申請、SFC 牌照、AML 合規、公司秘書及合規科技方案。由前金融機構合規主管領導，助您高效取牌、持續合規。' },
+  en: { title: 'Sandbox Group | Hong Kong Compliance & Licensing Specialists', description: 'Sandbox Group provides MSO licensing, SFC licensing, AML compliance, corporate services and RegTech solutions. Led by former banking compliance officers.' },
+  sc: { title: 'Sandbox Group | 香港企业合规与牌照申请专家', description: 'Sandbox Group 为企业提供 MSO 牌照申请、SFC 牌照、AML 合规、公司秘书及合规科技方案。由前金融机构合规主管领导。' },
+};
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
-  const seo = await prisma.seoMeta.findFirst({ where: { page: { slug: 'home' } } });
   const lk = locale === 'zh-Hant' ? 'tc' : locale === 'en' ? 'en' : 'sc';
-  const title = (seo?.title as Record<string, string>)?.[lk] ?? 'Sandbox Group | 香港企業合規與牌照申請專家';
-  const description = (seo?.description as Record<string, string>)?.[lk] ?? '';
+  const seo = await prisma.seoMeta.findFirst({ where: { page: { slug: 'home' } } }).catch(() => null);
+  const title = (seo?.title as Record<string, string>)?.[lk] || HOME_DEFAULTS[lk].title;
+  const description = (seo?.description as Record<string, string>)?.[lk] || HOME_DEFAULTS[lk].description;
   return {
-    title,
+    title: { absolute: title },
     description,
     alternates: {
       canonical: 'https://www.sandbox.ceo/',
@@ -27,10 +33,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
       },
     },
     openGraph: {
+      type: 'website',
       title,
       description,
       url: 'https://www.sandbox.ceo/',
-      images: [{ url: '/og-default.png', width: 1200, height: 630, alt: title }],
+      images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: title }],
     },
     twitter: { card: 'summary_large_image', title, description },
   };

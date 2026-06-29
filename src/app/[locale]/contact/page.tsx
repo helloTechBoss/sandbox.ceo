@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const { locale } = await params;
   const isEn = locale === 'en';
   const isSc = locale === 'zh-Hans';
-  const title = isEn ? 'Contact Us — Sandbox Group' : isSc ? '联络我们 — Sandbox Group' : '聯絡我們 — Sandbox Group';
+  const title = isEn ? 'Contact Us' : isSc ? '联络我们' : '聯絡我們';
   const description = isEn
     ? 'Get immediate expert advice from our compliance and licensing advisory team via WhatsApp. Free initial consultation — reply within 1 hour during business hours.'
     : isSc
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     title,
     description,
     alternates: hreflang('/contact'),
-    openGraph: { title, description, url: 'https://www.sandbox.ceo/contact', images: ogImage(title) },
+    openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/contact', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },
   };
 }

@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const { locale } = await params;
   const isEn = locale === 'en';
   const isSc = locale === 'zh-Hans';
-  const title = isEn ? 'Corporate Services — Sandbox Group' : isSc ? '企业及商业服务 — Sandbox Group' : '企業及商業服務 — Sandbox Group';
+  const title = isEn ? 'Corporate Services' : isSc ? '企业及商业服务' : '企業及商業服務';
   const description = isEn
     ? 'One-stop corporate services in Hong Kong — company incorporation, company secretary, accounting & audit, annual return filing and deregistration.'
     : isSc
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     description,
     keywords: ['香港公司成立', '公司秘書', '會計審計', '周年申報', '企業服務', 'Hong Kong company incorporation', 'company secretary Hong Kong'],
     alternates: hreflang('/corporate'),
-    openGraph: { title, description, url: 'https://www.sandbox.ceo/corporate', images: ogImage(title) },
+    openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/corporate', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },
   };
 }

@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const { locale } = await params;
   const isEn = locale === 'en';
   const isSc = locale === 'zh-Hans';
-  const title = isEn ? 'MSO Licensing — Sandbox Group' : isSc ? 'MSO牌照服务 — Sandbox Group' : 'MSO牌照服務 — Sandbox Group';
+  const title = isEn ? 'MSO Licensing' : isSc ? 'MSO牌照服务' : 'MSO牌照服務';
   const description = isEn
     ? 'Full-service MSO (Money Service Operator) licensing in Hong Kong — new applications, renewals, transfers and AML compliance systems. Approved by Hong Kong Customs.'
     : isSc
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     description,
     keywords: ['MSO牌照', '金錢服務經營者', 'MSO申請', 'AML合規系統', '匯款牌照', 'MSO licensing Hong Kong', 'money service operator'],
     alternates: hreflang('/mso'),
-    openGraph: { title, description, url: 'https://www.sandbox.ceo/mso', images: ogImage(title) },
+    openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/mso', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },
   };
 }

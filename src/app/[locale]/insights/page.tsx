@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const { locale } = await params;
   const isEn = locale === 'en';
   const isSc = locale === 'zh-Hans';
-  const title = isEn ? 'Compliance & Licensing Insights — Sandbox Group' : isSc ? '合规及牌照行业洞察 — Sandbox Group' : '合規及牌照行業洞察 — Sandbox Group';
+  const title = isEn ? 'Compliance & Licensing Insights' : isSc ? '合规及牌照行业洞察' : '合規及牌照行業洞察';
   const description = isEn
     ? 'Latest regulatory updates, compliance guides and licensing news for Hong Kong financial institutions — SFC, HKMA, Customs and cross-border developments.'
     : isSc
@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     title,
     description,
     alternates: hreflang('/insights'),
-    openGraph: { title, description, url: 'https://www.sandbox.ceo/insights', images: ogImage(title) },
+    openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/insights', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },
   };
 }

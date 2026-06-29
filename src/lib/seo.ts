@@ -12,6 +12,16 @@ export function hreflang(path: string) {
   };
 }
 
+export function ogMeta(title: string, description: string, url: string) {
+  return {
+    type: 'website' as const,
+    title,
+    description,
+    url: `https://www.sandbox.ceo${url}`,
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: title }],
+  };
+}
+
 export function ogImage(alt: string) {
-  return [{ url: '/og-default.png', width: 1200, height: 630, alt }];
+  return [{ url: '/opengraph-image', width: 1200, height: 630, alt }];
 }

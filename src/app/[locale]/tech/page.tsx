@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const { locale } = await params;
   const isEn = locale === 'en';
   const isSc = locale === 'zh-Hans';
-  const title = isEn ? 'RegTech Solutions — Sandbox Group' : isSc ? 'RegTech合规科技方案 — Sandbox Group' : 'RegTech合規科技方案 — Sandbox Group';
+  const title = isEn ? 'RegTech Solutions' : isSc ? 'RegTech合规科技方案' : 'RegTech合規科技方案';
   const description = isEn
     ? 'Technology-driven compliance solutions for Hong Kong licensed institutions — AML systems, KYC platforms, transaction monitoring and regulatory reporting tools.'
     : isSc
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     description,
     keywords: ['RegTech', 'AML系統', 'KYC平台', '合規科技', '交易監控', 'regtech Hong Kong', 'AML system', 'compliance technology'],
     alternates: hreflang('/tech'),
-    openGraph: { title, description, url: 'https://www.sandbox.ceo/tech', images: ogImage(title) },
+    openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/tech', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },
   };
 }

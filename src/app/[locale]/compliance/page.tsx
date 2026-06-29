@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const { locale } = await params;
   const isEn = locale === 'en';
   const isSc = locale === 'zh-Hans';
-  const title = isEn ? 'AML & Ongoing Compliance — Sandbox Group' : isSc ? 'AML及持续合规服务 — Sandbox Group' : 'AML及持續合規服務 — Sandbox Group';
+  const title = isEn ? 'AML & Ongoing Compliance' : isSc ? 'AML及持续合规服务' : 'AML及持續合規服務';
   const description = isEn
     ? 'Outsourced compliance officer, AML audits, staff training and ESG advisory for licensed financial institutions in Hong Kong. Institutional-grade compliance support.'
     : isSc
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     description,
     keywords: ['AML合規', '持續合規', '外判合規', 'MLRO', 'ESG顧問', 'AML compliance Hong Kong', 'outsourced compliance officer'],
     alternates: hreflang('/compliance'),
-    openGraph: { title, description, url: 'https://www.sandbox.ceo/compliance', images: ogImage(title) },
+    openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/compliance', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },
   };
 }

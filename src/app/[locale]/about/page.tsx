@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const { locale } = await params;
   const isEn = locale === 'en';
   const isSc = locale === 'zh-Hans';
-  const title = isEn ? 'About Us — Sandbox Group' : isSc ? '关于我们 — Sandbox Group' : '關於我們 — Sandbox Group';
+  const title = isEn ? 'About Us' : isSc ? '关于我们' : '關於我們';
   const description = isEn
     ? 'Founded by former banking compliance officers and MLRO professionals with 10+ years in Hong Kong financial regulation. Institutional-grade compliance for your business.'
     : isSc
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     title,
     description,
     alternates: hreflang('/about'),
-    openGraph: { title, description, url: 'https://www.sandbox.ceo/about', images: ogImage(title) },
+    openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/about', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },
   };
 }

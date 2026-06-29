@@ -25,13 +25,13 @@ export const metadata: Metadata = {
     title: 'Sandbox Group | 香港企業合規與牌照申請專家',
     description: 'Sandbox Group 為企業提供 MSO 牌照申請、SFC 牌照、AML 合規、公司秘書及合規科技方案。由前金融機構合規主管領導。',
     url: 'https://www.sandbox.ceo',
-    images: [{ url: '/og-default.png', width: 1200, height: 630, alt: 'Sandbox Group — 香港合規與牌照申請專家' }],
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'Sandbox Group — 香港合規與牌照申請專家' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Sandbox Group | 香港企業合規與牌照申請專家',
     description: 'Sandbox Group 為企業提供 MSO 牌照申請、SFC 牌照、AML 合規及公司秘書服務。',
-    images: ['/og-default.png'],
+    images: ['/opengraph-image'],
   },
 };
 
