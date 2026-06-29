@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Locale {
+  tc
+  en
+  sc
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  CONVERTED
+  CLOSED
+}
+
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+model Page {
+  id        String    @id @default(cuid())
+  slug      String    @unique
+  sections  Section[]
+  seo       SeoMeta?
+  updatedAt DateTime  @updatedAt
+}
+
+model Section {
+  id           String  @id @default(cuid())
+  page         Page    @relation(fields: [pageId], references: [id])
+  pageId       String
+  key          String
+  subTab       String?
+  translations Json
+  order        Int     @default(0)
+
+  @@unique([pageId, key])
+  @@index([pageId, subTab])
+}
+
+model SeoMeta {
+  id          String  @id @default(cuid())
+  page        Page    @relation(fields: [pageId], references: [id])
+  pageId      String  @unique
+  title       Json
+  description Json
+  keywords    Json
+  ogImage     String?
+}
+
+model Article {
+  id                 String    @id @default(cuid())
+  slug               String    @unique
+  category           Json
+  categoryColor      String?
+  title              Json
+  excerpt            Json
+  body               Json?
+  ctaLabel           Json
+  ctaWhatsappMessage String?
+  publishedAt        DateTime?
+  published          Boolean   @default(false)
+  order              Int       @default(0)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+}
+
+model Package {
+  id                 String           @id @default(cuid())
+  group              String
+  tierLabel          String
+  name               Json
+  price              String
+  priceNote          Json?
+  featured           Boolean          @default(false)
+  badgeLabel         Json?
+  ctaWhatsappMessage String?
+  order              Int              @default(0)
+  features           PackageFeature[]
+}
+
+model PackageFeature {
+  id        String  @id @default(cuid())
+  package   Package @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  packageId String
+  label     Json
+  enabled   Boolean @default(true)
+  order     Int     @default(0)
+}
+
+model Faq {
+  id       String  @id @default(cuid())
+  pageSlug String
+  subTab   String?
+  question Json
+  answer   Json
+  order    Int     @default(0)
+
+  @@index([pageSlug, subTab])
+}
+
+model TeamMember {
+  id       String  @id @default(cuid())
+  name     Json
+  title    Json
+  bio      Json?
+  photoUrl String?
+  order    Int     @default(0)
+  active   Boolean @default(true)
+}
+
+model Lead {
+  id              String     @id @default(cuid())
+  name            String
+  email           String?
+  phone           String?
+  serviceInterest String?
+  message         String?
+  sourcePage      String?
+  sourceLocale    Locale?
+  status          LeadStatus @default(NEW)
+  notes           String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  role         String   @default("editor")
+  createdAt    DateTime @default(now())
+}

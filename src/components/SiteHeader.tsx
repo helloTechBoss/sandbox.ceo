@@ -1,0 +1,293 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+
+const WA_NUMBER = '+85292318254';
+
+const navServices = [
+  { href: '/mso', label: 'MSO 牌照', en: 'MSO Licensing' },
+  { href: '/licensing', label: 'SFC / 跨境牌照', en: 'Cross-border Licensing' },
+  { href: '/compliance', label: '持續合規', en: 'Ongoing Compliance' },
+];
+
+const navCorporate = [
+  { href: '/corporate', label: '企業服務概覽', en: 'Corporate Overview' },
+  { href: '/corporate/incorporation', label: '公司註冊', en: 'Incorporation' },
+  { href: '/corporate/secretarial', label: '公司秘書', en: 'Company Secretary' },
+  { href: '/corporate/accounting', label: '會計及稅務', en: 'Accounting & Tax' },
+];
+
+type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
+
+interface Props {
+  locale: Locale;
+  waNumber?: string;
+}
+
+const localeName: Record<Locale, string> = {
+  'zh-Hant': '繁中',
+  'en': 'EN',
+  'zh-Hans': '简中',
+};
+
+export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 4);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const localeHref = (l: Locale) => {
+    if (l === 'zh-Hant') return '/';
+    return `/${l === 'zh-Hans' ? 'zh-Hans' : 'en'}`;
+  };
+
+  const waHref = `https://wa.me/${waNumber.replace(/\D/g, '')}?text=${encodeURIComponent('Hi，我想查詢合規及牌照服務')}`;
+
+  return (
+    <>
+      <div style={{ height: 5, background: 'linear-gradient(90deg,#EF4444 0%,#B91C1C 100%)', width: '100%' }} />
+      <header
+        style={{
+          position: 'sticky', top: 0, zIndex: 1000,
+          background: '#fff',
+          borderBottom: `1px solid ${scrolled ? '#E2E8F0' : 'transparent'}`,
+          boxShadow: scrolled ? '0 2px 20px rgba(15,37,87,.12)' : 'none',
+          transition: 'box-shadow .3s, border-color .3s',
+        }}
+      >
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', height: 68, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
+          {/* Logo */}
+          <Link href="/" style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: '1.2rem', color: '#0F2557', letterSpacing: '.05em', whiteSpace: 'nowrap', textDecoration: 'none' }}>
+            SANDBOX<span style={{ color: '#EF4444' }}>.</span>CEO
+            <small style={{ display: 'block', fontSize: '.55rem', fontWeight: 600, letterSpacing: '.12em', color: '#64748B', textTransform: 'uppercase', marginTop: -2 }}>
+              Compliance · Licensing · Corporate
+            </small>
+          </Link>
+
+          {/* Desktop Nav */}
+          <nav style={{ display: 'flex', alignItems: 'center', gap: 2 }} className="desktop-nav">
+            <Link href="/" style={navLinkStyle}>
+              {locale === 'en' ? 'Home' : locale === 'zh-Hans' ? '首页' : '首頁'}
+            </Link>
+            <Link href="/about" style={navLinkStyle}>
+              {locale === 'en' ? 'About' : '關於我們'}
+            </Link>
+
+            {/* Services dropdown */}
+            <div style={{ position: 'relative' }} className="dropdown">
+              <span style={{ ...navLinkStyle, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
+                {locale === 'en' ? 'Services' : '服務'} <span style={{ fontSize: '.6rem' }}>▾</span>
+              </span>
+              <div style={dropdownMenuStyle}>
+                {navServices.map(s => (
+                  <Link key={s.href} href={`/${locale !== 'zh-Hant' ? locale + '/' : ''}${s.href.slice(1)}`} style={dropdownItemStyle}>
+                    <span style={{ width: 6, height: 6, background: '#EF4444', borderRadius: '50%', flexShrink: 0, display: 'inline-block' }} />
+                    {locale === 'en' ? s.en : s.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Corporate dropdown */}
+            <div style={{ position: 'relative' }} className="dropdown">
+              <span style={{ ...navLinkStyle, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
+                {locale === 'en' ? 'Corporate' : '企業'} <span style={{ fontSize: '.6rem' }}>▾</span>
+              </span>
+              <div style={dropdownMenuStyle}>
+                {navCorporate.map(s => (
+                  <Link key={s.href} href={s.href} style={dropdownItemStyle}>
+                    <span style={{ width: 6, height: 6, background: '#EF4444', borderRadius: '50%', flexShrink: 0, display: 'inline-block' }} />
+                    {locale === 'en' ? s.en : s.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <Link href="/tech" style={navLinkStyle}>RegTech</Link>
+            <Link href="/insights" style={navLinkStyle}>{locale === 'en' ? 'Insights' : '行業洞察'}</Link>
+            <Link href="/contact" style={navLinkStyle}>{locale === 'en' ? 'Contact' : '聯絡'}</Link>
+          </nav>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            {/* Language switcher */}
+            <div style={{ position: 'relative' }} onMouseLeave={() => setLangOpen(false)}>
+              <button
+                onClick={() => setLangOpen(!langOpen)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 6,
+                  padding: '7px 12px', background: 'transparent',
+                  border: `1.5px solid ${langOpen ? '#0F2557' : '#E2E8F0'}`,
+                  borderRadius: 6, fontFamily: "'Montserrat',sans-serif",
+                  fontSize: '.75rem', fontWeight: 700, color: '#0F2557',
+                  cursor: 'pointer', whiteSpace: 'nowrap',
+                }}
+              >
+                {localeName[locale]}
+                <span style={{ fontSize: '.6rem', color: '#64748B', transition: 'transform .2s', transform: langOpen ? 'rotate(180deg)' : 'none' }}>▾</span>
+              </button>
+              {langOpen && (
+                <div style={{
+                  position: 'absolute', top: 'calc(100% + 8px)', right: 0,
+                  background: '#fff', border: '1px solid #E2E8F0',
+                  borderTop: '3px solid #0F2557', minWidth: 160,
+                  zIndex: 500, boxShadow: '0 12px 32px rgba(15,37,87,.12)',
+                }}>
+                  {(['zh-Hant', 'en', 'zh-Hans'] as Locale[]).map(l => (
+                    <a key={l} href={localeHref(l)} style={{
+                      display: 'flex', alignItems: 'center', gap: 10,
+                      padding: '11px 16px',
+                      borderBottom: l === 'zh-Hans' ? 'none' : '1px solid #F1F5F9',
+                      fontFamily: "'Montserrat',sans-serif", fontSize: '.78rem',
+                      fontWeight: 600, color: l === locale ? '#0F2557' : '#334155',
+                      background: l === locale ? '#F8FAFC' : 'transparent',
+                    }}>
+                      <span style={{ fontWeight: 800, fontSize: '.72rem', color: '#EF4444', width: 20 }}>
+                        {l === 'zh-Hant' ? 'TC' : l === 'en' ? 'EN' : 'SC'}
+                      </span>
+                      {l === 'zh-Hant' ? '繁體中文' : l === 'en' ? 'English' : '简体中文'}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* WhatsApp CTA */}
+            <a
+              href={waHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                background: '#EF4444', color: '#fff',
+                padding: '8px 16px', fontFamily: "'Noto Sans TC',sans-serif",
+                fontSize: '.84rem', fontWeight: 700, display: 'inline-flex',
+                alignItems: 'center', gap: 8, lineHeight: 1, textDecoration: 'none',
+                transition: 'background .2s',
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+              </svg>
+              <span style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <span style={{ fontSize: '.82rem', fontWeight: 700, lineHeight: 1 }}>
+                  {locale === 'en' ? 'Free Consult' : '免費諮詢'}
+                </span>
+                <span style={{ fontSize: '.62rem', fontWeight: 500, opacity: .88, letterSpacing: '.02em', lineHeight: 1 }}>
+                  {locale === 'en' ? 'Quotation' : '索取報價'}
+                </span>
+              </span>
+            </a>
+
+            {/* Hamburger */}
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              style={{ display: 'flex', flexDirection: 'column', gap: 5, cursor: 'pointer', padding: 8, flexShrink: 0, border: 'none', background: 'none' }}
+              className="hamburger"
+              aria-label="Menu"
+            >
+              <span style={{ display: 'block', width: 24, height: 2, background: '#0F2557' }} />
+              <span style={{ display: 'block', width: 24, height: 2, background: '#0F2557' }} />
+              <span style={{ display: 'block', width: 24, height: 2, background: '#0F2557' }} />
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Nav */}
+        {mobileOpen && (
+          <div style={{
+            background: '#fff', borderTop: '1px solid #E2E8F0',
+            padding: '12px 0', position: 'fixed', top: 64, left: 0, right: 0,
+            zIndex: 999, boxShadow: '0 8px 24px rgba(0,0,0,.1)',
+            maxHeight: 'calc(100vh - 64px)', overflowY: 'auto',
+          }}>
+            {[
+              { href: '/', label: locale === 'en' ? 'Home' : '首頁' },
+              { href: '/about', label: locale === 'en' ? 'About Us' : '關於我們' },
+              { href: '/mso', label: locale === 'en' ? 'MSO Licensing' : 'MSO 牌照' },
+              { href: '/licensing', label: locale === 'en' ? 'Licensing' : 'SFC / 跨境牌照' },
+              { href: '/compliance', label: locale === 'en' ? 'Compliance' : '持續合規' },
+              { href: '/corporate', label: locale === 'en' ? 'Corporate' : '企業服務' },
+              { href: '/tech', label: 'RegTech' },
+              { href: '/insights', label: locale === 'en' ? 'Insights' : '行業洞察' },
+              { href: '/contact', label: locale === 'en' ? 'Contact' : '聯絡我們' },
+            ].map(item => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setMobileOpen(false)}
+                style={{
+                  display: 'block', padding: '13px 24px',
+                  fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.95rem',
+                  color: '#334155', borderBottom: '1px solid #F1F5F9', textDecoration: 'none',
+                }}
+              >
+                {item.label}
+              </Link>
+            ))}
+            <a
+              href={waHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                margin: '16px 24px 8px', display: 'block', textAlign: 'center',
+                background: '#EF4444', color: '#fff', padding: 13,
+                fontWeight: 700, fontSize: '.9rem', textDecoration: 'none',
+              }}
+            >
+              {locale === 'en' ? 'WhatsApp Free Consult' : '免費 WhatsApp 諮詢'}
+            </a>
+          </div>
+        )}
+      </header>
+
+      <style>{`
+        @media(min-width:901px){.hamburger{display:none!important}}
+        @media(max-width:900px){.desktop-nav{display:none!important}}
+        .dropdown:hover > div:last-child{display:block!important}
+      `}</style>
+    </>
+  );
+}
+
+const navLinkStyle: React.CSSProperties = {
+  padding: '8px 12px',
+  fontFamily: "'Noto Sans TC',sans-serif",
+  fontSize: '.85rem',
+  color: '#334155',
+  fontWeight: 500,
+  transition: 'color .2s',
+  whiteSpace: 'nowrap',
+  textDecoration: 'none',
+};
+
+const dropdownMenuStyle: React.CSSProperties = {
+  display: 'none',
+  position: 'absolute',
+  top: 'calc(100% + 4px)',
+  left: 0,
+  background: '#fff',
+  border: '1px solid #E2E8F0',
+  borderTop: '3px solid #EF4444',
+  minWidth: 280,
+  zIndex: 200,
+  boxShadow: '0 12px 32px rgba(15,37,87,.12)',
+};
+
+const dropdownItemStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 10,
+  padding: '13px 20px',
+  fontFamily: "'Montserrat',sans-serif",
+  fontSize: '.78rem',
+  fontWeight: 700,
+  letterSpacing: '.02em',
+  color: '#0F2557',
+  borderBottom: '1px solid #F1F5F9',
+  textDecoration: 'none',
+};

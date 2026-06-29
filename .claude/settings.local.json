@@ -1,7 +1,20 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-git)"
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-git)",
+      "Bash(npm install *)",
+      "Bash(npx prisma *)",
+      "Bash(mkdir -p /Users/kelvin/sandbox.ceo-claude/src/app/\\\\[locale\\\\])",
+      "Bash(mv /Users/kelvin/sandbox.ceo-claude/src/app/page.tsx /Users/kelvin/sandbox.ceo-claude/src/app/\\\\[locale\\\\]/page.tsx)",
+      "Bash(npx tsx *)",
+      "Bash(npx tsc *)",
+      "Bash(timeout 20 npx next build)",
+      "Bash(npx next *)",
+      "Bash(mkdir -p /Users/kelvin/sandbox.ceo-claude/src/app/\\\\[locale\\\\]/licensing /Users/kelvin/sandbox.ceo-claude/src/app/\\\\[locale\\\\]/compliance /Users/kelvin/sandbox.ceo-claude/src/app/\\\\[locale\\\\]/corporate)",
+      "Bash(touch /Users/kelvin/sandbox.ceo-claude/src/app/\\\\[locale\\\\]/licensing/page.tsx /Users/kelvin/sandbox.ceo-claude/src/app/\\\\[locale\\\\]/compliance/page.tsx /Users/kelvin/sandbox.ceo-claude/src/app/\\\\[locale\\\\]/corporate/page.tsx)",
+      "Bash(git init *)",
+      "Bash(git remote *)",
+      "Bash(git add *)"
     ]
   }
 }

@@ -1,26 +1,50 @@
 @import "tailwindcss";
 
+/* ══ SANDBOX GROUP DESIGN TOKENS ══ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --navy:      #0F2557;
+  --navy-deep: #091A3E;
+  --white:     #FFFFFF;
+  --grey-50:   #F8FAFC;
+  --grey-100:  #F1F5F9;
+  --grey-200:  #E2E8F0;
+  --grey-400:  #94A3B8;
+  --grey-500:  #64748B;
+  --grey-700:  #334155;
+  --red:       #EF4444;
+  --red-dark:  #DC2626;
+  --gold:      #C9A84C;
+  --gold-light:#E8D28A;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-navy:       var(--navy);
+  --color-navy-deep:  var(--navy-deep);
+  --color-grey-50:    var(--grey-50);
+  --color-grey-100:   var(--grey-100);
+  --color-grey-200:   var(--grey-200);
+  --color-grey-400:   var(--grey-400);
+  --color-grey-500:   var(--grey-500);
+  --color-grey-700:   var(--grey-700);
+  --color-red:        var(--red);
+  --color-red-dark:   var(--red-dark);
+  --color-gold:       var(--gold);
+  --color-gold-light: var(--gold-light);
+  --font-heading:     'Montserrat', sans-serif;
+  --font-body:        'Noto Sans TC', sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+  font-weight: 400;
+  color: var(--grey-700);
+  background: var(--white);
+  line-height: 1.65;
 }
+h1, h2, h3, h4, h5 { line-height: 1.2; }
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+img { display: block; max-width: 100%; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
