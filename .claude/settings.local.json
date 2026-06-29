@@ -14,7 +14,15 @@
       "Bash(touch /Users/kelvin/sandbox.ceo-claude/src/app/\\\\[locale\\\\]/licensing/page.tsx /Users/kelvin/sandbox.ceo-claude/src/app/\\\\[locale\\\\]/compliance/page.tsx /Users/kelvin/sandbox.ceo-claude/src/app/\\\\[locale\\\\]/corporate/page.tsx)",
       "Bash(git init *)",
       "Bash(git remote *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(ssh-keyscan github.com >> ~/.ssh/known_hosts 2>&1 && git push -u origin main 2>&1)",
+      "Bash(ssh-keyscan github.com)",
+      "Bash(gh auth *)",
+      "Bash(git rm *)",
+      "Bash(node -e ' *)",
+      "Bash(mkdir -p /Users/kelvin/sandbox.ceo-claude/src/app/admin/\\\\\\(protected\\\\\\)/faqs/new /Users/kelvin/sandbox.ceo-claude/src/app/admin/\\\\\\(protected\\\\\\)/faqs/\\\\[id\\\\] /Users/kelvin/sandbox.ceo-claude/src/app/admin/\\\\\\(protected\\\\\\)/team/new /Users/kelvin/sandbox.ceo-claude/src/app/admin/\\\\\\(protected\\\\\\)/team/\\\\[id\\\\])"
     ]
   }
 }
