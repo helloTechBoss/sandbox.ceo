@@ -58,11 +58,11 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
     return () => document.removeEventListener('click', onClickOutside);
   }, [langOpen]);
 
-  const localeHref = (l: Locale) => {
-    if (typeof window === 'undefined') return l === 'zh-Hant' ? '/' : `/${l}`;
-    const path = window.location.pathname
-      .replace(/^\/(zh-Hans|en)/, '') || '/';
-    return l === 'zh-Hant' ? path : `/${l}${path}`;
+  const switchLocale = (l: Locale) => {
+    const path = window.location.pathname.replace(/^\/(zh-Hans|en)/, '') || '/';
+    const target = l === 'zh-Hant' ? path : `/${l}${path}`;
+    setLangOpen(false);
+    window.location.href = target;
   };
 
   const waHref = `https://wa.me/${waNumber.replace(/\D/g, '')}?text=${encodeURIComponent('Hi，我想查詢合規及牌照服務')}`;
@@ -157,7 +157,7 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
                   zIndex: 9999, boxShadow: '0 12px 32px rgba(15,37,87,.12)',
                 }}>
                   {(['zh-Hant', 'en', 'zh-Hans'] as Locale[]).map(l => (
-                    <a key={l} href={localeHref(l)} onClick={() => setLangOpen(false)} style={{
+                    <a key={l} href="#" onClick={e => { e.preventDefault(); switchLocale(l); }} style={{
                       display: 'flex', alignItems: 'center', gap: 10,
                       padding: '11px 16px',
                       borderBottom: l === 'zh-Hans' ? 'none' : '1px solid #F1F5F9',
