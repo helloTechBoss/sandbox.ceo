@@ -124,8 +124,11 @@ export default async function TechPage({ params }: { params: Promise<{ locale: L
       <main>
         {/* ── HERO ── */}
         <section className="tech-hero" style={{ background: '#0F2557', padding: '100px 0 80px', position: 'relative', overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle at 80% 50%,rgba(239,68,68,.12) 0%,transparent 55%)', pointerEvents: 'none' }} />
-          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1, textAlign: 'center' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="https://images.unsplash.com/photo-1507941097613-9f2157b69235?w=1600&q=80" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 35%', zIndex: 0 }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg,rgba(9,26,62,.96) 0%,rgba(9,26,62,.88) 50%,rgba(9,26,62,.6) 100%)', zIndex: 1 }} />
+          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle at 80% 50%,rgba(239,68,68,.12) 0%,transparent 55%)', pointerEvents: 'none', zIndex: 2 }} />
+          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 3, textAlign: 'center' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
               <div style={{ width: 28, height: 2, background: '#C9A84C' }} />
               <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.68rem', fontWeight: 700, letterSpacing: '.2em', color: '#C9A84C', textTransform: 'uppercase' }}>

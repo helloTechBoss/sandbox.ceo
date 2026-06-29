@@ -112,8 +112,11 @@ export default async function MsoPage({
       <SiteHeader locale={locale} waNumber={waNumber} />
       <main>
         {/* Hero */}
-        <section style={{ background: 'linear-gradient(105deg,#091A3E 0%,#0F2557 100%)', padding: '72px 24px 56px' }}>
-          <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <section style={{ background: '#091A3E', padding: '72px 24px 56px', position: 'relative', overflow: 'hidden' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="https://images.unsplash.com/photo-1507941097613-9f2157b69235?w=1600&q=80" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'left 50%', zIndex: 0 }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(110deg,rgba(9,26,62,.96) 0%,rgba(9,26,62,.9) 50%,rgba(9,26,62,.55) 100%)', zIndex: 1 }} />
+          <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 2 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
               <div style={{ width: 28, height: 2, background: '#C9A84C' }} />
               <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.68rem', fontWeight: 700, letterSpacing: '.2em', color: '#E8D28A', textTransform: 'uppercase' }}>

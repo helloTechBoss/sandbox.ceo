@@ -92,9 +92,9 @@ const PILLAR_NAMES: Record<LK, Record<string, string>> = {
 };
 
 const TABS: Record<LK, { key: string; label: string }[]> = {
-  tc: [{ key: 'calc', label: '費用計算器' }, { key: 'services', label: '服務一覽' }],
-  en: [{ key: 'calc', label: 'Fee Calculator' }, { key: 'services', label: 'All Services' }],
-  sc: [{ key: 'calc', label: '费用计算器' }, { key: 'services', label: '服务一览' }],
+  tc: [{ key: 'services', label: '服務一覽' }, { key: 'calc', label: '會計審計 即時報價' }],
+  en: [{ key: 'services', label: 'All Services' }, { key: 'calc', label: 'Instant Accounting & Audit Quotation' }],
+  sc: [{ key: 'services', label: '服务一览' }, { key: 'calc', label: '会计审计 即时报价' }],
 };
 
 function lkOf(locale: Locale): LK {
@@ -166,7 +166,7 @@ export default function CorporateCalculator({
       })
     : SVCS;
 
-  const [tab, setTab] = useState('calc');
+  const [tab, setTab] = useState('services');
   const [rev, setRev] = useState('none_op');
   const [txn, setTxn] = useState(200);
   const [banks, setBanks] = useState(1);
