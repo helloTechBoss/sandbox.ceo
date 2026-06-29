@@ -262,20 +262,21 @@ export default function CorporateCalculator({
         </div>
       </section>
 
-      {/* ── TAB NAV — matches site SubTabNav style ────────────────────────── */}
-      <div style={{ background: '#fff', borderBottom: '2px solid #E2E8F0', position: 'sticky', top: 0, zIndex: 50 }}>
-        <div style={{ maxWidth: 1160, margin: '0 auto', padding: '0 24px', display: 'flex' }}>
+      {/* ── TAB NAV — identical to SubTabNav ─────────────────────────────── */}
+      <div style={{ position: 'sticky', top: 68, zIndex: 100, background: '#fff', borderBottom: '1px solid #E2E8F0', boxShadow: '0 2px 8px rgba(0,0,0,.04)', overflow: 'hidden' }}>
+        <div className="tab-scroll" style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', overflowX: 'auto', gap: 0 }}>
           {TABS[lk].map(t => (
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
               style={{
-                background: 'none', border: 'none', padding: '14px 22px 12px', cursor: 'pointer',
-                fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.88rem', fontWeight: tab === t.key ? 700 : 400,
+                padding: '14px 16px', background: 'none', border: 'none',
+                borderBottom: tab === t.key ? '3px solid #EF4444' : '3px solid transparent',
+                fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.85rem',
+                fontWeight: tab === t.key ? 700 : 500,
                 color: tab === t.key ? '#0F2557' : '#64748B',
-                borderBottom: tab === t.key ? '2px solid #EF4444' : '2px solid transparent',
-                marginBottom: -2,
-                transition: 'all .15s',
+                cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all .15s',
+                letterSpacing: '.01em', flexShrink: 0,
               }}
             >
               {t.label}
@@ -504,7 +505,10 @@ export default function CorporateCalculator({
       </div>
 
       <style>{`
+        .tab-scroll{-webkit-overflow-scrolling:touch;scrollbar-width:none}
+        .tab-scroll::-webkit-scrollbar{display:none}
         @media (max-width: 768px) {
+          .tab-scroll{padding:0 12px!important}
           .calc-outer-grid { grid-template-columns: 1fr !important; }
           .rev-txn-grid { grid-template-columns: 1fr !important; }
           .ext-items-grid { grid-template-columns: 1fr !important; }
