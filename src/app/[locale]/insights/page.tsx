@@ -19,6 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title,
     description,
+    keywords: ['SFC監管動向', 'MSO合規更新', 'AML新聞', '香港金融監管', 'Hong Kong regulatory update', 'SFC circular', 'HKMA AML', 'compliance news Hong Kong', 'MSO licensing news'],
     alternates: hreflang('/insights'),
     openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/insights', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },

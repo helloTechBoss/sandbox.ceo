@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title,
     description,
-    keywords: ['MSO牌照', '金錢服務經營者', 'MSO申請', 'AML合規系統', '匯款牌照', 'MSO licensing Hong Kong', 'money service operator'],
+    keywords: ['MSO牌照', '金錢服務經營者', 'MSO申請', 'AML合規系統', '匯款牌照', '海關MSO', 'MSO牌照費用', 'MSO licensing Hong Kong', 'money service operator Hong Kong', 'MSO application', 'AMLO compliance', 'customs MSO licence', 'CSTB MSO'],
     alternates: hreflang('/mso'),
     openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/mso', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },

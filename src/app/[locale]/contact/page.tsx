@@ -22,6 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title,
     description,
+    keywords: ['香港合規諮詢', '牌照申請查詢', 'WhatsApp合規顧問', 'compliance consultation Hong Kong', 'MSO licensing enquiry', 'SFC licence advice', 'free compliance consultation'],
     alternates: hreflang('/contact'),
     openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/contact', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },

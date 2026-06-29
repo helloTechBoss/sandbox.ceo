@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title,
     description,
-    keywords: ['AML合規', '持續合規', '外判合規', 'MLRO', 'ESG顧問', 'AML compliance Hong Kong', 'outsourced compliance officer'],
+    keywords: ['AML合規', '持續合規', '外判合規', 'MLRO', 'ESG顧問', 'CPT培訓', 'AML獨立審計', '外判合規主任', 'AML compliance Hong Kong', 'outsourced compliance officer Hong Kong', 'MLRO services', 'AML audit', 'CPT training Hong Kong', 'ESG compliance'],
     alternates: hreflang('/compliance'),
     openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/compliance', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },

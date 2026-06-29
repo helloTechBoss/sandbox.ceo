@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title,
     description,
-    keywords: ['香港公司成立', '公司秘書', '會計審計', '周年申報', '企業服務', 'Hong Kong company incorporation', 'company secretary Hong Kong'],
+    keywords: ['香港公司成立', '公司秘書', '會計審計', '周年申報', '企業服務', 'TCSP牌照', '撤銷公司', '香港開公司', 'Hong Kong company incorporation', 'company secretary Hong Kong', 'accounting audit Hong Kong', 'TCSP licence', 'company deregistration Hong Kong', 'annual return filing'],
     alternates: hreflang('/corporate'),
     openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/corporate', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },

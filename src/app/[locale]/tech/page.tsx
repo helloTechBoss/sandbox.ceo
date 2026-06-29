@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title,
     description,
-    keywords: ['RegTech', 'AML系統', 'KYC平台', '合規科技', '交易監控', 'regtech Hong Kong', 'AML system', 'compliance technology'],
+    keywords: ['RegTech', 'AML系統', 'KYC平台', '合規科技', '交易監控', '監管申報', '可疑交易申報', 'regtech Hong Kong', 'AML system Hong Kong', 'KYC platform', 'compliance technology', 'transaction monitoring', 'STR system', 'regulatory reporting'],
     alternates: hreflang('/tech'),
     openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/tech', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },

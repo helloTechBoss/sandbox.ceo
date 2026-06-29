@@ -22,6 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title,
     description,
+    keywords: ['Sandbox Group', '香港合規顧問', 'MLRO', '前銀行合規主任', 'compliance consultant Hong Kong', 'AML specialist', 'licensed compliance officer', 'Sandbox CEO'],
     alternates: hreflang('/about'),
     openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/about', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },

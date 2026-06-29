@@ -23,6 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title: { absolute: title },
     description,
+    keywords: ['Sandbox Group', 'MSO牌照香港', 'SFC牌照申請', 'AML合規', '公司秘書', 'RegTech', '合規顧問香港', 'MSO licensing Hong Kong', 'SFC licence', 'AML compliance Hong Kong', 'company secretary Hong Kong', 'compliance consultant', 'sandbox.ceo'],
     alternates: {
       canonical: 'https://www.sandbox.ceo/',
       languages: {

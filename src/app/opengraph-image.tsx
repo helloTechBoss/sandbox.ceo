@@ -44,13 +44,12 @@ export default function OgImage() {
           </div>
 
           {/* Logo wordmark */}
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 0, marginBottom: 20 }}>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 16, marginBottom: 20 }}>
             <span style={{ fontSize: 88, fontWeight: 900, color: '#FFFFFF', letterSpacing: '0.04em', lineHeight: 1 }}>
               SANDBOX
             </span>
-            <span style={{ fontSize: 88, fontWeight: 900, color: '#EF4444', lineHeight: 1 }}>.</span>
-            <span style={{ fontSize: 88, fontWeight: 900, color: '#FFFFFF', letterSpacing: '0.04em', lineHeight: 1 }}>
-              CEO
+            <span style={{ fontSize: 88, fontWeight: 900, color: '#EF4444', letterSpacing: '0.04em', lineHeight: 1 }}>
+              GROUP
             </span>
           </div>
 

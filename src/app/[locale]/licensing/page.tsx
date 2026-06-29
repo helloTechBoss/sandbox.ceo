@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title,
     description,
-    keywords: ['SFC牌照', 'Type 1牌照', 'TCSP牌照', 'MSB牌照', 'MTL牌照', '跨境牌照', 'SFC licensing Hong Kong', 'cross-border licensing'],
+    keywords: ['SFC牌照', 'Type 1牌照', 'Type 9牌照', 'TCSP牌照', 'MSB牌照', 'MTL牌照', '跨境牌照', '虛擬資產牌照', 'VASP', 'SFC licensing Hong Kong', 'Type 1 SFC licence', 'Type 9 asset management licence', 'cross-border licensing', 'virtual asset licence Hong Kong', 'TCSP licence'],
     alternates: hreflang('/licensing'),
     openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/licensing', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },
