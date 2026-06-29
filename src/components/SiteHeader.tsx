@@ -91,16 +91,16 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
           {/* Desktop Nav */}
           <nav style={{ display: 'flex', alignItems: 'center', gap: 2 }} className="desktop-nav">
             <Link href={localePath(locale, '/')} style={navLinkStyle}>
-              {t(locale, '首頁', 'Home', '首页')}
+              {t(locale, '主頁', 'Home', '主页')}
             </Link>
             <Link href={localePath(locale, '/about')} style={navLinkStyle}>
-              {t(locale, '關於我們', 'About', '关于我们')}
+              {t(locale, '關於我們', 'About Us', '关于我们')}
             </Link>
 
             {/* Services dropdown */}
             <div style={{ position: 'relative' }} className="dropdown">
               <span style={{ ...navLinkStyle, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
-                {t(locale, '服務', 'Services', '服务')} <span style={{ fontSize: '.6rem' }}>▾</span>
+                {t(locale, '服務範疇', 'Services', '服务范畴')} <span style={{ fontSize: '.6rem' }}>▾</span>
               </span>
               <div style={dropdownMenuStyle}>
                 {navServices.map(s => (
@@ -115,7 +115,7 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
             {/* Corporate dropdown */}
             <div style={{ position: 'relative' }} className="dropdown">
               <span style={{ ...navLinkStyle, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
-                {t(locale, '企業', 'Corporate', '企业')} <span style={{ fontSize: '.6rem' }}>▾</span>
+                {t(locale, '企業服務', 'Corporate', '企业服务')} <span style={{ fontSize: '.6rem' }}>▾</span>
               </span>
               <div style={dropdownMenuStyle}>
                 {navCorporate.map(s => (
@@ -127,9 +127,9 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
               </div>
             </div>
 
-            <Link href={localePath(locale, '/tech')} style={navLinkStyle}>RegTech</Link>
-            <Link href={localePath(locale, '/insights')} style={navLinkStyle}>{t(locale, '行業洞察', 'Insights', '行业洞察')}</Link>
-            <Link href={localePath(locale, '/contact')} style={navLinkStyle}>{t(locale, '聯絡', 'Contact', '联络')}</Link>
+            <Link href={localePath(locale, '/tech')} style={navLinkStyle}>{t(locale, '合規科技', 'RegTech', '合规科技')}</Link>
+            <Link href={localePath(locale, '/insights')} style={navLinkStyle}>{t(locale, '專業見解', 'Insights', '专业见解')}</Link>
+            <Link href={localePath(locale, '/contact')} style={navLinkStyle}>{t(locale, '聯絡我們', 'Contact', '联络我们')}</Link>
           </nav>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -194,7 +194,7 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
               </svg>
               <span style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <span style={{ fontSize: '.82rem', fontWeight: 700, lineHeight: 1 }}>
-                  {t(locale, '免費諮詢', 'Free Consult', '免费咨询')}
+                  {t(locale, '企業報價', 'Get Quote', '企业报价')}
                 </span>
                 <span style={{ fontSize: '.62rem', fontWeight: 500, opacity: .88, letterSpacing: '.02em', lineHeight: 1 }}>
                   {t(locale, '索取報價', 'Quotation', '索取报价')}
@@ -225,14 +225,14 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
             maxHeight: 'calc(100vh - 64px)', overflowY: 'auto',
           }}>
             {[
-              { href: '/', label: t(locale, '首頁', 'Home', '首页') },
+              { href: '/', label: t(locale, '主頁', 'Home', '主页') },
               { href: '/about', label: t(locale, '關於我們', 'About Us', '关于我们') },
               { href: '/mso', label: t(locale, 'MSO 牌照', 'MSO Licensing', 'MSO 牌照') },
               { href: '/licensing', label: t(locale, 'SFC / 跨境牌照', 'Licensing', 'SFC / 跨境牌照') },
               { href: '/compliance', label: t(locale, '持續合規', 'Compliance', '持续合规') },
               { href: '/corporate', label: t(locale, '企業服務', 'Corporate', '企业服务') },
-              { href: '/tech', label: 'RegTech' },
-              { href: '/insights', label: t(locale, '行業洞察', 'Insights', '行业洞察') },
+              { href: '/tech', label: t(locale, '合規科技', 'RegTech', '合规科技') },
+              { href: '/insights', label: t(locale, '專業見解', 'Insights', '专业见解') },
               { href: '/contact', label: t(locale, '聯絡我們', 'Contact', '联络我们') },
             ].map(item => (
               <Link
@@ -258,7 +258,7 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
                 fontWeight: 700, fontSize: '.9rem', textDecoration: 'none',
               }}
             >
-              {t(locale, '免費 WhatsApp 諮詢', 'WhatsApp Free Consult', '免费 WhatsApp 咨询')}
+              {t(locale, 'WhatsApp 企業報價', 'WhatsApp Quote', 'WhatsApp 企业报价')}
             </a>
           </div>
         )}
