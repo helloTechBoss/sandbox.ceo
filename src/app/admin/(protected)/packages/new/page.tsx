@@ -14,6 +14,7 @@ async function createPackage(formData: FormData) {
       tierLabel: formData.get('tierLabel') as string,
       name: { tc: formData.get('name_tc') as string, en: formData.get('name_en') as string, sc: formData.get('name_sc') as string },
       price: formData.get('price') as string,
+      stripeAmount: formData.get('stripeAmount') ? parseInt(formData.get('stripeAmount') as string) : null,
       priceNote: { tc: formData.get('priceNote_tc') as string || '', en: formData.get('priceNote_en') as string || '', sc: formData.get('priceNote_sc') as string || '' },
       badgeLabel: { tc: formData.get('badgeLabel_tc') as string || '', en: formData.get('badgeLabel_en') as string || '', sc: formData.get('badgeLabel_sc') as string || '' },
       featured: formData.get('featured') === 'on',
@@ -97,8 +98,11 @@ export default function NewPackagePage() {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, marginBottom: 16 }}>
           <div>
-            <label style={labelStyle}>Price</label>
+            <label style={labelStyle}>Display Price</label>
             <input name="price" required placeholder="e.g. HK$1,800" style={inputStyle} />
+            <label style={{ ...labelStyle, marginTop: 12 }}>Online Purchase Price (HKD) — Leave blank = enquiry only</label>
+            <input name="stripeAmount" type="number" min="0" placeholder="e.g. 1800" style={inputStyle} />
+            <p style={{ fontSize: '.72rem', color: '#94A3B8', marginTop: 4 }}>Set this to allow customers to buy directly on the Packages page. Leave blank for enquiry-only services.</p>
           </div>
           <div>
             <label style={labelStyle}>Order</label>

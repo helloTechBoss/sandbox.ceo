@@ -30,6 +30,7 @@ export default async function EditPackagePage({ params }: { params: Promise<{ id
         tierLabel: formData.get('tierLabel') as string,
         name: { tc: formData.get('name_tc') as string, en: formData.get('name_en') as string, sc: formData.get('name_sc') as string },
         price: formData.get('price') as string,
+        stripeAmount: formData.get('stripeAmount') ? parseInt(formData.get('stripeAmount') as string) : null,
         priceNote: { tc: formData.get('priceNote_tc') as string || '', en: formData.get('priceNote_en') as string || '', sc: formData.get('priceNote_sc') as string || '' },
         badgeLabel: { tc: formData.get('badgeLabel_tc') as string || '', en: formData.get('badgeLabel_en') as string || '', sc: formData.get('badgeLabel_sc') as string || '' },
         featured: formData.get('featured') === 'on',
@@ -134,8 +135,12 @@ export default async function EditPackagePage({ params }: { params: Promise<{ id
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, marginBottom: 16 }}>
           <div>
-            <label style={labelStyle}>Price</label>
+            <label style={labelStyle}>Display Price</label>
             <input name="price" required defaultValue={pkg.price} style={inputStyle} />
+          </div>
+          <div>
+            <label style={labelStyle}>Online Purchase Price (HKD) — blank = enquiry only</label>
+            <input name="stripeAmount" type="number" min="0" defaultValue={pkg.stripeAmount ?? ''} style={inputStyle} placeholder="e.g. 1800" />
           </div>
           <div>
             <label style={labelStyle}>Order</label>
