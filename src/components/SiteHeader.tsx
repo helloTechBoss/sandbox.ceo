@@ -59,8 +59,10 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
   }, [langOpen]);
 
   const localeHref = (l: Locale) => {
-    if (l === 'zh-Hant') return '/';
-    return `/${l}`;
+    if (typeof window === 'undefined') return l === 'zh-Hant' ? '/' : `/${l}`;
+    const path = window.location.pathname
+      .replace(/^\/(zh-Hans|en)/, '') || '/';
+    return l === 'zh-Hant' ? path : `/${l}${path}`;
   };
 
   const waHref = `https://wa.me/${waNumber.replace(/\D/g, '')}?text=${encodeURIComponent('Hi，我想查詢合規及牌照服務')}`;
