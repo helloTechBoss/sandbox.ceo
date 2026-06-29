@@ -171,7 +171,7 @@ export default async function LicensingPage({
         <div style={{ background: '#0F2557', padding: '56px 0', position: 'relative', overflow: 'hidden' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
             <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.65rem', fontWeight: 700, letterSpacing: '.2em', color: '#C9A84C', textTransform: 'uppercase', marginBottom: 10 }}>
-              {isEn ? 'LICENSING' : isSc ? '牌照申请' : '牌照申請'}
+              SANDBOX LICENSING
             </p>
             <h1 style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: 'clamp(1.8rem,4vw,2.8rem)', color: '#fff', letterSpacing: '.02em', marginBottom: 8 }}>
               {isEn ? 'Licensing Application Services' : isSc ? '牌照申请服务' : '牌照申請服務'}

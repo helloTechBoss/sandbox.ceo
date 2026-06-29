@@ -120,7 +120,7 @@ export default async function TechPage({ params }: { params: Promise<{ locale: L
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
               <div style={{ width: 28, height: 2, background: '#C9A84C' }} />
               <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.68rem', fontWeight: 700, letterSpacing: '.2em', color: '#C9A84C', textTransform: 'uppercase' }}>
-                {t('監管科技', 'Regulatory Technology', '监管科技')} · REGTECH
+                SANDBOX REGTECH
               </span>
               <div style={{ width: 28, height: 2, background: '#C9A84C' }} />
             </div>

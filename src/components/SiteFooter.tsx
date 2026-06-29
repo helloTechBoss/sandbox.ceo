@@ -31,7 +31,7 @@ export default function SiteFooter({ locale = 'zh-Hant', waNumber = '+8529231825
           {/* Brand */}
           <div>
             <div style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: '1.2rem', color: '#fff', letterSpacing: '.05em', marginBottom: 12 }}>
-              SANDBOX<span style={{ color: '#EF4444' }}>.</span>CEO
+              SANDBOX <span style={{ color: '#EF4444' }}>GROUP</span>
             </div>
             <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.84rem', color: 'rgba(255,255,255,.55)', lineHeight: 1.85, marginBottom: 20 }}>
               {isEn ? 'Making compliance & growth simpler.' : isSc ? '让合规与增长更简单。' : '讓合規與增長更簡單。'}
@@ -132,7 +132,7 @@ export default function SiteFooter({ locale = 'zh-Hant', waNumber = '+8529231825
             © {new Date().getFullYear()} Sandbox Group / Tech Boss Limited. {isEn ? 'All rights reserved.' : isSc ? '版权所有。' : '版權所有。'}
           </p>
           <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.72rem', color: 'rgba(255,255,255,.25)', letterSpacing: '.05em' }}>
-            SANDBOX.CEO
+            SANDBOX GROUP
           </p>
         </div>
       </div>

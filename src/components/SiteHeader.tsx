@@ -6,13 +6,13 @@ import Link from 'next/link';
 const WA_NUMBER = '+85292318254';
 
 const navServices = [
-  { href: '/mso', tc: 'MSO 牌照', sc: 'MSO 牌照', en: 'MSO Licensing' },
-  { href: '/licensing', tc: 'SFC / 跨境牌照', sc: 'SFC / 跨境牌照', en: 'Cross-border Licensing' },
-  { href: '/compliance', tc: '持續合規', sc: '持续合规', en: 'Ongoing Compliance' },
+  { href: '/mso', tc: 'Sandbox MSO', sc: 'Sandbox MSO', en: 'Sandbox MSO' },
+  { href: '/licensing', tc: 'Sandbox Licensing', sc: 'Sandbox Licensing', en: 'Sandbox Licensing' },
+  { href: '/compliance', tc: 'Sandbox Compliance', sc: 'Sandbox Compliance', en: 'Sandbox Compliance' },
 ];
 
 const navCorporate = [
-  { href: '/corporate', tc: '企業服務概覽', sc: '企业服务概览', en: 'Corporate Overview' },
+  { href: '/corporate', tc: 'Sandbox Corporate', sc: 'Sandbox Corporate', en: 'Sandbox Corporate' },
   { href: '/corporate/incorporation', tc: '公司註冊', sc: '公司注册', en: 'Incorporation' },
   { href: '/corporate/secretarial', tc: '公司秘書', sc: '公司秘书', en: 'Company Secretary' },
   { href: '/corporate/accounting', tc: '會計及稅務', sc: '会计及税务', en: 'Accounting & Tax' },

@@ -163,7 +163,7 @@ export default async function CompliancePage({
         <div className="comp-hero" style={{ background: '#0F2557', padding: '56px 0', position: 'relative', overflow: 'hidden' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
             <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.65rem', fontWeight: 700, letterSpacing: '.2em', color: '#C9A84C', textTransform: 'uppercase', marginBottom: 10 }}>
-              {isEn ? 'COMPLIANCE' : isSc ? '合规服务' : '合規服務'}
+              SANDBOX COMPLIANCE
             </p>
             <h1 style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: 'clamp(1.8rem,4vw,2.8rem)', color: '#fff', letterSpacing: '.02em', marginBottom: 8 }}>
               {isEn ? 'Ongoing Compliance Services' : isSc ? '持续合规服务' : '持續合規服務'}

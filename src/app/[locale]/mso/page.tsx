@@ -107,7 +107,7 @@ export default async function MsoPage({
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
               <div style={{ width: 28, height: 2, background: '#C9A84C' }} />
               <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.68rem', fontWeight: 700, letterSpacing: '.2em', color: '#E8D28A', textTransform: 'uppercase' }}>
-                {isEn ? 'Money Service Operator' : isSc ? '金钱服务经营者' : '金錢服務經營者'}
+                SANDBOX MSO
               </span>
             </div>
             <h1 style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: 'clamp(2rem,4.5vw,3.2rem)', color: '#fff', lineHeight: 1.1, marginBottom: 16 }}>
