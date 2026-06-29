@@ -86,6 +86,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
       <main>
         {/* ══ HERO ══ */}
         <section style={{ position: 'relative', minHeight: 640, display: 'flex', alignItems: 'center', overflow: 'hidden', backgroundColor: '#0F2557' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="https://images.unsplash.com/photo-1507941097613-9f2157b69235?w=1600&q=80" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 55%', zIndex: 0 }} />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(105deg,rgba(9,26,62,.88) 0%,rgba(9,26,62,.75) 55%,rgba(9,26,62,.3) 100%)', zIndex: 1 }} />
           <div style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: 1200, margin: '0 auto', padding: '80px 60px', display: 'grid', gridTemplateColumns: '1fr 340px', gap: 60, alignItems: 'center' }} className="hero-inner">
             <div>
@@ -96,7 +98,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
                 </span>
               </div>
               <h1 style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: 'clamp(2.4rem,5.5vw,4rem)', color: '#fff', letterSpacing: '.04em', lineHeight: 1.05, marginBottom: 14 }}>
-                SANDBOX<span style={{ color: '#EF4444' }}>.</span>CEO
+                SANDBOX<br /><span style={{ color: '#EF4444' }}>GROUP</span>
               </h1>
               <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: 'clamp(1rem,2vw,1.3rem)', color: '#E8D28A', marginBottom: 10 }}>
                 {isEn ? 'Your Compliance & Business Growth Partner' : isSc ? '您的合规与业务增长伙伴' : '您的合規與業務增長夥伴'}

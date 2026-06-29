@@ -82,9 +82,9 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', height: 68, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
           {/* Logo */}
           <Link href="/" style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: '1.2rem', color: '#0F2557', letterSpacing: '.05em', whiteSpace: 'nowrap', textDecoration: 'none' }}>
-            SANDBOX<span style={{ color: '#EF4444' }}>.</span>CEO
+            SANDBOX <span style={{ color: '#EF4444' }}>GROUP</span>
             <small style={{ display: 'block', fontSize: '.55rem', fontWeight: 600, letterSpacing: '.12em', color: '#64748B', textTransform: 'uppercase', marginTop: -2 }}>
-              Compliance · Licensing · Corporate
+              Compliance · Licensing · Corporate Services
             </small>
           </Link>
 
