@@ -94,7 +94,18 @@ export default async function MsoPage({
 
         <SubTabNav tabs={tabs} activeTab={activeTab} />
 
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 40, padding: '60px 24px 80px' }}>
+        <style>{`
+          .mso-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 40px; }
+          .mso-svc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-bottom: 32px; }
+          .mso-req-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+          @media (max-width: 768px) {
+            .mso-layout { grid-template-columns: 1fr; gap: 24px; }
+            .mso-svc-grid { grid-template-columns: 1fr; }
+            .mso-req-grid { grid-template-columns: 1fr; }
+          }
+        `}</style>
+
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '60px 24px 80px' }} className="mso-layout">
           {/* Left content */}
           <div>
             {activeTab === 'overview' && <OverviewContent isEn={isEn} isSc={isSc} />}
@@ -254,7 +265,7 @@ function OverviewContent({ isEn, isSc }: { isEn: boolean; isSc: boolean }) {
           : '金錢服務經營者（MSO）牌照由香港海關簽發。提供貨幣兌換或匯款服務的經營者須持牌經營。Sandbox Group 提供一站式 MSO 牌照解決方案，涵蓋新牌申請、續期、轉讓及 AML 合規系統。'
       } />
       <CategoryTitle text={isEn ? 'Our MSO Services' : isSc ? '我们的MSO服务' : '我們的MSO服務'} />
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, marginBottom: 32 }}>
+      <div className="mso-svc-grid">
         {[
           { icon: '📋', tc: '新牌照申請', en: 'New Application', desc: '全程代辦海關申請，包括文件整理、AML/CFT政策撰寫及提交。' },
           { icon: '🔄', tc: '牌照續期', en: 'Licence Renewal', desc: '確保準時完成續期，避免業務中斷及合規風險。' },
@@ -292,7 +303,7 @@ function NewAppContent({ isEn, isSc }: { isEn: boolean; isSc: boolean }) {
 
       <div style={{ marginTop: 32 }}>
         <CategoryTitle text={isEn ? 'Key Requirements' : isSc ? '主要申请要求' : '主要申請要求'} />
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+        <div className="mso-req-grid">
           <ReqBox title="公司要求" items={['香港註冊有限公司', '在港有實際業務地址', '至少一名在港董事', '最低實繳股本 HK$500,000']} />
           <ReqBox title="人員要求" items={['合規主任 (MLRO)', '負責人通過適當人選評核', '相關業務經驗', '無刑事定罪記錄']} />
           <ReqBox title="系統要求" items={['AML/KYC系統', '交易監控系統', '制裁名單篩查', '可疑交易申報機制']} />

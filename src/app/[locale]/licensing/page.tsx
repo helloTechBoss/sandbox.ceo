@@ -152,6 +152,13 @@ export default async function LicensingPage({
 
         <SubTabNav tabs={tabs} activeTab={activeTab} />
 
+        <style>{`
+          .lic-tab-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 32px; }
+          @media (max-width: 768px) {
+            .lic-tab-layout { grid-template-columns: 1fr; gap: 24px; }
+          }
+        `}</style>
+
         {activeTab === 'overview' && (
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '60px 24px' }}>
             <div style={{ borderLeft: '3px solid #EF4444', paddingLeft: 16, marginBottom: 40 }}>
@@ -203,7 +210,7 @@ export default async function LicensingPage({
         )}
 
         {activeTab === 'sfc' && (
-          <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 32, padding: '60px 24px' }}>
+          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '60px 24px' }} className="lic-tab-layout">
             <div>
               <div style={{ borderLeft: '3px solid #EF4444', paddingLeft: 16, marginBottom: 32 }}>
                 <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.93rem', color: '#334155', lineHeight: 1.85 }}>
@@ -288,7 +295,7 @@ export default async function LicensingPage({
         )}
 
         {activeTab === 'hk-other' && (
-          <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 32, padding: '60px 24px' }}>
+          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '60px 24px' }} className="lic-tab-layout">
             <div>
               <div style={{ borderLeft: '3px solid #EF4444', paddingLeft: 16, marginBottom: 32 }}>
                 <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.93rem', color: '#334155', lineHeight: 1.85 }}>
@@ -348,7 +355,7 @@ export default async function LicensingPage({
         )}
 
         {activeTab === 'overseas' && (
-          <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 32, padding: '60px 24px' }}>
+          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '60px 24px' }} className="lic-tab-layout">
             <div>
               <div style={{ borderLeft: '3px solid #EF4444', paddingLeft: 16, marginBottom: 32 }}>
                 <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.93rem', color: '#334155', lineHeight: 1.85 }}>

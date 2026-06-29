@@ -144,7 +144,7 @@ export default async function CorporatePage({
     <>
       <SiteHeader locale={locale} waNumber={waNumber} />
       <main>
-        <div style={{ background: '#0F2557', padding: '56px 0', position: 'relative', overflow: 'hidden' }}>
+        <div className="corp-hero" style={{ background: '#0F2557', padding: '56px 0', position: 'relative', overflow: 'hidden' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
             <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.65rem', fontWeight: 700, letterSpacing: '.2em', color: '#C9A84C', textTransform: 'uppercase', marginBottom: 10 }}>
               {isEn ? 'CORPORATE SERVICES' : isSc ? '企业服务' : '企業服務'}
@@ -168,7 +168,7 @@ export default async function CorporatePage({
         <SubTabNav tabs={tabs} activeTab={activeTab} />
 
         {activeTab === 'overview' && (
-          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '60px 24px' }}>
+          <div className="corp-overview-wrapper" style={{ maxWidth: 1200, margin: '0 auto', padding: '60px 24px' }}>
             <div style={{ borderLeft: '3px solid #EF4444', paddingLeft: 16, marginBottom: 40 }}>
               <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.93rem', color: '#334155', lineHeight: 1.85 }}>
                 {isEn
@@ -178,7 +178,7 @@ export default async function CorporatePage({
                   : '穩健的企業架構是合規運營和可持續增長的基礎。我們為初創企業、中小企及海外公司提供一站式企業服務，涵蓋公司設立、秘書、會計及人才招聘。'}
               </p>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 20 }}>
+            <div className="corp-overview-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 20 }}>
               <OverviewCard tab="incorporation" locale={locale} enTitle="INCORPORATION" title={isEn ? 'Company Incorporation' : isSc ? '公司注册' : '公司成立'} desc={isEn ? 'HK limited company setup with secretarial services and TCSP licence applications.' : isSc ? '香港有限公司成立、秘书服务及TCSP牌照申请。' : '香港有限公司成立、秘書服務及 TCSP 牌照申請。'} />
               <OverviewCard tab="comsec" locale={locale} enTitle="COMPANY SECRETARY" title={isEn ? 'Company Secretarial' : isSc ? '公司秘书' : '公司秘書'} desc={isEn ? 'Statutory company secretarial services under the Companies Ordinance (Cap. 622).' : isSc ? '根据《公司条例》(第622章)提供法定公司秘书服务。' : '根據《公司條例》(第 622 章) 提供法定公司秘書服務。'} />
               <OverviewCard tab="accounting" locale={locale} enTitle="ACCOUNTING & AUDIT" title={isEn ? 'Accounting & Audit' : isSc ? '会计及审计' : '會計及審計'} desc={isEn ? 'Statutory audit, tax return filing, and bookkeeping services for HK companies.' : isSc ? '香港公司法定审计、报税及记账服务。' : '香港公司法定審計、報稅及記賬服務。'} />
@@ -189,7 +189,7 @@ export default async function CorporatePage({
         )}
 
         {activeTab === 'incorporation' && (
-          <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 32, padding: '60px 24px' }}>
+          <div className="corp-tab-content">
             <div>
               <div style={{ borderLeft: '3px solid #EF4444', paddingLeft: 16, marginBottom: 32 }}>
                 <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.93rem', color: '#334155', lineHeight: 1.85 }}>
@@ -226,7 +226,7 @@ export default async function CorporatePage({
               <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.88rem', color: '#C9A84C', letterSpacing: '.08em', textTransform: 'uppercase', margin: '28px 0 16px' }}>
                 {isEn ? 'PRICING PACKAGES' : isSc ? '收费套餐' : '收費套餐'}
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16 }}>
+              <div className="corp-pricing-grid">
                 <PkgCard
                   name={isEn ? 'Basic' : isSc ? '基础' : '基礎'}
                   price="HK$1,800"
@@ -280,7 +280,7 @@ export default async function CorporatePage({
         )}
 
         {activeTab === 'comsec' && (
-          <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 32, padding: '60px 24px' }}>
+          <div className="corp-tab-content">
             <div>
               <div style={{ borderLeft: '3px solid #EF4444', paddingLeft: 16, marginBottom: 32 }}>
                 <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.93rem', color: '#334155', lineHeight: 1.85 }}>
@@ -317,7 +317,7 @@ export default async function CorporatePage({
               <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.88rem', color: '#C9A84C', letterSpacing: '.08em', textTransform: 'uppercase', margin: '28px 0 16px' }}>
                 {isEn ? 'MONTHLY PLANS' : isSc ? '月费计划' : '月費計劃'}
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16 }}>
+              <div className="corp-pricing-grid">
                 <PkgCard
                   name="Basic"
                   price="HK$350/月"
@@ -363,7 +363,7 @@ export default async function CorporatePage({
         )}
 
         {activeTab === 'accounting' && (
-          <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 32, padding: '60px 24px' }}>
+          <div className="corp-tab-content">
             <div>
               <div style={{ borderLeft: '3px solid #EF4444', paddingLeft: 16, marginBottom: 32 }}>
                 <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.93rem', color: '#334155', lineHeight: 1.85 }}>
@@ -377,7 +377,7 @@ export default async function CorporatePage({
               <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.88rem', color: '#C9A84C', letterSpacing: '.08em', textTransform: 'uppercase', margin: '0 0 16px' }}>
                 {isEn ? 'SERVICE PLANS' : isSc ? '服务计划' : '服務計劃'}
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16, marginBottom: 24 }}>
+              <div className="corp-pricing-grid" style={{ marginBottom: 24 }}>
                 <PkgCard
                   name={isEn ? 'Audit + Tax' : isSc ? '审计+报税' : '審計+報稅'}
                   price={isEn ? 'From HK$3,800' : '由HK$3,800起'}
@@ -428,7 +428,7 @@ export default async function CorporatePage({
         )}
 
         {activeTab === 'deregistration' && (
-          <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 32, padding: '60px 24px' }}>
+          <div className="corp-tab-content">
             <div>
               <div style={{ borderLeft: '3px solid #EF4444', paddingLeft: 16, marginBottom: 32 }}>
                 <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.93rem', color: '#334155', lineHeight: 1.85 }}>
@@ -486,7 +486,7 @@ export default async function CorporatePage({
         )}
 
         {activeTab === 'hr' && (
-          <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 32, padding: '60px 24px' }}>
+          <div className="corp-tab-content">
             <div>
               <div style={{ borderLeft: '3px solid #EF4444', paddingLeft: 16, marginBottom: 32 }}>
                 <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.93rem', color: '#334155', lineHeight: 1.85 }}>
@@ -538,7 +538,7 @@ export default async function CorporatePage({
           </div>
         )}
 
-        <section style={{ background: '#F8FAFC', borderTop: '1px solid #E2E8F0', padding: '80px 0' }}>
+        <section className="corp-enquiry-section" style={{ background: '#F8FAFC', borderTop: '1px solid #E2E8F0', padding: '80px 0' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
             <h2 style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '1.3rem', color: '#0F2557', marginBottom: 6 }}>
               {isEn ? 'Submit an Enquiry' : isSc ? '提交查询' : '提交查詢'}
@@ -549,6 +549,19 @@ export default async function CorporatePage({
         </section>
       </main>
       <SiteFooter locale={locale} waNumber={waNumber} />
+      <style>{`
+        .corp-tab-content { display: grid; grid-template-columns: 2fr 1fr; gap: 32px; padding: 60px 24px; max-width: 1200px; margin: 0 auto; }
+        .corp-pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        @media (max-width: 768px) {
+          .corp-tab-content { grid-template-columns: 1fr; gap: 24px; padding: 32px 16px; }
+          .corp-tab-content > div:last-child { order: -1; }
+          .corp-pricing-grid { grid-template-columns: 1fr; }
+          .corp-overview-grid { grid-template-columns: 1fr !important; }
+          .corp-enquiry-section { padding: 40px 0 !important; }
+          .corp-hero { padding: 40px 0 !important; }
+          .corp-overview-wrapper { padding: 32px 16px !important; }
+        }
+      `}</style>
     </>
   );
 }

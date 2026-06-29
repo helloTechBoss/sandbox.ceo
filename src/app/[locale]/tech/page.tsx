@@ -85,7 +85,7 @@ export default async function TechPage({ params }: { params: Promise<{ locale: L
       <SiteHeader locale={locale} waNumber={waNumber} />
       <main>
         {/* ── HERO ── */}
-        <section style={{ background: '#0F2557', padding: '100px 0 80px', position: 'relative', overflow: 'hidden' }}>
+        <section className="tech-hero" style={{ background: '#0F2557', padding: '100px 0 80px', position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle at 80% 50%,rgba(239,68,68,.12) 0%,transparent 55%)', pointerEvents: 'none' }} />
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1, textAlign: 'center' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
@@ -105,7 +105,7 @@ export default async function TechPage({ params }: { params: Promise<{ locale: L
         </section>
 
         {/* ── INTRO ── */}
-        <section style={{ padding: '80px 0' }}>
+        <section className="tech-section" style={{ padding: '80px 0' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
             <div style={{ maxWidth: 800, margin: '0 auto', borderLeft: '4px solid #EF4444', paddingLeft: 32 }}>
               <span style={sectionLabel}>{t('關於 RegTech', 'About RegTech', '关于 RegTech')}</span>
@@ -121,14 +121,14 @@ export default async function TechPage({ params }: { params: Promise<{ locale: L
         </section>
 
         {/* ── SOLUTIONS ── */}
-        <section style={{ background: '#F8FAFC', padding: '80px 0' }}>
+        <section className="tech-section" style={{ background: '#F8FAFC', padding: '80px 0' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
             <div style={{ textAlign: 'center', marginBottom: 48 }}>
               <span style={sectionLabel}>{t('我們的解決方案', 'Our Solutions', '我们的解决方案')}</span>
               <h2 style={sectionTitle}>{t('四大核心 RegTech 產品', 'Four Core RegTech Products', '四大核心 RegTech 产品')}</h2>
               <div style={{ ...goldBar, margin: '12px auto 36px' }} />
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 2, background: '#E2E8F0' }}>
+            <div className="tech-solutions-grid">
               {solutions.map((svc, i) => (
                 <div key={i} style={{ background: '#fff', padding: '36px 32px' }}>
                   <div style={{ width: 52, height: 52, color: '#EF4444', marginBottom: 20 }}>{svc.icon}</div>
@@ -144,7 +144,7 @@ export default async function TechPage({ params }: { params: Promise<{ locale: L
         </section>
 
         {/* ── WHY REGTECH MATTERS ── */}
-        <section style={{ background: '#091A3E', padding: '80px 0' }}>
+        <section className="tech-section" style={{ background: '#091A3E', padding: '80px 0' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
             <div style={{ textAlign: 'center', marginBottom: 48 }}>
               <span style={{ ...sectionLabel, color: '#C9A84C' }}>{t('為何重要', 'Why It Matters', '为何重要')}</span>
@@ -153,7 +153,7 @@ export default async function TechPage({ params }: { params: Promise<{ locale: L
               </h2>
               <div style={{ width: 44, height: 3, background: '#C9A84C', margin: '12px auto 36px' }} />
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
+            <div className="tech-stat-grid">
               {statBoxes.map((box, i) => (
                 <div key={i} style={{ background: '#0F2557', padding: '36px 28px', border: '1px solid rgba(255,255,255,.08)' }}>
                   <div style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: '2.8rem', color: '#EF4444', lineHeight: 1, marginBottom: 14 }}>{box.num}</div>
@@ -169,7 +169,7 @@ export default async function TechPage({ params }: { params: Promise<{ locale: L
         </section>
 
         {/* ── CTA ── */}
-        <section style={{ background: '#EF4444', padding: '60px 0' }}>
+        <section className="tech-cta-section" style={{ background: '#EF4444', padding: '60px 0' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 32, flexWrap: 'wrap' }}>
             <div>
               <h2 style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: 'clamp(1.2rem,2.5vw,1.7rem)', color: '#fff' }}>
@@ -191,7 +191,7 @@ export default async function TechPage({ params }: { params: Promise<{ locale: L
         </section>
 
         {/* ── INQUIRY FORM ── */}
-        <section style={{ padding: '80px 0', background: '#F8FAFC' }}>
+        <section className="tech-section" style={{ padding: '80px 0', background: '#F8FAFC' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
             <div style={{ textAlign: 'center', marginBottom: 48 }}>
               <span style={sectionLabel}>{t('發送查詢', 'Get in Touch', '发送查询')}</span>
@@ -205,6 +205,17 @@ export default async function TechPage({ params }: { params: Promise<{ locale: L
         </section>
       </main>
       <SiteFooter locale={locale} waNumber={waNumber} />
+      <style>{`
+        .tech-solutions-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; background: #E2E8F0; }
+        .tech-stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        @media (max-width: 768px) {
+          .tech-solutions-grid { grid-template-columns: 1fr; }
+          .tech-stat-grid { grid-template-columns: 1fr; gap: 16px; }
+          .tech-hero { padding: 60px 0 40px !important; }
+          .tech-section { padding: 48px 0 !important; }
+          .tech-cta-section { padding: 40px 0 !important; }
+        }
+      `}</style>
     </>
   );
 }

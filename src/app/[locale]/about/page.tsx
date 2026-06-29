@@ -91,6 +91,16 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   return (
     <>
       <SiteHeader locale={locale} waNumber={waNumber} />
+      <style>{`
+        .about-story-grid { display: grid; grid-template-columns: 1fr 380px; gap: 60px; align-items: start; }
+        .about-why-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 2px; background: #E2E8F0; }
+        .about-team-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+        @media (max-width: 768px) {
+          .about-story-grid { grid-template-columns: 1fr; gap: 32px; }
+          .about-why-grid { grid-template-columns: 1fr; }
+          .about-team-grid { grid-template-columns: 1fr; }
+        }
+      `}</style>
       <main>
         {/* ── HERO ── */}
         <section style={{ background: 'linear-gradient(135deg,#091A3E 0%,#0F2557 60%,#1a3a7a 100%)', padding: '100px 0 80px', position: 'relative', overflow: 'hidden' }}>
@@ -114,7 +124,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
 
         {/* ── OUR STORY ── */}
         <section style={{ padding: '80px 0' }}>
-          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1fr 380px', gap: 60, alignItems: 'start' }}>
+          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }} className="about-story-grid">
             <div>
               <span style={sectionLabel}>{t('我們的故事', 'Our Story', '我们的故事')}</span>
               <h2 style={sectionTitle}>{t('由業界精英創立', 'Founded by Industry Veterans', '由业界精英创立')}</h2>
@@ -175,7 +185,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
               <h2 style={sectionTitle}>{t('為何選擇我們', 'Why Choose Us', '为何选择我们')}</h2>
               <div style={{ ...goldBar, margin: '12px auto 36px' }} />
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 2, background: '#E2E8F0' }}>
+            <div className="about-why-grid">
               {whyCards.map((card, i) => (
                 <div key={i} style={{ background: '#fff', padding: '36px 32px' }}>
                   <div style={{ width: 48, height: 48, background: '#0F2557', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
@@ -202,7 +212,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
               <h2 style={sectionTitle}>{t('資深業界專家', 'Senior Industry Experts', '资深业界专家')}</h2>
               <div style={{ ...goldBar, margin: '12px auto 36px' }} />
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
+            <div className="about-team-grid">
               {teamCards.map((member, i) => (
                 <div key={i} style={{ background: '#fff', border: '1px solid #E2E8F0', overflow: 'hidden' }}>
                   <div style={{ height: 8, background: '#0F2557' }} />

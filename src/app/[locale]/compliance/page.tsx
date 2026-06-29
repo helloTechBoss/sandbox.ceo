@@ -121,7 +121,7 @@ export default async function CompliancePage({
     <>
       <SiteHeader locale={locale} waNumber={waNumber} />
       <main>
-        <div style={{ background: '#0F2557', padding: '56px 0', position: 'relative', overflow: 'hidden' }}>
+        <div className="comp-hero" style={{ background: '#0F2557', padding: '56px 0', position: 'relative', overflow: 'hidden' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
             <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.65rem', fontWeight: 700, letterSpacing: '.2em', color: '#C9A84C', textTransform: 'uppercase', marginBottom: 10 }}>
               {isEn ? 'COMPLIANCE' : isSc ? '合规服务' : '合規服務'}
@@ -145,7 +145,7 @@ export default async function CompliancePage({
         <SubTabNav tabs={tabs} activeTab={activeTab} />
 
         {activeTab === 'overview' && (
-          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '60px 24px' }}>
+          <div className="comp-overview-wrapper" style={{ maxWidth: 1200, margin: '0 auto', padding: '60px 24px' }}>
             <div style={{ borderLeft: '3px solid #EF4444', paddingLeft: 16, marginBottom: 40 }}>
               <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.93rem', color: '#334155', lineHeight: 1.85 }}>
                 {isEn
@@ -155,7 +155,7 @@ export default async function CompliancePage({
                   : '在監管日趨嚴格的環境下，持續合規與取得牌照同樣重要。任何合規缺失均可能導致牌照被撤銷或重罰。我們提供全面的持續合規支援，讓您專注業務增長。'}
               </p>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 20, marginBottom: 40 }}>
+            <div className="comp-overview-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 20, marginBottom: 40 }}>
               <OverviewCard
                 tab="ongoing"
                 locale={locale}
@@ -195,7 +195,7 @@ export default async function CompliancePage({
         )}
 
         {activeTab === 'ongoing' && (
-          <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 32, padding: '60px 24px' }}>
+          <div className="comp-tab-content">
             <div>
               <div style={{ borderLeft: '3px solid #EF4444', paddingLeft: 16, marginBottom: 32 }}>
                 <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.93rem', color: '#334155', lineHeight: 1.85 }}>
@@ -250,7 +250,7 @@ export default async function CompliancePage({
         )}
 
         {activeTab === 'audit' && (
-          <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 32, padding: '60px 24px' }}>
+          <div className="comp-tab-content">
             <div>
               <div style={{ borderLeft: '3px solid #EF4444', paddingLeft: 16, marginBottom: 32 }}>
                 <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.93rem', color: '#334155', lineHeight: 1.85 }}>
@@ -318,7 +318,7 @@ export default async function CompliancePage({
         )}
 
         {activeTab === 'training' && (
-          <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 32, padding: '60px 24px' }}>
+          <div className="comp-tab-content">
             <div>
               <div style={{ borderLeft: '3px solid #EF4444', paddingLeft: 16, marginBottom: 32 }}>
                 <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.93rem', color: '#334155', lineHeight: 1.85 }}>
@@ -367,7 +367,7 @@ export default async function CompliancePage({
           </div>
         )}
 
-        <section style={{ background: '#F8FAFC', borderTop: '1px solid #E2E8F0', padding: '80px 0' }}>
+        <section className="comp-enquiry-section" style={{ background: '#F8FAFC', borderTop: '1px solid #E2E8F0', padding: '80px 0' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
             <h2 style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '1.3rem', color: '#0F2557', marginBottom: 6 }}>
               {isEn ? 'Submit an Enquiry' : isSc ? '提交查询' : '提交查詢'}
@@ -378,6 +378,17 @@ export default async function CompliancePage({
         </section>
       </main>
       <SiteFooter locale={locale} waNumber={waNumber} />
+      <style>{`
+        .comp-tab-content { display: grid; grid-template-columns: 2fr 1fr; gap: 32px; padding: 60px 24px; max-width: 1200px; margin: 0 auto; }
+        @media (max-width: 768px) {
+          .comp-tab-content { grid-template-columns: 1fr; gap: 24px; padding: 32px 16px; }
+          .comp-tab-content > div:last-child { order: -1; }
+          .comp-overview-grid { grid-template-columns: 1fr !important; }
+          .comp-enquiry-section { padding: 40px 0 !important; }
+          .comp-hero { padding: 40px 0 !important; }
+          .comp-overview-wrapper { padding: 32px 16px !important; }
+        }
+      `}</style>
     </>
   );
 }
