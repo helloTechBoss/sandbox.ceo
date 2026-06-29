@@ -3,7 +3,20 @@ import { prisma } from '@/lib/prisma';
 
 const BASE = 'https://www.sandbox.ceo';
 const locales = ['zh-Hant', 'en', 'zh-Hans'] as const;
-const pages = ['', '/about', '/mso', '/licensing', '/compliance', '/corporate', '/tech', '/insights', '/contact'];
+const pages = [
+  '',
+  '/about',
+  '/mso',
+  '/mso/new-application',
+  '/mso/renewal',
+  '/licensing',
+  '/compliance',
+  '/corporate',
+  '/tech',
+  '/insights',
+  '/contact',
+  '/quotation/corporate',
+];
 
 function altLanguages(path: string) {
   return Object.fromEntries(

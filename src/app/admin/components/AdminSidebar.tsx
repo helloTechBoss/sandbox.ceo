@@ -9,6 +9,7 @@ const nav = [
   { href: '/admin/leads', label: 'Leads', icon: '📋' },
   { href: '/admin/articles', label: 'Insights / Articles', icon: '📰' },
   { href: '/admin/packages', label: 'Packages & Plans', icon: '📦' },
+  { href: '/admin/quotation', label: 'Corporate Quotation', icon: '🧮' },
   { href: '/admin/faqs', label: 'FAQs', icon: '❓' },
   { href: '/admin/sections', label: 'Pages & Sections', icon: '📄' },
   { href: '/admin/team', label: 'Team Members', icon: '👥' },
