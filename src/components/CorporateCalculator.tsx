@@ -39,6 +39,17 @@ interface Svc {
   p: string; code: string;
   nameTc: string; nameEn: string; nameSc: string;
   price: string; popular?: boolean;
+  ctaWaMessage?: string;
+}
+
+interface DbService {
+  id: string;
+  group: string;
+  name: unknown;
+  price: string;
+  featured: boolean;
+  ctaWhatsappMessage: string | null;
+  order: number;
 }
 const SVCS: Svc[] = [
   {p:'A',code:'INC_BASIC',nameTc:'香港有限公司成立（基礎）',nameEn:'HK Ltd Co. Formation (Basic)',nameSc:'香港有限公司成立（基础）',price:'HK$1,800'},
@@ -122,11 +133,38 @@ const labelStyle: React.CSSProperties = {
   fontWeight: 600,
 };
 
-export default function CorporateCalculator({ locale, waNumber }: { locale: Locale; waNumber: string }) {
+export default function CorporateCalculator({
+  locale,
+  waNumber,
+  dbServices = [],
+  defaultWaMsg = '',
+}: {
+  locale: Locale;
+  waNumber: string;
+  dbServices?: DbService[];
+  defaultWaMsg?: string;
+}) {
   const lk = lkOf(locale);
   const isEn = lk === 'en';
   const isSc = lk === 'sc';
   const waBase = `https://wa.me/${waNumber.replace(/\D/g, '')}`;
+
+  // Use DB services when the admin has added any; otherwise fall back to hardcoded SVCS
+  const activeSvcs: Svc[] = dbServices.length > 0
+    ? dbServices.map(s => {
+        const n = s.name as { tc: string; en: string; sc: string };
+        return {
+          p: s.group,
+          code: s.id,
+          nameTc: n.tc || '',
+          nameEn: n.en || '',
+          nameSc: n.sc || '',
+          price: s.price,
+          popular: s.featured,
+          ctaWaMessage: s.ctaWhatsappMessage ?? undefined,
+        };
+      })
+    : SVCS;
 
   const [tab, setTab] = useState('calc');
   const [rev, setRev] = useState('none_op');
@@ -170,6 +208,7 @@ export default function CorporateCalculator({ locale, waNumber }: { locale: Loca
   ].filter(Boolean).join('\n');
 
   function svcWaHref(svc: Svc) {
+    if (svc.ctaWaMessage) return `${waBase}?text=${encodeURIComponent(svc.ctaWaMessage)}`;
     const name = lk === 'en' ? svc.nameEn : lk === 'sc' ? svc.nameSc : svc.nameTc;
     const msg = isEn
       ? `Hi Sandbox Corporate, I would like a quotation for: ${name} (${svc.price})`
@@ -179,7 +218,11 @@ export default function CorporateCalculator({ locale, waNumber }: { locale: Loca
     return `${waBase}?text=${encodeURIComponent(msg)}`;
   }
 
-  const pillars = ['A','B','C','D','E','F','G','H'];
+  const calcWaHref = defaultWaMsg
+    ? `${waBase}?text=${encodeURIComponent(defaultWaMsg)}`
+    : `${waBase}?text=${encodeURIComponent(calcWaText)}`;
+
+  const pillars = ['A','B','C','D','E','F','G','H'].filter(p => activeSvcs.some(s => s.p === p));
   const pnames = PILLAR_NAMES[lk];
 
   return (
@@ -356,7 +399,7 @@ export default function CorporateCalculator({ locale, waNumber }: { locale: Loca
                     {isEn ? 'Annual estimate for reference only. Final fee confirmed upon engagement.' : isSc ? '年度估算，仅供参考。最终费用于确认委托后确定。' : '年度估算，僅供參考。最終費用於確認委託後確定。'}
                   </p>
                   <a
-                    href={`${waBase}?text=${encodeURIComponent(calcWaText)}`}
+                    href={calcWaHref}
                     target="_blank" rel="noopener noreferrer"
                     style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, background: '#EF4444', color: '#fff', padding: '13px 16px', marginTop: 20, fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.9rem', textDecoration: 'none' }}
                   >
@@ -370,7 +413,7 @@ export default function CorporateCalculator({ locale, waNumber }: { locale: Loca
               /* ── SERVICES TAB ─────────────────────────────────────────── */
               <div>
                 {pillars.map(p => {
-                  const svcs = SVCS.filter(s => s.p === p);
+                  const svcs = activeSvcs.filter(s => s.p === p);
                   return (
                     <div key={p} style={{ marginBottom: 32 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>

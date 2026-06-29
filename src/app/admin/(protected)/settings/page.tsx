@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic';
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 
-const SETTING_FIELDS = [
+const SETTING_FIELDS: { key: string; label: string; placeholder: string; hint?: string; multiline?: boolean }[] = [
   { key: 'whatsapp_number', label: 'WhatsApp Number', placeholder: '+85292318254', hint: 'Include country code. Used for all CTA links site-wide.' },
   { key: 'contact_email', label: 'Contact Email', placeholder: 'info@sandbox.ceo', hint: 'Optional.' },
   { key: 'ga_id', label: 'Google Analytics ID', placeholder: 'G-XXXXXXXXXX', hint: 'GA4 measurement ID.' },
@@ -10,6 +10,13 @@ const SETTING_FIELDS = [
   { key: 'social_facebook', label: 'Facebook URL', placeholder: 'https://facebook.com/...', hint: 'Optional.' },
   { key: 'social_instagram', label: 'Instagram URL', placeholder: 'https://www.instagram.com/...', hint: 'Optional.' },
   { key: 'og_image', label: 'Default OG Image URL', placeholder: 'https://www.sandbox.ceo/og-image.jpg', hint: 'Used for social sharing by default.' },
+  {
+    key: 'corporate_default_wa_message',
+    label: 'Corporate Quotation — Default WhatsApp Message',
+    placeholder: 'Hi Sandbox Corporate，我想查詢企業服務報價，請提供更多資訊。',
+    hint: "Used for the \"WhatsApp — Get Accurate Quote\" button on the fee calculator. If blank, the button sends an auto-generated summary of the user's inputs.",
+    multiline: true,
+  },
 ];
 
 export default async function SettingsPage() {
@@ -41,7 +48,9 @@ export default async function SettingsPage() {
           {SETTING_FIELDS.map(f => (
             <div key={f.key}>
               <label style={labelStyle}>{f.label}</label>
-              <input name={f.key} defaultValue={map[f.key] ?? ''} placeholder={f.placeholder} style={inputStyle} />
+              {f.multiline
+                ? <textarea name={f.key} defaultValue={map[f.key] ?? ''} placeholder={f.placeholder} rows={4} style={{ ...inputStyle, resize: 'vertical', fontFamily: 'inherit', lineHeight: 1.6 }} />
+                : <input name={f.key} defaultValue={map[f.key] ?? ''} placeholder={f.placeholder} style={inputStyle} />}
               {f.hint && <p style={{ fontSize: '.75rem', color: '#94A3B8', marginTop: 4 }}>{f.hint}</p>}
             </div>
           ))}

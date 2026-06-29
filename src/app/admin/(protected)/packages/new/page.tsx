@@ -65,7 +65,25 @@ export default function NewPackagePage() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
           <div>
             <label style={labelStyle}>Group</label>
-            <input name="group" required placeholder="e.g. mso, incorporation, comsec" style={inputStyle} />
+            <select name="group" required style={{ ...inputStyle, appearance: 'none', cursor: 'pointer', backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', paddingRight: 32 }}>
+              <option value="">— Select group —</option>
+              <optgroup label="Quotation Page Services (A–H)">
+                <option value="A">A — 公司成立 / Company Formation</option>
+                <option value="B">B — 公司秘書 / Company Secretary</option>
+                <option value="C">C — 會計 / Accounting</option>
+                <option value="D">D — 審計 / Audit</option>
+                <option value="E">E — 稅務 / Tax Advisory</option>
+                <option value="F">F — 商務中心 / Business Centre</option>
+                <option value="G">G — 企業服務 / Other Corp Services</option>
+                <option value="H">H — 簽證及移民 / Visa &amp; Immigration</option>
+              </optgroup>
+              <optgroup label="Pricing Plan Cards">
+                <option value="mso">mso</option>
+                <option value="incorporation">incorporation</option>
+                <option value="comsec">comsec</option>
+              </optgroup>
+            </select>
+            <p style={{ fontSize: '.72rem', color: '#94A3B8', marginTop: 4 }}>Groups A–H appear as service cards on the Corporate Quotation page. Other groups are used for pricing plan tables.</p>
           </div>
           <div>
             <label style={labelStyle}>Tier Label</label>
@@ -93,8 +111,9 @@ export default function NewPackagePage() {
         </div>
 
         <div style={{ marginBottom: 16 }}>
-          <label style={labelStyle}>CTA WhatsApp Message</label>
-          <input name="ctaWhatsappMessage" style={inputStyle} />
+          <label style={labelStyle}>CTA WhatsApp Message (optional)</label>
+          <input name="ctaWhatsappMessage" style={inputStyle} placeholder="Hi Sandbox Corporate，我想查詢：[服務名稱]..." />
+          <p style={{ fontSize: '.72rem', color: '#94A3B8', marginTop: 4 }}>For quotation page services (groups A–H): custom WhatsApp message when visitor clicks "Enquire". If blank, an auto-generated message with the service name and price is used.</p>
         </div>
 
         <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', padding: '20px 24px', marginBottom: 24 }}>

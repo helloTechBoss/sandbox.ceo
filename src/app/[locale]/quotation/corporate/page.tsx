@@ -1,14 +1,5 @@
 import { prisma } from '@/lib/prisma';
 import { getSeoMeta } from '@/lib/getSeoMeta';
-
-async function getSetting(key: string): Promise<string> {
-  try {
-    const row = await prisma.setting.findUnique({ where: { key } });
-    return (row?.value as string) || '';
-  } catch {
-    return '';
-  }
-}
 import CorporateCalculator from '@/components/CorporateCalculator';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
@@ -20,6 +11,15 @@ type LK = 'tc' | 'en' | 'sc';
 
 function lkOf(locale: Locale): LK {
   return locale === 'en' ? 'en' : locale === 'zh-Hans' ? 'sc' : 'tc';
+}
+
+async function getSetting(key: string): Promise<string> {
+  try {
+    const row = await prisma.setting.findUnique({ where: { key } });
+    return (row?.value as string) || '';
+  } catch {
+    return '';
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }) {
@@ -45,12 +45,34 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
 
 export default async function CorporateQuotationPage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
-  const waNumber = (await getSetting('whatsapp_number')) || '+85292318254';
+
+  const [waNumber, defaultWaMsg, dbServices] = await Promise.all([
+    getSetting('whatsapp_number').then(v => v || '+85292318254'),
+    getSetting('corporate_default_wa_message'),
+    prisma.package.findMany({
+      where: { group: { in: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'] } },
+      orderBy: [{ group: 'asc' }, { order: 'asc' }],
+      select: {
+        id: true,
+        group: true,
+        name: true,
+        price: true,
+        featured: true,
+        ctaWhatsappMessage: true,
+        order: true,
+      },
+    }).catch(() => []),
+  ]);
 
   return (
     <>
       <SiteHeader locale={locale} waNumber={waNumber} />
-      <CorporateCalculator locale={locale} waNumber={waNumber} />
+      <CorporateCalculator
+        locale={locale}
+        waNumber={waNumber}
+        dbServices={dbServices}
+        defaultWaMsg={defaultWaMsg}
+      />
       <SiteFooter locale={locale} waNumber={waNumber} />
     </>
   );
