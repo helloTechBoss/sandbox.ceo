@@ -60,6 +60,7 @@ export default async function TechPage({ params }: { params: Promise<{ locale: L
       en: 'Regulatory Fine Risk',
       descTc: '人工合規流程錯誤率高達 30%',
       descEn: 'Manual compliance processes have error rates up to 30%',
+      descSc: '人工合规流程错误率高达 30%',
     },
     {
       num: '50%',
@@ -67,6 +68,7 @@ export default async function TechPage({ params }: { params: Promise<{ locale: L
       en: 'Efficiency Gain',
       descTc: 'RegTech 系統可將合規成本降低達 50%',
       descEn: 'RegTech systems can reduce compliance costs by up to 50%',
+      descSc: 'RegTech 系统可将合规成本降低达 50%',
     },
     {
       num: '24/7',
@@ -74,6 +76,7 @@ export default async function TechPage({ params }: { params: Promise<{ locale: L
       en: 'Audit Ready',
       descTc: '數碼化記錄隨時準備接受監管巡查',
       descEn: 'Digital records ready for regulatory inspection at any time',
+      descSc: '数码化记录随时准备接受监管巡查',
     },
   ];
 
@@ -157,7 +160,7 @@ export default async function TechPage({ params }: { params: Promise<{ locale: L
                   <h3 style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 700, fontSize: '.95rem', color: '#fff', marginBottom: 4 }}>{box.en}</h3>
                   <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.8rem', color: '#C9A84C', marginBottom: 12 }}>{box.tc}</div>
                   <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.84rem', color: 'rgba(255,255,255,.55)', lineHeight: 1.8 }}>
-                    {isEn ? box.descEn : box.descTc}
+                    {isEn ? box.descEn : isSc ? (box.descSc ?? box.descTc) : box.descTc}
                   </p>
                 </div>
               ))}

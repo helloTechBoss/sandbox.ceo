@@ -7,6 +7,7 @@ interface Props {
 
 export default function SiteFooter({ locale = 'zh-Hant', waNumber = '+85292318254' }: Props) {
   const isEn = locale === 'en';
+  const isSc = locale === 'zh-Hans';
   const waHref = `https://wa.me/${waNumber.replace(/\D/g, '')}?text=${encodeURIComponent('Hi，我想查詢合規及牌照服務')}`;
 
   return (
@@ -19,7 +20,7 @@ export default function SiteFooter({ locale = 'zh-Hant', waNumber = '+8529231825
               SANDBOX<span style={{ color: '#EF4444' }}>.</span>CEO
             </div>
             <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.84rem', color: 'rgba(255,255,255,.55)', lineHeight: 1.85, marginBottom: 20 }}>
-              {isEn ? 'Making compliance & growth simpler.' : '讓合規與增長更簡單。'}
+              {isEn ? 'Making compliance & growth simpler.' : isSc ? '让合规与增长更简单。' : '讓合規與增長更簡單。'}
             </p>
             <a
               href={waHref}
@@ -42,14 +43,14 @@ export default function SiteFooter({ locale = 'zh-Hant', waNumber = '+8529231825
           {/* Services */}
           <div>
             <h4 style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 700, fontSize: '.72rem', letterSpacing: '.15em', color: '#C9A84C', textTransform: 'uppercase', marginBottom: 20 }}>
-              {isEn ? 'Core Services' : '核心服務'}
+              {isEn ? 'Core Services' : isSc ? '核心服务' : '核心服務'}
             </h4>
             <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {[
                 { href: '/mso', label: isEn ? 'MSO Licensing' : 'MSO 牌照' },
                 { href: '/licensing', label: isEn ? 'SFC Licensing' : 'SFC 牌照' },
-                { href: '/compliance', label: isEn ? 'AML Compliance' : 'AML 合規' },
-                { href: '/corporate', label: isEn ? 'Corporate Services' : '企業服務' },
+                { href: '/compliance', label: isEn ? 'AML Compliance' : isSc ? 'AML 合规' : 'AML 合規' },
+                { href: '/corporate', label: isEn ? 'Corporate Services' : isSc ? '企业服务' : '企業服務' },
                 { href: '/tech', label: 'RegTech' },
               ].map(item => (
                 <li key={item.href}>
@@ -64,15 +65,15 @@ export default function SiteFooter({ locale = 'zh-Hant', waNumber = '+8529231825
           {/* Quick Links */}
           <div>
             <h4 style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 700, fontSize: '.72rem', letterSpacing: '.15em', color: '#C9A84C', textTransform: 'uppercase', marginBottom: 20 }}>
-              {isEn ? 'Quick Links' : '快速連結'}
+              {isEn ? 'Quick Links' : isSc ? '快速链接' : '快速連結'}
             </h4>
             <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {[
-                { href: '/about', label: isEn ? 'About Us' : '關於我們' },
-                { href: '/insights', label: isEn ? 'Insights' : '行業洞察' },
-                { href: '/contact', label: isEn ? 'Contact' : '聯絡我們' },
-                { href: '/terms', label: isEn ? 'Terms of Service' : '服務條款' },
-                { href: '/privacy', label: isEn ? 'Privacy Policy' : '私隱政策' },
+                { href: '/about', label: isEn ? 'About Us' : isSc ? '关于我们' : '關於我們' },
+                { href: '/insights', label: isEn ? 'Insights' : isSc ? '行业洞察' : '行業洞察' },
+                { href: '/contact', label: isEn ? 'Contact' : isSc ? '联络我们' : '聯絡我們' },
+                { href: '/terms', label: isEn ? 'Terms of Service' : isSc ? '服务条款' : '服務條款' },
+                { href: '/privacy', label: isEn ? 'Privacy Policy' : isSc ? '隐私政策' : '私隱政策' },
               ].map(item => (
                 <li key={item.href}>
                   <Link href={item.href} style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.83rem', color: 'rgba(255,255,255,.55)', textDecoration: 'none' }}>
@@ -86,14 +87,14 @@ export default function SiteFooter({ locale = 'zh-Hant', waNumber = '+8529231825
           {/* Contact */}
           <div>
             <h4 style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 700, fontSize: '.72rem', letterSpacing: '.15em', color: '#C9A84C', textTransform: 'uppercase', marginBottom: 20 }}>
-              {isEn ? 'Contact' : '聯絡'}
+              {isEn ? 'Contact' : isSc ? '联络' : '聯絡'}
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.83rem', color: 'rgba(255,255,255,.55)', lineHeight: 1.6 }}>
                 <div style={{ color: 'rgba(255,255,255,.8)', fontWeight: 500, marginBottom: 2 }}>
-                  {isEn ? 'Hong Kong Office' : '香港辦公室'}
+                  {isEn ? 'Hong Kong Office' : isSc ? '香港办公室' : '香港辦公室'}
                 </div>
-                {isEn ? 'Kowloon Bay, Hong Kong' : '香港九龍灣'}
+                {isEn ? 'Kowloon Bay, Hong Kong' : isSc ? '香港九龙湾' : '香港九龍灣'}
               </div>
               <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.83rem', color: 'rgba(255,255,255,.55)' }}>
                 <div style={{ color: 'rgba(255,255,255,.8)', fontWeight: 500, marginBottom: 2 }}>WhatsApp</div>
@@ -103,9 +104,9 @@ export default function SiteFooter({ locale = 'zh-Hant', waNumber = '+8529231825
               </div>
               <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.83rem', color: 'rgba(255,255,255,.55)' }}>
                 <div style={{ color: 'rgba(255,255,255,.8)', fontWeight: 500, marginBottom: 2 }}>
-                  {isEn ? 'Office Hours' : '辦公時間'}
+                  {isEn ? 'Office Hours' : isSc ? '办公时间' : '辦公時間'}
                 </div>
-                {isEn ? 'Mon–Fri: 09:00 – 18:00' : '週一至週五：09:00 – 18:00'}
+                {isEn ? 'Mon–Fri: 09:00 – 18:00' : isSc ? '周一至周五：09:00 – 18:00' : '週一至週五：09:00 – 18:00'}
               </div>
             </div>
           </div>
@@ -114,7 +115,7 @@ export default function SiteFooter({ locale = 'zh-Hant', waNumber = '+8529231825
         {/* Bottom bar */}
         <div style={{ padding: '20px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
           <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.78rem', color: 'rgba(255,255,255,.35)' }}>
-            © {new Date().getFullYear()} Sandbox Group / Tech Boss Limited. {isEn ? 'All rights reserved.' : '版權所有。'}
+            © {new Date().getFullYear()} Sandbox Group / Tech Boss Limited. {isEn ? 'All rights reserved.' : isSc ? '版权所有。' : '版權所有。'}
           </p>
           <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.72rem', color: 'rgba(255,255,255,.25)', letterSpacing: '.05em' }}>
             SANDBOX.CEO

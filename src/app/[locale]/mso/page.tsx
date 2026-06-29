@@ -71,7 +71,7 @@ export default async function MsoPage({
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
               <div style={{ width: 28, height: 2, background: '#C9A84C' }} />
               <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.68rem', fontWeight: 700, letterSpacing: '.2em', color: '#E8D28A', textTransform: 'uppercase' }}>
-                {isEn ? 'Money Service Operator' : '金錢服務經營者'}
+                {isEn ? 'Money Service Operator' : isSc ? '金钱服务经营者' : '金錢服務經營者'}
               </span>
             </div>
             <h1 style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: 'clamp(2rem,4.5vw,3.2rem)', color: '#fff', lineHeight: 1.1, marginBottom: 16 }}>
@@ -86,7 +86,7 @@ export default async function MsoPage({
             </p>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(201,168,76,.15)', border: '1px solid rgba(201,168,76,.4)', padding: '8px 18px' }}>
               <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.75rem', fontWeight: 700, color: '#E8D28A' }}>
-                {isEn ? '✓ Customs-licensed practitioners' : '✓ 海關認可持牌從業員'}
+                {isEn ? '✓ Customs-licensed practitioners' : isSc ? '✓ 海关认可持牌从业员' : '✓ 海關認可持牌從業員'}
               </span>
             </div>
           </div>
@@ -110,7 +110,7 @@ export default async function MsoPage({
             <div style={{ border: '1px solid #E2E8F0' }}>
               <div style={{ background: '#0F2557', padding: '14px 20px' }}>
                 <h3 style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 700, fontSize: '.8rem', color: '#fff', letterSpacing: '.08em', textTransform: 'uppercase' }}>
-                  {isEn ? 'Who We Serve' : '適用客戶'}
+                  {isEn ? 'Who We Serve' : isSc ? '适用客户' : '適用客戶'}
                 </h3>
               </div>
               <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -127,7 +127,7 @@ export default async function MsoPage({
             {activeTab !== 'overview' && (
               <div style={{ background: '#091A3E', padding: '20px' }}>
                 <div style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.65rem', fontWeight: 700, letterSpacing: '.15em', color: '#C9A84C', textTransform: 'uppercase', marginBottom: 16 }}>
-                  {isEn ? 'Process' : '申請流程'}
+                  {isEn ? 'Process' : isSc ? '申请流程' : '申請流程'}
                 </div>
                 {(PROCESS_STEPS[activeTab as keyof typeof PROCESS_STEPS] ?? PROCESS_STEPS['new-application']).map((step, i) => (
                   <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', marginBottom: i < 4 ? 16 : 0 }}>
@@ -148,10 +148,10 @@ export default async function MsoPage({
             {/* WhatsApp CTA */}
             <div style={{ background: '#EF4444', padding: '20px' }}>
               <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, color: '#fff', fontSize: '.9rem', marginBottom: 8 }}>
-                {isEn ? 'Free Consultation' : '免費初步諮詢'}
+                {isEn ? 'Free Consultation' : isSc ? '免费初步咨询' : '免費初步諮詢'}
               </div>
               <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.8rem', color: 'rgba(255,255,255,.9)', lineHeight: 1.6, marginBottom: 14 }}>
-                {isEn ? 'Contact us on WhatsApp for a no-obligation assessment.' : '立即 WhatsApp 我們，獲取免費初步評估。'}
+                {isEn ? 'Contact us on WhatsApp for a no-obligation assessment.' : isSc ? '立即 WhatsApp 我们，获取免费初步评估。' : '立即 WhatsApp 我們，獲取免費初步評估。'}
               </p>
               <a
                 href={waLink}
@@ -180,10 +180,10 @@ export default async function MsoPage({
         <section style={{ background: '#F8FAFC', padding: '72px 24px' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto' }}>
             <h2 style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: 'clamp(1.5rem,3vw,2.2rem)', color: '#0F2557', marginBottom: 8, textAlign: 'center' }}>
-              {isEn ? 'Get a Free Assessment' : '獲取免費初步評估'}
+              {isEn ? 'Get a Free Assessment' : isSc ? '获取免费初步评估' : '獲取免費初步評估'}
             </h2>
             <p style={{ fontFamily: "'Noto Sans TC',sans-serif", color: '#64748B', textAlign: 'center', marginBottom: 40 }}>
-              {isEn ? 'Tell us about your business and we will advise on the best approach.' : '告訴我們您的業務詳情，我們將為您提供最佳方案建議。'}
+              {isEn ? 'Tell us about your business and we will advise on the best approach.' : isSc ? '告诉我们您的业务详情，我们将为您提供最佳方案建议。' : '告訴我們您的業務詳情，我們將為您提供最佳方案建議。'}
             </p>
             <InquiryForm locale={locale} sourcePage="mso" waNumber={waNumber} />
           </div>
@@ -253,7 +253,7 @@ function OverviewContent({ isEn, isSc }: { isEn: boolean; isSc: boolean }) {
           ? '金钱服务经营者(MSO)牌照由香港海关签发。提供货币兑换或汇款服务的经营者须持牌经营。Sandbox Group提供一站式MSO牌照解决方案，涵盖新牌申请、续期、转让及AML合规系统。'
           : '金錢服務經營者（MSO）牌照由香港海關簽發。提供貨幣兌換或匯款服務的經營者須持牌經營。Sandbox Group 提供一站式 MSO 牌照解決方案，涵蓋新牌申請、續期、轉讓及 AML 合規系統。'
       } />
-      <CategoryTitle text={isEn ? 'Our MSO Services' : '我們的MSO服務'} />
+      <CategoryTitle text={isEn ? 'Our MSO Services' : isSc ? '我们的MSO服务' : '我們的MSO服務'} />
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, marginBottom: 32 }}>
         {[
           { icon: '📋', tc: '新牌照申請', en: 'New Application', desc: '全程代辦海關申請，包括文件整理、AML/CFT政策撰寫及提交。' },
@@ -283,7 +283,7 @@ function NewAppContent({ isEn, isSc }: { isEn: boolean; isSc: boolean }) {
           ? '新MSO牌照申请涉及向香港海关提交表格1，以及详细的AML/CFT政策、业务计划及关键人员的适当人选评估。我们的团队已成功处理数百份申请。'
           : '新 MSO 牌照申請涉及向香港海關提交表格 1，連同詳細的 AML/CFT 政策、業務計劃及關鍵人員的適當人選評估。我們的團隊已成功處理數百份申請。'
       } />
-      <CategoryTitle text={isEn ? 'Services Included' : '服務範疇'} />
+      <CategoryTitle text={isEn ? 'Services Included' : isSc ? '服务范畴' : '服務範疇'} />
       <SvcItem icon="📄" tc="申請文件準備" en="Document Preparation" desc="全套申請文件整理，包括公司架構圖、業務流程、股東資料及董事履歷。" />
       <SvcItem icon="🔒" tc="AML/CFT政策撰寫" en="AML/CFT Policy" desc="撰寫符合海關要求的反洗錢及反恐融資政策，涵蓋KYC、交易監控及可疑交易申報。" />
       <SvcItem icon="👤" tc="關鍵人員評估" en="Fit & Proper Assessment" desc="協助董事及負責人員準備海關問卷，確保符合適當人選標準。" />
@@ -291,7 +291,7 @@ function NewAppContent({ isEn, isSc }: { isEn: boolean; isSc: boolean }) {
       <SvcItem icon="📋" tc="海關跟進溝通" en="Customs Liaison" desc="全程代表申請人與海關溝通，跟進審批進度，即時回應補充文件要求。" />
 
       <div style={{ marginTop: 32 }}>
-        <CategoryTitle text={isEn ? 'Key Requirements' : '主要申請要求'} />
+        <CategoryTitle text={isEn ? 'Key Requirements' : isSc ? '主要申请要求' : '主要申請要求'} />
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
           <ReqBox title="公司要求" items={['香港註冊有限公司', '在港有實際業務地址', '至少一名在港董事', '最低實繳股本 HK$500,000']} />
           <ReqBox title="人員要求" items={['合規主任 (MLRO)', '負責人通過適當人選評核', '相關業務經驗', '無刑事定罪記錄']} />
@@ -313,7 +313,7 @@ function RenewalContent({ isEn, isSc }: { isEn: boolean; isSc: boolean }) {
           ? 'MSO牌照须每年续期。香港海关要求至少在到期日前3个月提交续期申请。未能按时续期可能导致牌照被暂停或撤销。我们全程代办续期手续。'
           : 'MSO 牌照須每年續期。香港海關要求至少在到期日前 3 個月提交續期申請。未能按時續期可能導致牌照被暫停或撤銷。我們全程代辦續期手續。'
       } />
-      <CategoryTitle text={isEn ? 'Renewal Services' : '續期服務'} />
+      <CategoryTitle text={isEn ? 'Renewal Services' : isSc ? '续期服务' : '續期服務'} />
       <SvcItem icon="🗓️" tc="提前3個月提醒" en="Advance Reminder" desc="我們主動追蹤您的牌照到期日，提前提醒並啟動續期流程，確保不會錯過截止日期。" />
       <SvcItem icon="📋" tc="合規文件更新" en="Compliance Update" desc="審查並更新 AML/CFT 政策、風險評估及客戶盡職審查程序，確保符合最新監管要求。" />
       <SvcItem icon="📝" tc="續期申請表格填寫" en="Renewal Application" desc="準備及遞交海關要求的所有續期文件及表格，並跟進審批進度。" />
@@ -332,7 +332,7 @@ function TransferContent({ isEn, isSc }: { isEn: boolean; isSc: boolean }) {
           ? '收购现有MSO牌照可能比申请新牌更快。然而，转让过程需要对目标公司进行尽职调查，并获得香港海关批准。我们为买卖双方提供全程顾问服务。'
           : '收購現有 MSO 牌照可能比申請新牌更快。然而，轉讓過程需要對目標公司進行盡職調查，並獲得香港海關批准。我們為買賣雙方提供全程顧問服務。'
       } />
-      <CategoryTitle text={isEn ? 'Transfer Services' : '轉讓服務'} />
+      <CategoryTitle text={isEn ? 'Transfer Services' : isSc ? '转让服务' : '轉讓服務'} />
       <SvcItem icon="🔍" tc="目標公司盡職調查" en="Due Diligence" desc="審查目標MSO的合規記錄、監管狀況、業務歷史及潛在風險，保護買方利益。" />
       <SvcItem icon="📜" tc="買賣協議草擬" en="SPA Drafting" desc="協調法律團隊草擬股份買賣協議，確保牌照轉讓條款清晰，保障雙方權益。" />
       <SvcItem icon="📋" tc="海關轉讓申請" en="Customs Application" desc="向香港海關遞交轉讓申請，協助新東主完成適當人選評核及合規文件更新。" />
@@ -351,7 +351,7 @@ function SystemContent({ isEn, isSc }: { isEn: boolean; isSc: boolean }) {
           ? '强健的AML系统不再是可选项——这是MSO持牌人的法律要求。香港海关期望持牌人拥有有文件记录的、技术支持的AML框架，涵盖KYC、交易监控和制裁筛查。'
           : '健全的 AML 系統不再是可選項——這是 MSO 持牌人的法律要求。香港海關期望持牌人擁有有文件記錄的、技術支持的 AML 框架，涵蓋 KYC、交易監控和制裁篩查。'
       } />
-      <CategoryTitle text={isEn ? 'AML System Services' : 'AML系統服務'} />
+      <CategoryTitle text={isEn ? 'AML System Services' : isSc ? 'AML系统服务' : 'AML系統服務'} />
       <SvcItem icon="🛡️" tc="AML合規系統部署" en="AML System Deployment" desc="提供適合MSO規模的AML系統，涵蓋客戶身份核實（eKYC）、交易監控及可疑活動申報功能。" />
       <SvcItem icon="🔍" tc="制裁名單篩查" en="Sanctions Screening" desc="整合全球制裁名單（OFAC, UN, HKMA）的自動篩查功能，實時過濾高風險客戶及交易。" />
       <SvcItem icon="📊" tc="交易監控規則設定" en="Transaction Monitoring" desc="根據您的業務風險狀況，設定交易監控觸發規則，平衡合規要求與業務效率。" />

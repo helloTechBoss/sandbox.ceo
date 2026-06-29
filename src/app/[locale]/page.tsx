@@ -53,6 +53,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
   const { locale } = await params;
   const lk = locale === 'zh-Hant' ? 'tc' : locale === 'en' ? 'en' : 'sc';
   const isEn = locale === 'en';
+  const isSc = locale === 'zh-Hans';
   const [waNumber, articles] = await Promise.all([
     getSetting('whatsapp_number').then(v => v || '+85292318254'),
     getArticles(),
@@ -74,32 +75,33 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
                 <div style={{ width: 32, height: 2, background: '#C9A84C' }} />
                 <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.7rem', fontWeight: 700, letterSpacing: '.2em', color: '#E8D28A', textTransform: 'uppercase' }}>
-                  {isEn ? 'Hong Kong' : '香港'} · {isEn ? 'Compliance & Licensing Experts' : '合規與牌照申請專家'}
+                  {isEn ? 'Hong Kong' : '香港'} · {isEn ? 'Compliance & Licensing Experts' : isSc ? '合规与牌照申请专家' : '合規與牌照申請專家'}
                 </span>
               </div>
               <h1 style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: 'clamp(2.4rem,5.5vw,4rem)', color: '#fff', letterSpacing: '.04em', lineHeight: 1.05, marginBottom: 14 }}>
                 SANDBOX<span style={{ color: '#EF4444' }}>.</span>CEO
               </h1>
               <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: 'clamp(1rem,2vw,1.3rem)', color: '#E8D28A', marginBottom: 10 }}>
-                {isEn ? 'Your Compliance & Business Growth Partner' : '您的合規與業務增長夥伴'}
+                {isEn ? 'Your Compliance & Business Growth Partner' : isSc ? '您的合规与业务增长伙伴' : '您的合規與業務增長夥伴'}
               </p>
               <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.95rem', color: 'rgba(255,255,255,.65)', marginBottom: 32, lineHeight: 1.9, maxWidth: 500 }}>
                 {isEn
                   ? 'Led by former compliance officers and MLROs from top financial institutions, delivering institutional-grade compliance, licensing and corporate services efficiently and competitively.'
+                  : isSc ? '由前金融机构合规主管及 MLRO 领导，以机构级合规标准，高效、具竞争力地提供牌照申请、持续合规及企业服务。'
                   : '由前金融機構合規主管及 MLRO 領導，以機構級合規標準，高效、具競爭力地提供牌照申請、持續合規及企業服務。'}
               </p>
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                 <a href={waMso} target="_blank" rel="noopener noreferrer" style={btnRed}>
-                  <WaIcon /> {isEn ? 'Free WhatsApp Consult' : '免費 WhatsApp 諮詢'}
+                  <WaIcon /> {isEn ? 'Free WhatsApp Consult' : isSc ? '免费 WhatsApp 咨询' : '免費 WhatsApp 諮詢'}
                 </a>
-                <a href="/about" style={btnGhost}>{isEn ? 'About Our Team' : '認識我們的團隊'}</a>
+                <a href="/about" style={btnGhost}>{isEn ? 'About Our Team' : isSc ? '认识我们的团队' : '認識我們的團隊'}</a>
               </div>
               {/* Stats */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 1, background: 'rgba(255,255,255,.15)', border: '1px solid rgba(255,255,255,.15)', marginTop: 40 }}>
                 {[
-                  { num: '4', label: isEn ? 'Core Divisions' : '核心業務' },
-                  { num: '10+', label: isEn ? 'Years Experience' : '年行業經驗' },
-                  { num: 'HK+GBA', label: isEn ? 'Coverage' : '服務範圍' },
+                  { num: '4', label: isEn ? 'Core Divisions' : isSc ? '核心业务' : '核心業務' },
+                  { num: '10+', label: isEn ? 'Years Experience' : isSc ? '年行业经验' : '年行業經驗' },
+                  { num: 'HK+GBA', label: isEn ? 'Coverage' : isSc ? '服务范围' : '服務範圍' },
                 ].map(s => (
                   <div key={s.num} style={{ background: 'rgba(9,26,62,.6)', padding: '18px 16px', textAlign: 'center' }}>
                     <div style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: '1.8rem', color: '#fff', lineHeight: 1 }}>
@@ -114,14 +116,14 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
             {/* Quick nav card */}
             <div style={{ background: 'rgba(255,255,255,.06)', border: '1px solid rgba(255,255,255,.15)', padding: '28px 24px', backdropFilter: 'blur(8px)' }} className="hero-card">
               <div style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.7rem', fontWeight: 700, letterSpacing: '.15em', color: '#C9A84C', textTransform: 'uppercase', marginBottom: 16, paddingBottom: 12, borderBottom: '1px solid rgba(255,255,255,.15)' }}>
-                {isEn ? 'Quick Service Navigator' : '快速服務導航'}
+                {isEn ? 'Quick Service Navigator' : isSc ? '快速服务导航' : '快速服務導航'}
               </div>
               {[
-                { href: waMso, label: isEn ? 'MSO Licence Application / Renewal' : 'MSO 牌照申請 / 續期' },
-                { href: `${waBase}?text=${encodeURIComponent('Hi，我想查詢SFC牌照申請')}`, label: isEn ? 'SFC Licence Application' : 'SFC 牌照申請' },
-                { href: `${waBase}?text=${encodeURIComponent('Hi，我想查詢美國MSB牌照')}`, label: isEn ? 'US MSB / MTL Licence' : '美國 MSB / MTL 牌照' },
-                { href: `${waBase}?text=${encodeURIComponent('Hi，我想查詢公司秘書服務')}`, label: isEn ? 'Company Secretary / Corporate' : '公司秘書 / 企業服務' },
-                { href: `${waBase}?text=${encodeURIComponent('Hi，我想查詢AML合規系統')}`, label: isEn ? 'AML Compliance System' : 'AML 合規系統' },
+                { href: waMso, label: isEn ? 'MSO Licence Application / Renewal' : isSc ? 'MSO 牌照申请 / 续期' : 'MSO 牌照申請 / 續期' },
+                { href: `${waBase}?text=${encodeURIComponent('Hi，我想查詢SFC牌照申請')}`, label: isEn ? 'SFC Licence Application' : isSc ? 'SFC 牌照申请' : 'SFC 牌照申請' },
+                { href: `${waBase}?text=${encodeURIComponent('Hi，我想查詢美國MSB牌照')}`, label: isEn ? 'US MSB / MTL Licence' : isSc ? '美国 MSB / MTL 牌照' : '美國 MSB / MTL 牌照' },
+                { href: `${waBase}?text=${encodeURIComponent('Hi，我想查詢公司秘書服務')}`, label: isEn ? 'Company Secretary / Corporate' : isSc ? '公司秘书 / 企业服务' : '公司秘書 / 企業服務' },
+                { href: `${waBase}?text=${encodeURIComponent('Hi，我想查詢AML合規系統')}`, label: isEn ? 'AML Compliance System' : isSc ? 'AML 合规系统' : 'AML 合規系統' },
               ].map(item => (
                 <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer" style={{
                   display: 'flex', alignItems: 'flex-start', gap: 10, padding: '10px 12px', margin: '0 -12px',
@@ -139,7 +141,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
                 fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.9rem',
                 textDecoration: 'none', transition: 'background .2s',
               }}>
-                {isEn ? 'Enquire Now →' : '立即查詢 →'}
+                {isEn ? 'Enquire Now →' : isSc ? '立即查询 →' : '立即查詢 →'}
               </a>
             </div>
           </div>
@@ -167,9 +169,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         <div style={{ background: '#fff', borderBottom: '1px solid #E2E8F0', padding: '20px 0' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 40, flexWrap: 'wrap' }}>
             {[
-              isEn ? 'Led by Former Bank Compliance Officers' : '前銀行合規主管領導',
-              isEn ? 'Kowloon Bay, Hong Kong Office' : '香港九龍灣辦公室',
-              isEn ? '10+ Years Industry Experience' : '10+ 年行業經驗',
+              isEn ? 'Led by Former Bank Compliance Officers' : isSc ? '前银行合规主管领导' : '前銀行合規主管領導',
+              isEn ? 'Kowloon Bay, Hong Kong Office' : isSc ? '香港九龙湾办公室' : '香港九龍灣辦公室',
+              isEn ? '10+ Years Industry Experience' : isSc ? '10+ 年行业经验' : '10+ 年行業經驗',
             ].map((label, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.83rem', color: '#64748B' }}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" strokeWidth="2">
@@ -185,8 +187,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         <section style={{ padding: '80px 0' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
             <div style={{ textAlign: 'center', marginBottom: 48 }}>
-              <span style={sectionLabel}>{isEn ? 'WHAT WE DO' : '我們的業務'}</span>
-              <h2 style={sectionTitle}>{isEn ? 'Four Core Divisions' : '四大核心業務'}</h2>
+              <span style={sectionLabel}>{isEn ? 'WHAT WE DO' : isSc ? '我们的业务' : '我們的業務'}</span>
+              <h2 style={sectionTitle}>{isEn ? 'Four Core Divisions' : isSc ? '四大核心业务' : '四大核心業務'}</h2>
               <div style={goldBar} />
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 0, border: '1px solid #E2E8F0' }}>
@@ -194,29 +196,29 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
                 {
                   icon: <LicenceIcon />,
                   num: '01', enTitle: 'MSO & Licensing', zhTitle: 'MSO 牌照',
-                  desc: isEn ? 'One-stop MSO licence applications, renewals and AML compliance systems for remittance companies and money changers.' : 'MSO 牌照申請、續期及 AML 合規系統，服務匯款及找換公司。',
-                  subs: isEn ? ['New Application', 'Renewal & Transfer', 'AML System'] : ['新牌照申請', '續期及轉讓', 'AML 合規系統'],
+                  desc: isEn ? 'One-stop MSO licence applications, renewals and AML compliance systems for remittance companies and money changers.' : isSc ? 'MSO 牌照申请、续期及 AML 合规系统，服务汇款及找换公司。' : 'MSO 牌照申請、續期及 AML 合規系統，服務匯款及找換公司。',
+                  subs: isEn ? ['New Application', 'Renewal & Transfer', 'AML System'] : isSc ? ['新牌照申请', '续期及转让', 'AML 合规系统'] : ['新牌照申請', '續期及轉讓', 'AML 合規系統'],
                   href: '/mso',
                 },
                 {
                   icon: <ComplianceIcon />,
                   num: '02', enTitle: 'Compliance', zhTitle: '持續合規',
-                  desc: isEn ? 'Outsourced compliance officer, independent AML audit, CPT training and ESG advisory for licensed corporations and MSOs.' : '外判合規主任、獨立 AML 審計、CPT 培訓及 ESG 顧問服務。',
-                  subs: isEn ? ['Outsourced Compliance Officer', 'AML Audit', 'CPT Training'] : ['外判合規主任', 'AML 獨立審計', 'CPT 培訓'],
+                  desc: isEn ? 'Outsourced compliance officer, independent AML audit, CPT training and ESG advisory for licensed corporations and MSOs.' : isSc ? '外判合规主任、独立 AML 审计、CPT 培训及 ESG 顾问服务。' : '外判合規主任、獨立 AML 審計、CPT 培訓及 ESG 顧問服務。',
+                  subs: isEn ? ['Outsourced Compliance Officer', 'AML Audit', 'CPT Training'] : isSc ? ['外判合规主任', 'AML 独立审计', 'CPT 培训'] : ['外判合規主任', 'AML 獨立審計', 'CPT 培訓'],
                   href: '/compliance',
                 },
                 {
                   icon: <CorporateIcon />,
                   num: '03', enTitle: 'Corporate', zhTitle: '企業服務',
-                  desc: isEn ? 'Company incorporation, company secretary, accounting, TCSP licence and fund setup for startups and SMEs.' : '公司註冊、公司秘書、會計、TCSP 牌照及基金設立服務。',
-                  subs: isEn ? ['Incorporation', 'Company Secretary', 'Accounting & Tax'] : ['公司註冊', '公司秘書', '會計及稅務'],
+                  desc: isEn ? 'Company incorporation, company secretary, accounting, TCSP licence and fund setup for startups and SMEs.' : isSc ? '公司注册、公司秘书、会计、TCSP 牌照及基金设立服务。' : '公司註冊、公司秘書、會計、TCSP 牌照及基金設立服務。',
+                  subs: isEn ? ['Incorporation', 'Company Secretary', 'Accounting & Tax'] : isSc ? ['公司注册', '公司秘书', '会计及税务'] : ['公司註冊', '公司秘書', '會計及稅務'],
                   href: '/corporate',
                 },
                 {
                   icon: <TechIcon />,
                   num: '04', enTitle: 'RegTech', zhTitle: '合規科技',
-                  desc: isEn ? 'AML transaction monitoring, KYC/CDD client management and automated STR reports for MSOs.' : 'AML 交易監察、KYC/CDD 客戶管理及 STR 自動報告系統。',
-                  subs: isEn ? ['Transaction Monitoring', 'KYC / CDD', 'STR Auto-reports'] : ['交易監察', 'KYC / CDD', 'STR 自動報告'],
+                  desc: isEn ? 'AML transaction monitoring, KYC/CDD client management and automated STR reports for MSOs.' : isSc ? 'AML 交易监察、KYC/CDD 客户管理及 STR 自动报告系统。' : 'AML 交易監察、KYC/CDD 客戶管理及 STR 自動報告系統。',
+                  subs: isEn ? ['Transaction Monitoring', 'KYC / CDD', 'STR Auto-reports'] : isSc ? ['交易监察', 'KYC / CDD', 'STR 自动报告'] : ['交易監察', 'KYC / CDD', 'STR 自動報告'],
                   href: '/tech',
                 },
               ].map((div, i) => (
@@ -250,7 +252,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
                     ))}
                   </ul>
                   <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.78rem', fontWeight: 700, color: '#EF4444', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-                    {isEn ? 'Learn More' : '了解更多'} →
+                    {isEn ? 'Learn More' : isSc ? '了解更多' : '了解更多'} →
                   </span>
                 </a>
               ))}
@@ -263,26 +265,28 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 60, alignItems: 'start' }}>
               <div>
-                <span style={sectionLabel}>{isEn ? 'OUR ADVANTAGE' : '我們的優勢'}</span>
-                <h2 style={{ ...sectionTitle, marginBottom: 6 }} dangerouslySetInnerHTML={{ __html: isEn ? 'Why Choose<br/>Sandbox Group?' : '為什麼選擇<br/>Sandbox Group？' }} />
+                <span style={sectionLabel}>{isEn ? 'OUR ADVANTAGE' : isSc ? '我们的优势' : '我們的優勢'}</span>
+                <h2 style={{ ...sectionTitle, marginBottom: 6 }} dangerouslySetInnerHTML={{ __html: isEn ? 'Why Choose<br/>Sandbox Group?' : isSc ? '为什么选择<br/>Sandbox Group？' : '為什麼選擇<br/>Sandbox Group？' }} />
                 <div style={goldBar} />
                 <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.93rem', color: '#64748B', lineHeight: 1.95, marginBottom: 16 }}>
                   {isEn
                     ? "In Hong Kong's highly regulated financial environment, compliance is not just a legal obligation — it is the foundation of market trust and sustainable growth. Sandbox Group was founded by former compliance heads at top investment banks and financial institutions."
+                    : isSc ? '在香港高度监管的金融环境中，合规不只是法律义务——更是市场信任与可持续增长的基础。Sandbox Group 由前投资银行及金融机构合规主管创立。'
                     : '在香港高度監管的金融環境中，合規不只是法律義務——更是市場信任與可持續增長的基礎。Sandbox Group 由前投資銀行及金融機構合規主管創立。'}
                 </p>
                 <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.93rem', color: '#64748B', lineHeight: 1.95 }}>
                   {isEn
                     ? "We don't sell theory. We deliver results. From document preparation and regulatory liaison to post-approval compliance, we help businesses achieve their goals without compromising on standards."
+                    : isSc ? '我们不卖理论，我们交付结果。从文件准备、监管沟通到批准后合规，我们帮助企业在不妥协标准的前提下实现目标。'
                     : '我們不賣理論，我們交付結果。從文件準備、監管溝通到批准後合規，我們幫助企業在不妥協標準的前提下實現目標。'}
                 </p>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, background: '#E2E8F0' }}>
                 {[
-                  { num: '01', title: isEn ? 'Institutional Background' : '機構背景', desc: isEn ? 'Our team brings real-world experience as compliance officers and MLROs at major financial institutions.' : '團隊成員擁有頂級金融機構合規主管及 MLRO 實戰經驗。' },
-                  { num: '02', title: isEn ? 'One-stop Service' : '一站式服務', desc: isEn ? 'Licensing, ongoing compliance, corporate services and technology — all under one roof.' : '牌照、持續合規、企業服務及科技——盡在一處。' },
-                  { num: '03', title: isEn ? 'Practical & Efficient' : '務實高效', desc: isEn ? 'Actionable solutions tailored to real business operations, not abstract frameworks.' : '針對實際業務運作提供可執行方案，而非抽象框架。' },
-                  { num: '04', title: isEn ? 'Cost-effective' : '具成本效益', desc: isEn ? 'Leveraging compliance technology to deliver above-market standards at competitive fees.' : '借助合規科技以具競爭力的費用提供超越市場水準的服務。' },
+                  { num: '01', title: isEn ? 'Institutional Background' : isSc ? '机构背景' : '機構背景', desc: isEn ? 'Our team brings real-world experience as compliance officers and MLROs at major financial institutions.' : isSc ? '团队成员拥有顶级金融机构合规主管及 MLRO 实战经验。' : '團隊成員擁有頂級金融機構合規主管及 MLRO 實戰經驗。' },
+                  { num: '02', title: isEn ? 'One-stop Service' : isSc ? '一站式服务' : '一站式服務', desc: isEn ? 'Licensing, ongoing compliance, corporate services and technology — all under one roof.' : isSc ? '牌照、持续合规、企业服务及科技——尽在一处。' : '牌照、持續合規、企業服務及科技——盡在一處。' },
+                  { num: '03', title: isEn ? 'Practical & Efficient' : isSc ? '务实高效' : '務實高效', desc: isEn ? 'Actionable solutions tailored to real business operations, not abstract frameworks.' : isSc ? '针对实际业务运作提供可执行方案，而非抽象框架。' : '針對實際業務運作提供可執行方案，而非抽象框架。' },
+                  { num: '04', title: isEn ? 'Cost-effective' : isSc ? '具成本效益' : '具成本效益', desc: isEn ? 'Leveraging compliance technology to deliver above-market standards at competitive fees.' : isSc ? '借助合规科技以具竞争力的费用提供超越市场水准的服务。' : '借助合規科技以具競爭力的費用提供超越市場水準的服務。' },
                 ].map(adv => (
                   <div key={adv.num} style={{ background: '#fff', padding: '28px 24px' }}>
                     <div style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: '2rem', color: '#C9A84C', lineHeight: 1, marginBottom: 10 }}>{adv.num}</div>
@@ -299,20 +303,20 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         <section style={{ background: '#0F2557', padding: '80px 0' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
             <div style={{ textAlign: 'center', marginBottom: 8 }}>
-              <span style={{ ...sectionLabel, color: '#C9A84C' }}>{isEn ? 'OUR SERVICES' : '我們的服務'}</span>
+              <span style={{ ...sectionLabel, color: '#C9A84C' }}>{isEn ? 'OUR SERVICES' : isSc ? '我们的服务' : '我們的服務'}</span>
               <h2 style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: 'clamp(1.5rem,3vw,2rem)', color: '#fff', marginBottom: 6 }}>
-                {isEn ? 'Comprehensive Compliance & Corporate Services' : '全面合規與企業服務'}
+                {isEn ? 'Comprehensive Compliance & Corporate Services' : isSc ? '全面合规与企业服务' : '全面合規與企業服務'}
               </h2>
               <div style={{ width: 44, height: 3, background: '#C9A84C', margin: '12px auto 36px' }} />
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 2, background: 'rgba(255,255,255,.08)', marginTop: 12 }}>
               {[
-                { href: '/mso', icon: <LicenceIcon />, en: 'MSO Licensing', zh: 'MSO 牌照', desc: isEn ? 'MSO licence applications, renewals, transfers and AML compliance systems.' : 'MSO 牌照申請、續期、轉讓及 AML 合規系統。' },
-                { href: '/licensing', icon: <GlobeIcon />, en: 'Cross-border Licensing', zh: '跨境牌照', desc: isEn ? 'SFC, US MSB/MTL, Canada MSB, DPMS, Insurance Broker and Money Lenders licences.' : 'SFC、美國 MSB/MTL、加拿大 MSB、DPMS、保險中介人及放債人牌照。' },
-                { href: '/compliance', icon: <ComplianceIcon />, en: 'Regulatory Compliance', zh: '監管合規', desc: isEn ? 'Ongoing compliance, independent AML audit, CPT training and ESG advisory.' : '持續合規、獨立 AML 審計、CPT 培訓及 ESG 顧問。' },
-                { href: '/corporate', icon: <CorporateIcon />, en: 'One-stop Corporate', zh: '一站式企業服務', desc: isEn ? 'Company incorporation, company secretary, accounting, TCSP licence and fund setup.' : '公司註冊、公司秘書、會計、TCSP 牌照及基金設立。' },
-                { href: '/tech', icon: <TechIcon />, en: 'Compliance Technology', zh: '合規科技', desc: isEn ? 'AML transaction monitoring, KYC/CDD client management and automated STR reports.' : 'AML 交易監察、KYC/CDD 客戶管理及 STR 自動報告。' },
-                { href: '/corporate/hr', icon: <HrIcon />, en: 'HR & Visa', zh: '人才及簽證', desc: isEn ? 'Compliance talent recruitment, executive search and HK work visa applications.' : '合規人才招聘、高管搜尋及香港工作簽證申請。' },
+                { href: '/mso', icon: <LicenceIcon />, en: 'MSO Licensing', zh: isSc ? 'MSO 牌照' : 'MSO 牌照', desc: isEn ? 'MSO licence applications, renewals, transfers and AML compliance systems.' : isSc ? 'MSO 牌照申请、续期、转让及 AML 合规系统。' : 'MSO 牌照申請、續期、轉讓及 AML 合規系統。' },
+                { href: '/licensing', icon: <GlobeIcon />, en: 'Cross-border Licensing', zh: isSc ? '跨境牌照' : '跨境牌照', desc: isEn ? 'SFC, US MSB/MTL, Canada MSB, DPMS, Insurance Broker and Money Lenders licences.' : isSc ? 'SFC、美国 MSB/MTL、加拿大 MSB、DPMS、保险中介人及放债人牌照。' : 'SFC、美國 MSB/MTL、加拿大 MSB、DPMS、保險中介人及放債人牌照。' },
+                { href: '/compliance', icon: <ComplianceIcon />, en: 'Regulatory Compliance', zh: isSc ? '监管合规' : '監管合規', desc: isEn ? 'Ongoing compliance, independent AML audit, CPT training and ESG advisory.' : isSc ? '持续合规、独立 AML 审计、CPT 培训及 ESG 顾问。' : '持續合規、獨立 AML 審計、CPT 培訓及 ESG 顧問。' },
+                { href: '/corporate', icon: <CorporateIcon />, en: 'One-stop Corporate', zh: isSc ? '一站式企业服务' : '一站式企業服務', desc: isEn ? 'Company incorporation, company secretary, accounting, TCSP licence and fund setup.' : isSc ? '公司注册、公司秘书、会计、TCSP 牌照及基金设立。' : '公司註冊、公司秘書、會計、TCSP 牌照及基金設立。' },
+                { href: '/tech', icon: <TechIcon />, en: 'Compliance Technology', zh: isSc ? '合规科技' : '合規科技', desc: isEn ? 'AML transaction monitoring, KYC/CDD client management and automated STR reports.' : isSc ? 'AML 交易监察、KYC/CDD 客户管理及 STR 自动报告。' : 'AML 交易監察、KYC/CDD 客戶管理及 STR 自動報告。' },
+                { href: '/corporate/hr', icon: <HrIcon />, en: 'HR & Visa', zh: isSc ? '人才及签证' : '人才及簽證', desc: isEn ? 'Compliance talent recruitment, executive search and HK work visa applications.' : isSc ? '合规人才招聘、高管搜寻及香港工作签证申请。' : '合規人才招聘、高管搜尋及香港工作簽證申請。' },
               ].map(svc => (
                 <a key={svc.href} href={svc.href} style={{
                   background: '#091A3E', padding: '32px 28px', transition: 'background .2s',
@@ -323,7 +327,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
                   <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.8rem', color: '#C9A84C', marginBottom: 12 }}>{svc.zh}</div>
                   <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.83rem', color: 'rgba(255,255,255,.55)', lineHeight: 1.8 }}>{svc.desc}</p>
                   <div style={{ marginTop: 16, fontFamily: "'Montserrat',sans-serif", fontSize: '.75rem', fontWeight: 700, color: '#EF4444', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-                    {isEn ? 'Learn More' : '了解更多'} →
+                    {isEn ? 'Learn More' : isSc ? '了解更多' : '了解更多'} →
                   </div>
                 </a>
               ))}
@@ -335,17 +339,17 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         <section style={{ background: '#F8FAFC', padding: '80px 0' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
             <div style={{ textAlign: 'center', marginBottom: 8 }}>
-              <span style={sectionLabel}>{isEn ? 'HOW IT WORKS' : '服務流程'}</span>
-              <h2 style={sectionTitle}>{isEn ? '5-Step Application Process' : '五步申請流程'}</h2>
+              <span style={sectionLabel}>{isEn ? 'HOW IT WORKS' : isSc ? '服务流程' : '服務流程'}</span>
+              <h2 style={sectionTitle}>{isEn ? '5-Step Application Process' : isSc ? '五步申请流程' : '五步申請流程'}</h2>
               <div style={{ ...goldBar, margin: '12px auto 36px' }} />
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 0, position: 'relative', marginTop: 48 }}>
               {[
-                { title: isEn ? 'Free Initial Consultation' : '免費初步諮詢', desc: isEn ? 'Contact us by WhatsApp or phone. Our advisors respond same-day.' : '透過 WhatsApp 或電話聯絡我們，顧問當天回覆。' },
-                { title: isEn ? 'Due Diligence Assessment' : '盡職審查評估', desc: isEn ? 'We assess eligibility, corporate structure and AML framework.' : '評估申請資格、公司架構及 AML 框架。' },
-                { title: isEn ? 'Document Preparation' : '文件準備', desc: isEn ? 'We handle the complete application package — AML manual, business plan, supporting documents.' : '完整申請文件包——AML 手冊、商業計劃書及支援文件。' },
-                { title: isEn ? 'Regulatory Follow-up' : '監管跟進', desc: isEn ? 'We liaise with HKCED, SFC and other regulators on your behalf.' : '代表您與 HKCED、SFC 及其他監管機構溝通。' },
-                { title: isEn ? 'Post-approval Support' : '批准後支援', desc: isEn ? 'Ongoing compliance, AML audits, annual filings and staff training.' : '持續合規、AML 審計、年度申報及員工培訓。' },
+                { title: isEn ? 'Free Initial Consultation' : isSc ? '免费初步咨询' : '免費初步諮詢', desc: isEn ? 'Contact us by WhatsApp or phone. Our advisors respond same-day.' : isSc ? '透过 WhatsApp 或电话联络我们，顾问当天回复。' : '透過 WhatsApp 或電話聯絡我們，顧問當天回覆。' },
+                { title: isEn ? 'Due Diligence Assessment' : isSc ? '尽职审查评估' : '盡職審查評估', desc: isEn ? 'We assess eligibility, corporate structure and AML framework.' : isSc ? '评估申请资格、公司架构及 AML 框架。' : '評估申請資格、公司架構及 AML 框架。' },
+                { title: isEn ? 'Document Preparation' : isSc ? '文件准备' : '文件準備', desc: isEn ? 'We handle the complete application package — AML manual, business plan, supporting documents.' : isSc ? '完整申请文件包——AML 手册、商业计划书及支援文件。' : '完整申請文件包——AML 手冊、商業計劃書及支援文件。' },
+                { title: isEn ? 'Regulatory Follow-up' : isSc ? '监管跟进' : '監管跟進', desc: isEn ? 'We liaise with HKCED, SFC and other regulators on your behalf.' : isSc ? '代表您与 HKCED、SFC 及其他监管机构沟通。' : '代表您與 HKCED、SFC 及其他監管機構溝通。' },
+                { title: isEn ? 'Post-approval Support' : isSc ? '批准后支援' : '批准後支援', desc: isEn ? 'Ongoing compliance, AML audits, annual filings and staff training.' : isSc ? '持续合规、AML 审计、年度申报及员工培训。' : '持續合規、AML 審計、年度申報及員工培訓。' },
               ].map((step, i) => (
                 <div key={i} style={{ position: 'relative', padding: '32px 24px', border: '1px solid #E2E8F0', background: '#fff', marginRight: -1, marginBottom: -1 }}>
                   <div style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: '2.5rem', color: '#E2E8F0', lineHeight: 1, marginBottom: 12 }}>
@@ -379,12 +383,12 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
             <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 40, flexWrap: 'wrap', gap: 16 }}>
                 <div>
-                  <span style={sectionLabel}>{isEn ? 'LATEST INSIGHTS' : '最新資訊'}</span>
-                  <h2 style={sectionTitle}>{isEn ? 'Regulatory Updates & Industry Insights' : '監管動向與行業洞察'}</h2>
+                  <span style={sectionLabel}>{isEn ? 'LATEST INSIGHTS' : isSc ? '最新资讯' : '最新資訊'}</span>
+                  <h2 style={sectionTitle}>{isEn ? 'Regulatory Updates & Industry Insights' : isSc ? '监管动向与行业洞察' : '監管動向與行業洞察'}</h2>
                   <div style={goldBar} />
                 </div>
                 <a href="/insights" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.8rem', fontWeight: 700, color: '#0F2557', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-                  {isEn ? 'All Insights' : '全部文章'} →
+                  {isEn ? 'All Insights' : isSc ? '全部文章' : '全部文章'} →
                 </a>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
@@ -392,7 +396,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
                   const cat = (art.category as Record<string, string>)?.[lk] ?? '';
                   const title = (art.title as Record<string, string>)?.[lk] ?? '';
                   const excerpt = (art.excerpt as Record<string, string>)?.[lk] ?? '';
-                  const cta = (art.ctaLabel as Record<string, string>)?.[lk] ?? (isEn ? 'Read More →' : '閱讀更多 →');
+                  const cta = (art.ctaLabel as Record<string, string>)?.[lk] ?? (isEn ? 'Read More →' : isSc ? '阅读更多 →' : '閱讀更多 →');
                   const waMsg = art.ctaWhatsappMessage ? `${waBase}?text=${encodeURIComponent(art.ctaWhatsappMessage)}` : waDefault;
                   return (
                     <div key={art.id} style={{ border: '1px solid #E2E8F0', background: '#fff', transition: 'box-shadow .2s' }}>
@@ -429,10 +433,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 32, flexWrap: 'wrap' }}>
             <div>
               <h2 style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: 'clamp(1.2rem,2.5vw,1.7rem)', color: '#fff' }}>
-                {isEn ? 'Ready to Drive Your Compliance Growth?' : '準備好推動合規增長了嗎？'}
+                {isEn ? 'Ready to Drive Your Compliance Growth?' : isSc ? '准备好推动合规增长了吗？' : '準備好推動合規增長了嗎？'}
               </h2>
               <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.9rem', color: 'rgba(255,255,255,.8)', marginTop: 6 }}>
-                {isEn ? 'Contact us today for a free initial consultation.' : '立即聯絡我們，獲取免費初步諮詢。'}
+                {isEn ? 'Contact us today for a free initial consultation.' : isSc ? '立即联络我们，获取免费初步咨询。' : '立即聯絡我們，獲取免費初步諮詢。'}
               </p>
             </div>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
@@ -442,7 +446,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
                 fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.9rem', fontWeight: 700,
                 textDecoration: 'none', transition: 'opacity .2s',
               }}>
-                <WaIcon /> {isEn ? 'WhatsApp Now' : '立即 WhatsApp'}
+                <WaIcon /> {isEn ? 'WhatsApp Now' : isSc ? '立即 WhatsApp' : '立即 WhatsApp'}
               </a>
               <a href="/contact" style={{
                 display: 'inline-flex', alignItems: 'center', gap: 8,
@@ -450,7 +454,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
                 fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.9rem', fontWeight: 700,
                 textDecoration: 'none', transition: 'all .2s',
               }}>
-                {isEn ? 'Contact Information' : '聯絡資料'}
+                {isEn ? 'Contact Information' : isSc ? '联络资料' : '聯絡資料'}
               </a>
             </div>
           </div>
@@ -460,8 +464,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         <section style={{ padding: '80px 0', background: '#F8FAFC' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
             <div style={{ textAlign: 'center', marginBottom: 48 }}>
-              <span style={sectionLabel}>{isEn ? 'GET IN TOUCH' : '聯絡我們'}</span>
-              <h2 style={sectionTitle}>{isEn ? 'Send Us an Enquiry' : '發送查詢'}</h2>
+              <span style={sectionLabel}>{isEn ? 'GET IN TOUCH' : isSc ? '联络我们' : '聯絡我們'}</span>
+              <h2 style={sectionTitle}>{isEn ? 'Send Us an Enquiry' : isSc ? '发送查询' : '發送查詢'}</h2>
               <div style={{ ...goldBar, margin: '12px auto 36px' }} />
             </div>
             <div style={{ maxWidth: 680, margin: '0 auto' }}>

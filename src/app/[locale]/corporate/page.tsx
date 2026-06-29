@@ -201,7 +201,7 @@ export default async function CorporatePage({
                 </p>
               </div>
               <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.88rem', color: '#C9A84C', letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 12 }}>
-                {isEn ? 'INCORPORATION SERVICES' : '成立服務'}
+                {isEn ? 'INCORPORATION SERVICES' : isSc ? '成立服务' : '成立服務'}
               </div>
               <SvcItem
                 title={isEn ? 'HK Limited Company Formation' : isSc ? '香港有限公司成立' : '香港有限公司成立'}
@@ -228,7 +228,7 @@ export default async function CorporatePage({
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16 }}>
                 <PkgCard
-                  name={isEn ? 'Basic' : '基礎'}
+                  name={isEn ? 'Basic' : isSc ? '基础' : '基礎'}
                   price="HK$1,800"
                   features={isEn
                     ? ['Company Registration', 'Legal Share Capital', 'Articles of Association', 'Electronic Company Documents']
@@ -237,7 +237,7 @@ export default async function CorporatePage({
                     : ['公司成立申請', '法定股本', '公司章程', '電子公司憲章']}
                 />
                 <PkgCard
-                  name={isEn ? 'Standard' : '標準'}
+                  name={isEn ? 'Standard' : isSc ? '标准' : '標準'}
                   price="HK$3,200"
                   highlight
                   features={isEn
@@ -247,7 +247,7 @@ export default async function CorporatePage({
                     : ['基礎套餐全部內容', '首年公司秘書', '商業登記', '周年申報表（首年）']}
                 />
                 <PkgCard
-                  name={isEn ? 'Premium' : '高級'}
+                  name={isEn ? 'Premium' : isSc ? '高级' : '高級'}
                   price="HK$5,500"
                   features={isEn
                     ? ['All Standard Features', 'Bank Account Opening Assistance', 'Virtual Office', 'Initial Compliance Consultation']
@@ -262,6 +262,8 @@ export default async function CorporatePage({
                 title={isEn ? 'Who Should Incorporate' : isSc ? '谁应该注册公司' : '誰應該成立公司'}
                 items={isEn
                   ? ['Startups & Entrepreneurs', 'Overseas Companies Entering HK', 'Fintech & Payment Firms', 'Asset Management Firms', 'Trading Companies']
+                  : isSc
+                  ? ['初创企业及创业者', '海外公司进入香港市场', '金融科技及支付公司', '资产管理公司', '贸易公司']
                   : ['初創企業及創業者', '海外公司進入香港市場', '金融科技及支付公司', '資產管理公司', '貿易公司']}
               />
               <ProcessBar
@@ -272,7 +274,7 @@ export default async function CorporatePage({
                   ? ['公司名称预留', '文件准备', '递交公司注册处', '公司注册证发出', '商业登记及银行开户']
                   : ['公司名稱預留', '文件準備', '遞交公司註冊處', '公司註冊證發出', '商業登記及銀行開戶']}
               />
-              <WaCta href={waHref} label={isEn ? 'WhatsApp Us – Incorporation' : '立即 WhatsApp 查詢公司成立'} />
+              <WaCta href={waHref} label={isEn ? 'WhatsApp Us – Incorporation' : isSc ? '立即 WhatsApp 查询公司成立' : '立即 WhatsApp 查詢公司成立'} />
             </div>
           </div>
         )}
@@ -290,7 +292,7 @@ export default async function CorporatePage({
                 </p>
               </div>
               <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.88rem', color: '#C9A84C', letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 12 }}>
-                {isEn ? 'SECRETARIAL SERVICES' : '秘書服務'}
+                {isEn ? 'SECRETARIAL SERVICES' : isSc ? '秘书服务' : '秘書服務'}
               </div>
               <SvcItem
                 title={isEn ? 'Annual Return Filing' : isSc ? '周年申报表递交' : '周年申報表遞交'}
@@ -351,9 +353,11 @@ export default async function CorporatePage({
                 title={isEn ? 'Statutory Requirements' : isSc ? '法定要求' : '法定要求'}
                 items={isEn
                   ? ['Annual Return – within 42 days of anniversary', 'BR Renewal – before expiry', 'SCR – updated within 7 days of change', 'Registered Address in HK required']
+                  : isSc
+                  ? ['周年申报 – 周年日起42日内', '商业登记 – 到期前续期', '重要控制人 – 变更后7日内更新', '须有香港注册地址']
                   : ['周年申報 – 周年日起42日內', '商業登記 – 到期前續期', '重要控制人 – 變更後7日內更新', '須有香港註冊地址']}
               />
-              <WaCta href={waHref} label={isEn ? 'WhatsApp Us – Company Sec.' : '立即 WhatsApp 查詢公司秘書'} />
+              <WaCta href={waHref} label={isEn ? 'WhatsApp Us – Company Sec.' : isSc ? '立即 WhatsApp 查询公司秘书' : '立即 WhatsApp 查詢公司秘書'} />
             </div>
           </div>
         )}
@@ -371,7 +375,7 @@ export default async function CorporatePage({
                 </p>
               </div>
               <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.88rem', color: '#C9A84C', letterSpacing: '.08em', textTransform: 'uppercase', margin: '0 0 16px' }}>
-                {isEn ? 'SERVICE PLANS' : '服務計劃'}
+                {isEn ? 'SERVICE PLANS' : isSc ? '服务计划' : '服務計劃'}
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16, marginBottom: 24 }}>
                 <PkgCard
@@ -414,9 +418,11 @@ export default async function CorporatePage({
                 title={isEn ? 'Key Deadlines' : isSc ? '重要截止日期' : '重要截止日期'}
                 items={isEn
                   ? ['Profits Tax Return – within 1 month of issue', 'Employer Return – April each year', 'Financial Records – kept 7 years', 'Audit – before tax filing']
+                  : isSc
+                  ? ['利得税报税表 – 发出后1个月内', '雇主报税表 – 每年4月', '财务记录 – 保存7年', '审计 – 报税前完成']
                   : ['利得稅報稅表 – 發出後1個月內', '僱主報稅表 – 每年4月', '財務記錄 – 保存7年', '審計 – 報稅前完成']}
               />
-              <WaCta href={waHref} label={isEn ? 'WhatsApp Us – Accounting' : '立即 WhatsApp 查詢會計服務'} />
+              <WaCta href={waHref} label={isEn ? 'WhatsApp Us – Accounting' : isSc ? '立即 WhatsApp 查询会计服务' : '立即 WhatsApp 查詢會計服務'} />
             </div>
           </div>
         )}
@@ -434,7 +440,7 @@ export default async function CorporatePage({
                 </p>
               </div>
               <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.88rem', color: '#C9A84C', letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 12 }}>
-                {isEn ? 'DEREGISTRATION SERVICES' : '撤銷登記服務'}
+                {isEn ? 'DEREGISTRATION SERVICES' : isSc ? '撤销登记服务' : '撤銷登記服務'}
               </div>
               <SvcItem
                 title={isEn ? 'Company Deregistration Application' : isSc ? '公司撤销登记申请' : '公司撤銷登記申請'}
@@ -462,6 +468,8 @@ export default async function CorporatePage({
                 title={isEn ? 'Deregistration Requirements' : isSc ? '撤销登记条件' : '撤銷登記條件'}
                 items={isEn
                   ? ['Company has ceased operations', 'No outstanding liabilities', 'No pending legal proceedings', 'All taxes settled', "Shareholders' approval"]
+                  : isSc
+                  ? ['公司已停止营运', '无未清偿负债', '无待决法律诉讼', '所有税款已结清', '股东批准']
                   : ['公司已停止運營', '無未清償負債', '無待決法律訴訟', '所有稅款已結清', '股東批准']}
               />
               <ProcessBar
@@ -472,7 +480,7 @@ export default async function CorporatePage({
                   ? ['清理资产', '股东决议', '申请撤销', '政府审核', '完成撤销（3-4个月）']
                   : ['清理資產', '股東決議', '申請撤銷', '政府審核', '完成撤銷（3-4個月）']}
               />
-              <WaCta href={waHref} label={isEn ? 'WhatsApp Us – Deregistration' : '立即 WhatsApp 查詢撤銷登記'} />
+              <WaCta href={waHref} label={isEn ? 'WhatsApp Us – Deregistration' : isSc ? '立即 WhatsApp 查询撤销登记' : '立即 WhatsApp 查詢撤銷登記'} />
             </div>
           </div>
         )}
@@ -490,7 +498,7 @@ export default async function CorporatePage({
                 </p>
               </div>
               <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.88rem', color: '#C9A84C', letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 12 }}>
-                {isEn ? 'HR & TALENT SERVICES' : '人才服務'}
+                {isEn ? 'HR & TALENT SERVICES' : isSc ? '人才服务' : '人才服務'}
               </div>
               <SvcItem
                 title={isEn ? 'Compliance Talent Recruitment & Executive Search' : isSc ? '合规人才招聘及高管搜寻' : '合規人才招聘及高管搜尋'}
@@ -525,7 +533,7 @@ export default async function CorporatePage({
                   ? ['需求简报', '候选人搜寻', '筛选及入围', '面试协调', '录用及入职']
                   : ['需求簡報', '候選人搜尋', '篩選及入圍', '面試協調', '錄用及入職']}
               />
-              <WaCta href={waHref} label={isEn ? 'WhatsApp Us – HR & Talent' : '立即 WhatsApp 查詢人才服務'} />
+              <WaCta href={waHref} label={isEn ? 'WhatsApp Us – HR & Talent' : isSc ? '立即 WhatsApp 查询人才服务' : '立即 WhatsApp 查詢人才服務'} />
             </div>
           </div>
         )}

@@ -23,6 +23,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       initials: 'CO',
       nameTc: '合規部總監',
       titleTc: '合規部總監',
+      titleSc: '合规部总监',
       titleEn: 'Head of Compliance',
       bio: t(
         '前投資銀行 MLRO，擁有逾 15 年 AML 合規經驗',
@@ -34,6 +35,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       initials: 'LL',
       nameTc: '牌照申請總監',
       titleTc: '牌照申請總監',
+      titleSc: '牌照申请总监',
       titleEn: 'Head of Licensing',
       bio: t(
         '曾處理逾 200 宗 MSO 及 SFC 牌照申請',
@@ -45,6 +47,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       initials: 'CS',
       nameTc: '企業服務總監',
       titleTc: '企業服務總監',
+      titleSc: '企业服务总监',
       titleEn: 'Head of Corporate',
       bio: t(
         '香港執業會計師，專注金融機構企業架構',
@@ -59,24 +62,28 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       tc: '前銀行從業員',
       en: 'Former Bankers',
       descTc: '團隊成員均曾任職頂級金融機構',
+      descSc: '团队成员均曾任职顶级金融机构',
       descEn: 'Team members from top-tier financial institutions',
     },
     {
       tc: '全程代辦',
       en: 'End-to-End',
       descTc: '從申請到持續合規，一站式服務',
+      descSc: '从申请到持续合规，一站式服务',
       descEn: 'From application to ongoing compliance, one-stop service',
     },
     {
       tc: '透明收費',
       en: 'Transparent Fees',
       descTc: '固定報價，無隱藏收費',
+      descSc: '固定报价，无隐藏收费',
       descEn: 'Fixed quotes, no hidden fees',
     },
     {
       tc: '快速回應',
       en: 'Fast Response',
       descTc: 'WhatsApp 直達，即日回覆',
+      descSc: 'WhatsApp 直达，即日回复',
       descEn: 'WhatsApp direct line, same-day response',
     },
   ];
@@ -179,7 +186,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                   <h3 style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: '1rem', color: '#0F2557', marginBottom: 4, letterSpacing: '.02em' }}>{card.en}</h3>
                   <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.83rem', color: '#C9A84C', fontWeight: 600, marginBottom: 10 }}>{card.tc}</div>
                   <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.88rem', color: '#64748B', lineHeight: 1.8 }}>
-                    {isEn ? card.descEn : card.descTc}
+                    {isEn ? card.descEn : isSc ? card.descSc : card.descTc}
                   </p>
                 </div>
               ))}
@@ -204,7 +211,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                       <span style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: '1.2rem', color: '#fff' }}>{member.initials}</span>
                     </div>
                     <h3 style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '1rem', color: '#0F2557', marginBottom: 4 }}>
-                      {isEn ? member.titleEn : member.titleTc}
+                      {isEn ? member.titleEn : isSc ? member.titleSc : member.titleTc}
                     </h3>
                     <div style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.75rem', color: '#C9A84C', fontWeight: 600, letterSpacing: '.05em', marginBottom: 14 }}>
                       {member.titleEn.toUpperCase()}

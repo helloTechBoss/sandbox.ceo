@@ -9,9 +9,10 @@ type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
   const isEn = locale === 'en';
+  const isSc = locale === 'zh-Hans';
   return {
-    title: isEn ? 'Privacy Policy | Sandbox Group' : '私隱政策 | Sandbox Group',
-    description: isEn ? 'Privacy Policy for Sandbox Group compliance and licensing services.' : 'Sandbox Group 合規及牌照服務私隱政策。',
+    title: isEn ? 'Privacy Policy | Sandbox Group' : isSc ? '隐私政策 | Sandbox Group' : '私隱政策 | Sandbox Group',
+    description: isEn ? 'Privacy Policy for Sandbox Group compliance and licensing services.' : isSc ? 'Sandbox Group 合规及牌照服务隐私政策。' : 'Sandbox Group 合規及牌照服務私隱政策。',
   };
 }
 
@@ -33,7 +34,7 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
               {isEn ? 'Privacy Policy' : isSc ? '隐私政策' : '私隱政策'}
             </h1>
             <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.85rem', color: 'rgba(255,255,255,.6)' }}>
-              {isEn ? 'Last updated: January 2024' : '最後更新：2024年1月'}
+              {isEn ? 'Last updated: January 2024' : isSc ? '最后更新：2024年1月' : '最後更新：2024年1月'}
             </p>
           </div>
         </section>

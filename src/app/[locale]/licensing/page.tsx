@@ -114,7 +114,7 @@ export default async function LicensingPage({
 
   const tabs = [
     { key: 'overview', label: isEn ? 'Overview' : isSc ? '概览' : '概覽' },
-    { key: 'sfc', label: isEn ? 'SFC Licence' : 'SFC 牌照' },
+    { key: 'sfc', label: isEn ? 'SFC Licence' : isSc ? 'SFC 牌照' : 'SFC 牌照' },
     { key: 'hk-other', label: isEn ? 'HK Other' : isSc ? '香港其他' : '香港其他牌照' },
     { key: 'overseas', label: isEn ? 'Overseas' : isSc ? '海外' : '海外牌照' },
   ];
@@ -168,7 +168,7 @@ export default async function LicensingPage({
                 tab="sfc"
                 locale={locale}
                 enTitle="SFC LICENCE"
-                title={isEn ? 'SFC Licence' : 'SFC 牌照申請'}
+                title={isEn ? 'SFC Licence' : isSc ? 'SFC 牌照申请' : 'SFC 牌照申請'}
                 desc={isEn ? 'Type 1–9 regulated activities for Hong Kong investment firms.' : isSc ? '香港证券及期货业务Type 1–9监管活动牌照。' : '香港證券及期貨業務 Type 1–9 受規管活動牌照。'}
               />
               <OverviewCard
@@ -215,7 +215,7 @@ export default async function LicensingPage({
                 </p>
               </div>
               <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.88rem', color: '#C9A84C', letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 12 }}>
-                {isEn ? 'SFC REGULATED ACTIVITIES' : 'SFC 受規管活動'}
+                {isEn ? 'SFC REGULATED ACTIVITIES' : isSc ? 'SFC 受规管活动' : 'SFC 受規管活動'}
               </div>
               <SvcItem
                 icon={docIcon}
@@ -264,7 +264,7 @@ export default async function LicensingPage({
                 }
               />
               <div style={{ marginTop: 16 }}>
-                <WaCta href={waHref} label={isEn ? 'WhatsApp Us – SFC Licence' : '立即 WhatsApp 查詢 SFC 牌照'} />
+                <WaCta href={waHref} label={isEn ? 'WhatsApp Us – SFC Licence' : isSc ? '立即 WhatsApp 查询 SFC 牌照' : '立即 WhatsApp 查詢 SFC 牌照'} />
               </div>
               <div style={{ border: '1px solid #E2E8F0' }}>
                 <div style={{ background: '#0F2557', padding: '12px 16px', fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.85rem', color: '#fff' }}>
@@ -300,7 +300,7 @@ export default async function LicensingPage({
                 </p>
               </div>
               <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.88rem', color: '#C9A84C', letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 12 }}>
-                {isEn ? 'LICENCE TYPES' : '牌照類別'}
+                {isEn ? 'LICENCE TYPES' : isSc ? '牌照类别' : '牌照類別'}
               </div>
               <SvcItem
                 icon={docIcon}
@@ -341,7 +341,7 @@ export default async function LicensingPage({
                 }
               />
               <div style={{ marginTop: 16 }}>
-                <WaCta href={waHref} label={isEn ? 'WhatsApp Us – HK Licences' : '立即 WhatsApp 查詢香港牌照'} />
+                <WaCta href={waHref} label={isEn ? 'WhatsApp Us – HK Licences' : isSc ? '立即 WhatsApp 查询香港牌照' : '立即 WhatsApp 查詢香港牌照'} />
               </div>
             </div>
           </div>
@@ -360,7 +360,7 @@ export default async function LicensingPage({
                 </p>
               </div>
               <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.88rem', color: '#C9A84C', letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 12 }}>
-                {isEn ? 'OVERSEAS LICENCE SERVICES' : '海外牌照服務'}
+                {isEn ? 'OVERSEAS LICENCE SERVICES' : isSc ? '海外牌照服务' : '海外牌照服務'}
               </div>
               <SvcItem
                 icon={docIcon}
@@ -401,11 +401,11 @@ export default async function LicensingPage({
                 }
               />
               <div style={{ marginTop: 16 }}>
-                <WaCta href={waHref} label={isEn ? 'WhatsApp Us – MSB/MTL' : '立即 WhatsApp 查詢 MSB/MTL'} />
+                <WaCta href={waHref} label={isEn ? 'WhatsApp Us – MSB/MTL' : isSc ? '立即 WhatsApp 查询 MSB/MTL' : '立即 WhatsApp 查詢 MSB/MTL'} />
               </div>
               <div style={{ border: '1px solid #E2E8F0' }}>
                 <div style={{ background: '#0F2557', padding: '12px 16px', fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.85rem', color: '#fff' }}>
-                  {isEn ? 'FAQ' : '常見問題'}
+                  {isEn ? 'FAQ' : isSc ? '常见问题' : '常見問題'}
                 </div>
                 <FaqAccordion
                   faqs={[

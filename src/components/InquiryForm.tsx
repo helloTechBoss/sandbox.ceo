@@ -39,6 +39,7 @@ const services = {
 
 export default function InquiryForm({ locale = 'zh-Hant', sourcePage = 'home', waNumber = '+85292318254' }: Props) {
   const isEn = locale === 'en';
+  const isSc = locale === 'zh-Hans';
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
   const serviceList = services[locale as keyof typeof services] ?? services['zh-Hant'];
@@ -58,7 +59,7 @@ export default function InquiryForm({ locale = 'zh-Hant', sourcePage = 'home', w
       if (!res.ok) throw new Error('Failed');
       setSubmitted(true);
     } catch {
-      setError(isEn ? 'Submission failed. Please try WhatsApp instead.' : '提交失敗，請使用 WhatsApp 聯絡我們。');
+      setError(isEn ? 'Submission failed. Please try WhatsApp instead.' : isSc ? '提交失败，请使用 WhatsApp 联络我们。' : '提交失敗，請使用 WhatsApp 聯絡我們。');
     }
   };
 
@@ -71,10 +72,10 @@ export default function InquiryForm({ locale = 'zh-Hant', sourcePage = 'home', w
           </svg>
         </div>
         <h3 style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '1.1rem', color: '#0F2557', marginBottom: 8 }}>
-          {isEn ? 'Enquiry Received!' : '查詢已收到！'}
+          {isEn ? 'Enquiry Received!' : isSc ? '查询已收到！' : '查詢已收到！'}
         </h3>
         <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.9rem', color: '#64748B' }}>
-          {isEn ? 'Our team will respond within 1 business day.' : '我們的團隊將在 1 個工作天內回覆。'}
+          {isEn ? 'Our team will respond within 1 business day.' : isSc ? '我们的团队将在 1 个工作天内回复。' : '我們的團隊將在 1 個工作天內回覆。'}
         </p>
         <a
           href={`https://wa.me/${waNumber.replace(/\D/g, '')}?text=${encodeURIComponent('Hi，我剛提交了查詢表格，希望盡快跟進')}`}
@@ -82,7 +83,7 @@ export default function InquiryForm({ locale = 'zh-Hant', sourcePage = 'home', w
           rel="noopener noreferrer"
           style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 20, background: '#EF4444', color: '#fff', padding: '12px 24px', fontWeight: 700, fontSize: '.9rem', textDecoration: 'none' }}
         >
-          {isEn ? 'Also WhatsApp Us' : '也可 WhatsApp 我們'}
+          {isEn ? 'Also WhatsApp Us' : isSc ? '也可 WhatsApp 我们' : '也可 WhatsApp 我們'}
         </a>
       </div>
     );
@@ -92,29 +93,29 @@ export default function InquiryForm({ locale = 'zh-Hant', sourcePage = 'home', w
     <form onSubmit={handleSubmit(onSubmit)} style={{ background: '#fff', padding: '36px', border: '1px solid #E2E8F0' }}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }}>
         <div>
-          <label style={labelStyle}>{isEn ? 'Name *' : '姓名 *'}</label>
-          <input {...register('name')} style={{ ...inputStyle, borderColor: errors.name ? '#EF4444' : '#E2E8F0' }} placeholder={isEn ? 'Your name' : '您的姓名'} />
-          {errors.name && <span style={errorStyle}>{isEn ? 'Required' : '必填'}</span>}
+          <label style={labelStyle}>{isEn ? 'Name *' : isSc ? '姓名 *' : '姓名 *'}</label>
+          <input {...register('name')} style={{ ...inputStyle, borderColor: errors.name ? '#EF4444' : '#E2E8F0' }} placeholder={isEn ? 'Your name' : isSc ? '您的姓名' : '您的姓名'} />
+          {errors.name && <span style={errorStyle}>{isEn ? 'Required' : isSc ? '必填' : '必填'}</span>}
         </div>
         <div>
-          <label style={labelStyle}>{isEn ? 'Phone / WhatsApp' : '電話 / WhatsApp'}</label>
+          <label style={labelStyle}>{isEn ? 'Phone / WhatsApp' : isSc ? '电话 / WhatsApp' : '電話 / WhatsApp'}</label>
           <input {...register('phone')} style={inputStyle} placeholder="+852 xxxx xxxx" />
         </div>
       </div>
       <div style={{ marginBottom: 20 }}>
-        <label style={labelStyle}>{isEn ? 'Email' : '電郵'}</label>
-        <input {...register('email')} type="email" style={{ ...inputStyle, borderColor: errors.email ? '#EF4444' : '#E2E8F0' }} placeholder={isEn ? 'your@email.com' : '您的電郵'} />
+        <label style={labelStyle}>{isEn ? 'Email' : isSc ? '电邮' : '電郵'}</label>
+        <input {...register('email')} type="email" style={{ ...inputStyle, borderColor: errors.email ? '#EF4444' : '#E2E8F0' }} placeholder={isEn ? 'your@email.com' : isSc ? '您的电邮' : '您的電郵'} />
       </div>
       <div style={{ marginBottom: 20 }}>
-        <label style={labelStyle}>{isEn ? 'Service Interest' : '查詢服務'}</label>
+        <label style={labelStyle}>{isEn ? 'Service Interest' : isSc ? '查询服务' : '查詢服務'}</label>
         <select {...register('serviceInterest')} style={inputStyle}>
-          <option value="">{isEn ? '— Select a service —' : '— 選擇服務 —'}</option>
+          <option value="">{isEn ? '— Select a service —' : isSc ? '— 选择服务 —' : '— 選擇服務 —'}</option>
           {serviceList.map(s => <option key={s} value={s}>{s}</option>)}
         </select>
       </div>
       <div style={{ marginBottom: 24 }}>
-        <label style={labelStyle}>{isEn ? 'Message' : '查詢詳情'}</label>
-        <textarea {...register('message')} rows={4} style={{ ...inputStyle, resize: 'vertical' }} placeholder={isEn ? 'Briefly describe your needs...' : '簡述您的需求...'} />
+        <label style={labelStyle}>{isEn ? 'Message' : isSc ? '查询详情' : '查詢詳情'}</label>
+        <textarea {...register('message')} rows={4} style={{ ...inputStyle, resize: 'vertical' }} placeholder={isEn ? 'Briefly describe your needs...' : isSc ? '简述您的需求...' : '簡述您的需求...'} />
       </div>
       {error && <p style={{ ...errorStyle, marginBottom: 16, fontSize: '.85rem' }}>{error}</p>}
       <button type="submit" disabled={isSubmitting} style={{
@@ -123,12 +124,12 @@ export default function InquiryForm({ locale = 'zh-Hant', sourcePage = 'home', w
         border: 'none', cursor: isSubmitting ? 'not-allowed' : 'pointer',
         opacity: isSubmitting ? .7 : 1, transition: 'all .2s',
       }}>
-        {isSubmitting ? (isEn ? 'Sending...' : '發送中...') : (isEn ? 'Submit Enquiry' : '提交查詢')}
+        {isSubmitting ? (isEn ? 'Sending...' : isSc ? '发送中...' : '發送中...') : (isEn ? 'Submit Enquiry' : isSc ? '提交查询' : '提交查詢')}
       </button>
       <p style={{ textAlign: 'center', fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.8rem', color: '#94A3B8', marginTop: 16 }}>
         {isEn
           ? 'Or WhatsApp us directly: '
-          : '或直接 WhatsApp：'}
+          : isSc ? '或直接 WhatsApp：' : '或直接 WhatsApp：'}
         <a href={`https://wa.me/${waNumber.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" style={{ color: '#EF4444', fontWeight: 700 }}>
           {waNumber}
         </a>

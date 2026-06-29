@@ -207,7 +207,7 @@ export default async function CompliancePage({
                 </p>
               </div>
               <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.88rem', color: '#C9A84C', letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 12 }}>
-                {isEn ? 'COMPLIANCE SERVICES' : '合規服務'}
+                {isEn ? 'COMPLIANCE SERVICES' : isSc ? '合规服务' : '合規服務'}
               </div>
               <SvcItem
                 title={isEn ? 'Licensed Corporation Ongoing Compliance' : isSc ? '持牌法团持续合规服务' : '持牌法團持續合規服務'}
@@ -244,7 +244,7 @@ export default async function CompliancePage({
                     : ['初步評估', '制定合規計劃', '月度執行', '定期匯報', '年度審查']
                 }
               />
-              <WaCta href={waHref} label={isEn ? 'WhatsApp Us – Compliance' : '立即 WhatsApp 查詢合規服務'} />
+              <WaCta href={waHref} label={isEn ? 'WhatsApp Us – Compliance' : isSc ? '立即 WhatsApp 查询合规服务' : '立即 WhatsApp 查詢合規服務'} />
             </div>
           </div>
         )}
@@ -262,7 +262,7 @@ export default async function CompliancePage({
                 </p>
               </div>
               <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.88rem', color: '#C9A84C', letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 12 }}>
-                {isEn ? 'AUDIT SERVICES' : '審計服務'}
+                {isEn ? 'AUDIT SERVICES' : isSc ? '审计服务' : '審計服務'}
               </div>
               <SvcItem
                 title={isEn ? 'Independent AML Audit' : isSc ? '独立 AML 审计' : '獨立 AML 審計'}
@@ -304,7 +304,7 @@ export default async function CompliancePage({
                     : ['範圍界定', '文件審閱', '現場測試', '發現報告', '補救計劃']
                 }
               />
-              <WaCta href={waHref} label={isEn ? 'WhatsApp Us – AML Audit' : '立即 WhatsApp 查詢 AML 審計'} />
+              <WaCta href={waHref} label={isEn ? 'WhatsApp Us – AML Audit' : isSc ? '立即 WhatsApp 查询 AML 审计' : '立即 WhatsApp 查詢 AML 審計'} />
               <FaqAccordion
                 faqs={[
                   {
@@ -330,7 +330,7 @@ export default async function CompliancePage({
                 </p>
               </div>
               <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.88rem', color: '#C9A84C', letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 12 }}>
-                {isEn ? 'TRAINING & ADVISORY SERVICES' : '培訓及顧問服務'}
+                {isEn ? 'TRAINING & ADVISORY SERVICES' : isSc ? '培训及顾问服务' : '培訓及顧問服務'}
               </div>
               <SvcItem
                 title={isEn ? 'Continuing Professional Training (CPT)' : isSc ? '持续专业培训 (CPT)' : '持續專業培訓 (CPT)'}
@@ -362,7 +362,7 @@ export default async function CompliancePage({
                     : ['培訓需求評估', '課程設計', '培訓實施', '記錄保存', '年度審查']
                 }
               />
-              <WaCta href={waHref} label={isEn ? 'WhatsApp Us – Training' : '立即 WhatsApp 查詢培訓服務'} />
+              <WaCta href={waHref} label={isEn ? 'WhatsApp Us – Training' : isSc ? '立即 WhatsApp 查询培训服务' : '立即 WhatsApp 查詢培訓服務'} />
             </div>
           </div>
         )}
