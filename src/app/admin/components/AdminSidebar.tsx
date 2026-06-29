@@ -10,7 +10,7 @@ const nav = [
   { href: '/admin/articles', label: 'Insights / Articles', icon: '📰' },
   { href: '/admin/packages', label: 'Packages & Plans', icon: '📦' },
   { href: '/admin/faqs', label: 'FAQs', icon: '❓' },
-  { href: '/admin/pages', label: 'Pages & Sections', icon: '📄' },
+  { href: '/admin/sections', label: 'Pages & Sections', icon: '📄' },
   { href: '/admin/team', label: 'Team Members', icon: '👥' },
   { href: '/admin/settings', label: 'Settings', icon: '⚙️' },
 ];
