@@ -1,9 +1,10 @@
 export const dynamic = 'force-dynamic';
+import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
-import type { Metadata } from 'next';
+import { OrgJsonLd } from '@/components/JsonLd';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
 
@@ -22,8 +23,16 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
         'zh-Hant': 'https://www.sandbox.ceo/',
         'en': 'https://www.sandbox.ceo/en',
         'zh-Hans': 'https://www.sandbox.ceo/zh-Hans',
+        'x-default': 'https://www.sandbox.ceo/',
       },
     },
+    openGraph: {
+      title,
+      description,
+      url: 'https://www.sandbox.ceo/',
+      images: [{ url: '/og-default.png', width: 1200, height: 630, alt: title }],
+    },
+    twitter: { card: 'summary_large_image', title, description },
   };
 }
 
@@ -65,6 +74,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
 
   return (
     <>
+      <OrgJsonLd />
       <SiteHeader locale={locale} waNumber={waNumber} />
       <main>
         {/* ══ HERO ══ */}

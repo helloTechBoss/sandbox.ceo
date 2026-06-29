@@ -1,10 +1,33 @@
 export const dynamic = 'force-dynamic';
+import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
+import { OrgJsonLd, ServiceJsonLd } from '@/components/JsonLd';
+import { hreflang, ogImage } from '@/lib/seo';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const isEn = locale === 'en';
+  const isSc = locale === 'zh-Hans';
+  const title = isEn ? 'RegTech Solutions — Sandbox Group' : isSc ? 'RegTech合规科技方案 — Sandbox Group' : 'RegTech合規科技方案 — Sandbox Group';
+  const description = isEn
+    ? 'Technology-driven compliance solutions for Hong Kong licensed institutions — AML systems, KYC platforms, transaction monitoring and regulatory reporting tools.'
+    : isSc
+    ? '为香港持牌机构提供科技驱动的合规解决方案，包括AML系统、KYC平台、交易监控及监管申报工具。'
+    : '為香港持牌機構提供科技驅動的合規解決方案，包括AML系統、KYC平台、交易監控及監管申報工具。';
+  return {
+    title,
+    description,
+    keywords: ['RegTech', 'AML系統', 'KYC平台', '合規科技', '交易監控', 'regtech Hong Kong', 'AML system', 'compliance technology'],
+    alternates: hreflang('/tech'),
+    openGraph: { title, description, url: 'https://www.sandbox.ceo/tech', images: ogImage(title) },
+    twitter: { card: 'summary_large_image', title, description },
+  };
+}
 
 export default async function TechPage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
@@ -82,6 +105,12 @@ export default async function TechPage({ params }: { params: Promise<{ locale: L
 
   return (
     <>
+      <OrgJsonLd />
+      <ServiceJsonLd
+        name={isEn ? 'RegTech Solutions' : 'RegTech合規科技方案'}
+        description={isEn ? 'AML systems, KYC platforms and compliance technology for Hong Kong licensed institutions.' : 'AML系統、KYC平台及合規科技方案。'}
+        url="/tech"
+      />
       <SiteHeader locale={locale} waNumber={waNumber} />
       <main>
         {/* ── HERO ── */}

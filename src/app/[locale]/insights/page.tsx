@@ -1,7 +1,29 @@
 export const dynamic = 'force-dynamic';
+import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import { prisma } from '@/lib/prisma';
+import { OrgJsonLd } from '@/components/JsonLd';
+import { hreflang, ogImage } from '@/lib/seo';
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const isEn = locale === 'en';
+  const isSc = locale === 'zh-Hans';
+  const title = isEn ? 'Compliance & Licensing Insights — Sandbox Group' : isSc ? '合规及牌照行业洞察 — Sandbox Group' : '合規及牌照行業洞察 — Sandbox Group';
+  const description = isEn
+    ? 'Latest regulatory updates, compliance guides and licensing news for Hong Kong financial institutions — SFC, HKMA, Customs and cross-border developments.'
+    : isSc
+    ? '香港金融机构最新监管动态、合规指引及牌照资讯，涵盖SFC、HKMA、海关及跨境发展。'
+    : '香港金融機構最新監管動態、合規指引及牌照資訊，涵蓋SFC、HKMA、海關及跨境發展。';
+  return {
+    title,
+    description,
+    alternates: hreflang('/insights'),
+    openGraph: { title, description, url: 'https://www.sandbox.ceo/insights', images: ogImage(title) },
+    twitter: { card: 'summary_large_image', title, description },
+  };
+}
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
 
@@ -23,6 +45,7 @@ export default async function InsightsPage({ params }: { params: Promise<{ local
 
   return (
     <>
+      <OrgJsonLd />
       <SiteHeader locale={locale} waNumber={waNumber} />
       <main>
         {/* ── HERO ── */}

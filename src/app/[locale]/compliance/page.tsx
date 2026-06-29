@@ -1,12 +1,35 @@
 export const dynamic = 'force-dynamic';
+import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import SubTabNav from '@/components/SubTabNav';
 import FaqAccordion from '@/components/FaqAccordion';
+import { OrgJsonLd, ServiceJsonLd } from '@/components/JsonLd';
+import { hreflang, ogImage } from '@/lib/seo';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const isEn = locale === 'en';
+  const isSc = locale === 'zh-Hans';
+  const title = isEn ? 'AML & Ongoing Compliance — Sandbox Group' : isSc ? 'AML及持续合规服务 — Sandbox Group' : 'AML及持續合規服務 — Sandbox Group';
+  const description = isEn
+    ? 'Outsourced compliance officer, AML audits, staff training and ESG advisory for licensed financial institutions in Hong Kong. Institutional-grade compliance support.'
+    : isSc
+    ? '为香港持牌金融机构提供外判合规主任、AML审计、员工培训及ESG顾问服务，提供机构级合规支持。'
+    : '為香港持牌金融機構提供外判合規主任、AML審計、員工培訓及ESG顧問服務，提供機構級合規支援。';
+  return {
+    title,
+    description,
+    keywords: ['AML合規', '持續合規', '外判合規', 'MLRO', 'ESG顧問', 'AML compliance Hong Kong', 'outsourced compliance officer'],
+    alternates: hreflang('/compliance'),
+    openGraph: { title, description, url: 'https://www.sandbox.ceo/compliance', images: ogImage(title) },
+    twitter: { card: 'summary_large_image', title, description },
+  };
+}
 
 const WA_ICON = (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -129,6 +152,12 @@ export default async function CompliancePage({
 
   return (
     <>
+      <OrgJsonLd />
+      <ServiceJsonLd
+        name={isEn ? 'AML & Ongoing Compliance' : 'AML及持續合規服務'}
+        description={isEn ? 'Outsourced compliance officer, AML audits, training and ESG advisory for Hong Kong licensed institutions.' : '外判合規主任、AML審計、培訓及ESG顧問服務。'}
+        url="/compliance"
+      />
       <SiteHeader locale={locale} waNumber={waNumber} />
       <main>
         <div className="comp-hero" style={{ background: '#0F2557', padding: '56px 0', position: 'relative', overflow: 'hidden' }}>

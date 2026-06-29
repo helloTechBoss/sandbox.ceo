@@ -1,10 +1,36 @@
 export const dynamic = 'force-dynamic';
+import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
+import { ArticleJsonLd } from '@/components/JsonLd';
+import { hreflang } from '@/lib/seo';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale; slug: string }> }): Promise<Metadata> {
+  const { locale, slug } = await params;
+  const lk = locale === 'zh-Hant' ? 'tc' : locale === 'en' ? 'en' : 'sc';
+  const article = await prisma.article.findUnique({ where: { slug } }).catch(() => null);
+  if (!article) return { title: 'Article Not Found' };
+  const title = (article.title as Record<string, string>)?.[lk] ?? '';
+  const description = (article.excerpt as Record<string, string>)?.[lk] ?? '';
+  return {
+    title,
+    description,
+    alternates: hreflang(`/insights/${slug}`),
+    openGraph: {
+      type: 'article',
+      title,
+      description,
+      url: `https://www.sandbox.ceo/insights/${slug}`,
+      publishedTime: article.publishedAt?.toISOString(),
+      images: [{ url: '/og-default.png', width: 1200, height: 630, alt: title }],
+    },
+    twitter: { card: 'summary_large_image', title, description },
+  };
+}
 
 export default async function ArticlePage({
   params,
@@ -61,8 +87,11 @@ export default async function ArticlePage({
   // Detect if body looks like HTML
   const isHtml = body.trim().startsWith('<');
 
+  const excerpt = (article.excerpt as Record<string, string>)?.[lk] ?? '';
+
   return (
     <>
+      <ArticleJsonLd title={title} description={excerpt} slug={slug} publishedAt={article.publishedAt} modifiedAt={article.updatedAt} />
       <SiteHeader locale={locale} waNumber={waNumber} />
       <main>
         {/* ── ARTICLE HEADER ── */}

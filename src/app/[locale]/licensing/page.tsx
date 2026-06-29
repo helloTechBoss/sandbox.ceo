@@ -1,12 +1,35 @@
 export const dynamic = 'force-dynamic';
+import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import SubTabNav from '@/components/SubTabNav';
 import FaqAccordion from '@/components/FaqAccordion';
+import { OrgJsonLd, ServiceJsonLd } from '@/components/JsonLd';
+import { hreflang, ogImage } from '@/lib/seo';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const isEn = locale === 'en';
+  const isSc = locale === 'zh-Hans';
+  const title = isEn ? 'SFC & Cross-border Licensing — Sandbox Group' : isSc ? 'SFC及跨境牌照 — Sandbox Group' : 'SFC及跨境牌照 — Sandbox Group';
+  const description = isEn
+    ? 'SFC Type 1–9 licensing, Hong Kong TCSP, US MSB/MTL and cross-border financial licensing. Expert advisory from former regulatory professionals.'
+    : isSc
+    ? 'SFC Type 1–9牌照、香港TCSP、美国MSB/MTL及跨境金融牌照申请。由前监管专业人士提供专业顾问服务。'
+    : 'SFC Type 1–9牌照、香港TCSP、美國MSB/MTL及跨境金融牌照申請。由前監管專業人士提供專業顧問服務。';
+  return {
+    title,
+    description,
+    keywords: ['SFC牌照', 'Type 1牌照', 'TCSP牌照', 'MSB牌照', 'MTL牌照', '跨境牌照', 'SFC licensing Hong Kong', 'cross-border licensing'],
+    alternates: hreflang('/licensing'),
+    openGraph: { title, description, url: 'https://www.sandbox.ceo/licensing', images: ogImage(title) },
+    twitter: { card: 'summary_large_image', title, description },
+  };
+}
 
 const WA_ICON = (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -137,6 +160,12 @@ export default async function LicensingPage({
 
   return (
     <>
+      <OrgJsonLd />
+      <ServiceJsonLd
+        name={isEn ? 'SFC & Cross-border Licensing' : 'SFC及跨境牌照服務'}
+        description={isEn ? 'SFC Type 1–9, TCSP, MSB/MTL and cross-border financial licensing advisory.' : 'SFC Type 1–9、TCSP、MSB/MTL及跨境金融牌照顧問服務。'}
+        url="/licensing"
+      />
       <SiteHeader locale={locale} waNumber={waNumber} />
       <main>
         <div style={{ background: '#0F2557', padding: '56px 0', position: 'relative', overflow: 'hidden' }}>

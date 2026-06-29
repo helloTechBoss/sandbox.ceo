@@ -1,10 +1,32 @@
 export const dynamic = 'force-dynamic';
+import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
+import { OrgJsonLd } from '@/components/JsonLd';
+import { hreflang, ogImage } from '@/lib/seo';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const isEn = locale === 'en';
+  const isSc = locale === 'zh-Hans';
+  const title = isEn ? 'About Us — Sandbox Group' : isSc ? '关于我们 — Sandbox Group' : '關於我們 — Sandbox Group';
+  const description = isEn
+    ? 'Founded by former banking compliance officers and MLRO professionals with 10+ years in Hong Kong financial regulation. Institutional-grade compliance for your business.'
+    : isSc
+    ? 'Sandbox Group 由前银行合规主任及洗钱申报主任创立，深耕香港金融监管市场逾十年，提供机构级合规支持。'
+    : 'Sandbox Group 由前銀行合規主任及洗錢申報主任（MLRO）創立，深耕香港金融監管市場逾十年，提供機構級合規支援。';
+  return {
+    title,
+    description,
+    alternates: hreflang('/about'),
+    openGraph: { title, description, url: 'https://www.sandbox.ceo/about', images: ogImage(title) },
+    twitter: { card: 'summary_large_image', title, description },
+  };
+}
 
 export default async function AboutPage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
@@ -94,6 +116,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
 
   return (
     <>
+      <OrgJsonLd />
       <SiteHeader locale={locale} waNumber={waNumber} />
       <style>{`
         .about-story-grid { display: grid; grid-template-columns: 1fr 380px; gap: 60px; align-items: start; }

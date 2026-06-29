@@ -1,9 +1,11 @@
 export const dynamic = 'force-dynamic';
+import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
-import type { Metadata } from 'next';
+import { OrgJsonLd } from '@/components/JsonLd';
+import { hreflang, ogImage } from '@/lib/seo';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
 
@@ -11,9 +13,18 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const { locale } = await params;
   const isEn = locale === 'en';
   const isSc = locale === 'zh-Hans';
+  const title = isEn ? 'Contact Us — Sandbox Group' : isSc ? '联络我们 — Sandbox Group' : '聯絡我們 — Sandbox Group';
+  const description = isEn
+    ? 'Get immediate expert advice from our compliance and licensing advisory team via WhatsApp. Free initial consultation — reply within 1 hour during business hours.'
+    : isSc
+    ? '透过WhatsApp即时获取我们合规及牌照顾问团队的专业建议，提供免费初步评估，办公时间内1小时内回复。'
+    : '透過WhatsApp即時獲取我們合規及牌照顧問團隊的專業建議，提供免費初步評估，辦公時間內1小時內回覆。';
   return {
-    title: isEn ? 'Contact Us | Sandbox Group' : isSc ? '联络我们 | Sandbox Group' : '聯絡我們 | Sandbox Group',
-    description: isEn ? 'Get immediate expert advice from our compliance advisory team.' : isSc ? '即时获取我们合规顾问团队的专业建议。' : '即時獲取我們合規顧問團隊的專業建議。',
+    title,
+    description,
+    alternates: hreflang('/contact'),
+    openGraph: { title, description, url: 'https://www.sandbox.ceo/contact', images: ogImage(title) },
+    twitter: { card: 'summary_large_image', title, description },
   };
 }
 
@@ -27,6 +38,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
 
   return (
     <>
+      <OrgJsonLd />
       <SiteHeader locale={locale} waNumber={waNumber} />
       <main>
         {/* Page Hero */}

@@ -1,12 +1,35 @@
 export const dynamic = 'force-dynamic';
+import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import SubTabNav from '@/components/SubTabNav';
 import FaqAccordion from '@/components/FaqAccordion';
+import { OrgJsonLd, ServiceJsonLd } from '@/components/JsonLd';
+import { hreflang, ogImage } from '@/lib/seo';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const isEn = locale === 'en';
+  const isSc = locale === 'zh-Hans';
+  const title = isEn ? 'MSO Licensing — Sandbox Group' : isSc ? 'MSO牌照服务 — Sandbox Group' : 'MSO牌照服務 — Sandbox Group';
+  const description = isEn
+    ? 'Full-service MSO (Money Service Operator) licensing in Hong Kong — new applications, renewals, transfers and AML compliance systems. Approved by Hong Kong Customs.'
+    : isSc
+    ? '香港全面MSO（金钱服务经营者）牌照服务，涵盖新牌申请、续期、转让及AML合规系统，由香港海关认可持牌从业员提供。'
+    : '香港全面MSO（金錢服務經營者）牌照服務，涵蓋新牌申請、續期、轉讓及AML合規系統，由香港海關認可持牌從業員提供。';
+  return {
+    title,
+    description,
+    keywords: ['MSO牌照', '金錢服務經營者', 'MSO申請', 'AML合規系統', '匯款牌照', 'MSO licensing Hong Kong', 'money service operator'],
+    alternates: hreflang('/mso'),
+    openGraph: { title, description, url: 'https://www.sandbox.ceo/mso', images: ogImage(title) },
+    twitter: { card: 'summary_large_image', title, description },
+  };
+}
 
 const TABS = [
   { key: 'overview', tc: '服務概覽', en: 'Overview', sc: '服务概览' },
@@ -70,6 +93,12 @@ export default async function MsoPage({
 
   return (
     <>
+      <OrgJsonLd />
+      <ServiceJsonLd
+        name={isEn ? 'MSO Licensing' : 'MSO牌照服務'}
+        description={isEn ? 'Hong Kong MSO licensing — new applications, renewals, transfers and AML compliance systems.' : 'MSO 牌照申請、續期、轉讓及AML合規系統。'}
+        url="/mso"
+      />
       <SiteHeader locale={locale} waNumber={waNumber} />
       <main>
         {/* Hero */}

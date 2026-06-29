@@ -1,12 +1,35 @@
 export const dynamic = 'force-dynamic';
+import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import SubTabNav from '@/components/SubTabNav';
 import FaqAccordion from '@/components/FaqAccordion';
+import { OrgJsonLd, ServiceJsonLd } from '@/components/JsonLd';
+import { hreflang, ogImage } from '@/lib/seo';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const isEn = locale === 'en';
+  const isSc = locale === 'zh-Hans';
+  const title = isEn ? 'Corporate Services — Sandbox Group' : isSc ? '企业及商业服务 — Sandbox Group' : '企業及商業服務 — Sandbox Group';
+  const description = isEn
+    ? 'One-stop corporate services in Hong Kong — company incorporation, company secretary, accounting & audit, annual return filing and deregistration.'
+    : isSc
+    ? '香港一站式企业服务，涵盖公司成立、公司秘书、会计审计、周年申报及撤销注册服务。'
+    : '香港一站式企業服務，涵蓋公司成立、公司秘書、會計審計、周年申報及撤銷註冊服務。';
+  return {
+    title,
+    description,
+    keywords: ['香港公司成立', '公司秘書', '會計審計', '周年申報', '企業服務', 'Hong Kong company incorporation', 'company secretary Hong Kong'],
+    alternates: hreflang('/corporate'),
+    openGraph: { title, description, url: 'https://www.sandbox.ceo/corporate', images: ogImage(title) },
+    twitter: { card: 'summary_large_image', title, description },
+  };
+}
 
 const WA_ICON = (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -152,6 +175,12 @@ export default async function CorporatePage({
 
   return (
     <>
+      <OrgJsonLd />
+      <ServiceJsonLd
+        name={isEn ? 'Corporate Services' : '企業及商業服務'}
+        description={isEn ? 'Company incorporation, secretary, accounting and corporate services in Hong Kong.' : '香港公司成立、秘書、會計及企業服務。'}
+        url="/corporate"
+      />
       <SiteHeader locale={locale} waNumber={waNumber} />
       <main>
         <div className="corp-hero" style={{ background: '#0F2557', padding: '56px 0', position: 'relative', overflow: 'hidden' }}>
