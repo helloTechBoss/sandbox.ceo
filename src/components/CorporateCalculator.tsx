@@ -92,9 +92,9 @@ const PILLAR_NAMES: Record<LK, Record<string, string>> = {
 };
 
 const TABS: Record<LK, { key: string; label: string }[]> = {
-  tc: [{ key: 'services', label: '服務一覽' }, { key: 'calc', label: '會計審計 即時報價' }],
-  en: [{ key: 'services', label: 'All Services' }, { key: 'calc', label: 'Instant Accounting & Audit Quotation' }],
-  sc: [{ key: 'services', label: '服务一览' }, { key: 'calc', label: '会计审计 即时报价' }],
+  tc: [{ key: 'services', label: '服務一覽' }, { key: 'calc', label: '報價計算器' }],
+  en: [{ key: 'services', label: 'All Services' }, { key: 'calc', label: 'Quote Calculator' }],
+  sc: [{ key: 'services', label: '服务一览' }, { key: 'calc', label: '报价计算器' }],
 };
 
 function lkOf(locale: Locale): LK {
