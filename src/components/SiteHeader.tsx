@@ -6,16 +6,16 @@ import Link from 'next/link';
 const WA_NUMBER = '+85292318254';
 
 const navServices = [
-  { href: '/mso', label: 'MSO 牌照', en: 'MSO Licensing' },
-  { href: '/licensing', label: 'SFC / 跨境牌照', en: 'Cross-border Licensing' },
-  { href: '/compliance', label: '持續合規', en: 'Ongoing Compliance' },
+  { href: '/mso', tc: 'MSO 牌照', sc: 'MSO 牌照', en: 'MSO Licensing' },
+  { href: '/licensing', tc: 'SFC / 跨境牌照', sc: 'SFC / 跨境牌照', en: 'Cross-border Licensing' },
+  { href: '/compliance', tc: '持續合規', sc: '持续合规', en: 'Ongoing Compliance' },
 ];
 
 const navCorporate = [
-  { href: '/corporate', label: '企業服務概覽', en: 'Corporate Overview' },
-  { href: '/corporate/incorporation', label: '公司註冊', en: 'Incorporation' },
-  { href: '/corporate/secretarial', label: '公司秘書', en: 'Company Secretary' },
-  { href: '/corporate/accounting', label: '會計及稅務', en: 'Accounting & Tax' },
+  { href: '/corporate', tc: '企業服務概覽', sc: '企业服务概览', en: 'Corporate Overview' },
+  { href: '/corporate/incorporation', tc: '公司註冊', sc: '公司注册', en: 'Incorporation' },
+  { href: '/corporate/secretarial', tc: '公司秘書', sc: '公司秘书', en: 'Company Secretary' },
+  { href: '/corporate/accounting', tc: '會計及稅務', sc: '会计及税务', en: 'Accounting & Tax' },
 ];
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
@@ -31,6 +31,12 @@ const localeName: Record<Locale, string> = {
   'zh-Hans': '简中',
 };
 
+const t = (locale: Locale, tc: string, en: string, sc: string) =>
+  locale === 'en' ? en : locale === 'zh-Hans' ? sc : tc;
+
+const localePath = (locale: Locale, path: string) =>
+  locale === 'zh-Hant' ? path : `/${locale}${path}`;
+
 export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -44,7 +50,7 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
 
   const localeHref = (l: Locale) => {
     if (l === 'zh-Hant') return '/';
-    return `/${l === 'zh-Hans' ? 'zh-Hans' : 'en'}`;
+    return `/${l}`;
   };
 
   const waHref = `https://wa.me/${waNumber.replace(/\D/g, '')}?text=${encodeURIComponent('Hi，我想查詢合規及牌照服務')}`;
@@ -72,23 +78,23 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
 
           {/* Desktop Nav */}
           <nav style={{ display: 'flex', alignItems: 'center', gap: 2 }} className="desktop-nav">
-            <Link href="/" style={navLinkStyle}>
-              {locale === 'en' ? 'Home' : locale === 'zh-Hans' ? '首页' : '首頁'}
+            <Link href={localePath(locale, '/')} style={navLinkStyle}>
+              {t(locale, '首頁', 'Home', '首页')}
             </Link>
-            <Link href="/about" style={navLinkStyle}>
-              {locale === 'en' ? 'About' : '關於我們'}
+            <Link href={localePath(locale, '/about')} style={navLinkStyle}>
+              {t(locale, '關於我們', 'About', '关于我们')}
             </Link>
 
             {/* Services dropdown */}
             <div style={{ position: 'relative' }} className="dropdown">
               <span style={{ ...navLinkStyle, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
-                {locale === 'en' ? 'Services' : '服務'} <span style={{ fontSize: '.6rem' }}>▾</span>
+                {t(locale, '服務', 'Services', '服务')} <span style={{ fontSize: '.6rem' }}>▾</span>
               </span>
               <div style={dropdownMenuStyle}>
                 {navServices.map(s => (
-                  <Link key={s.href} href={`/${locale !== 'zh-Hant' ? locale + '/' : ''}${s.href.slice(1)}`} style={dropdownItemStyle}>
+                  <Link key={s.href} href={localePath(locale, s.href)} style={dropdownItemStyle}>
                     <span style={{ width: 6, height: 6, background: '#EF4444', borderRadius: '50%', flexShrink: 0, display: 'inline-block' }} />
-                    {locale === 'en' ? s.en : s.label}
+                    {t(locale, s.tc, s.en, s.sc)}
                   </Link>
                 ))}
               </div>
@@ -97,21 +103,21 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
             {/* Corporate dropdown */}
             <div style={{ position: 'relative' }} className="dropdown">
               <span style={{ ...navLinkStyle, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
-                {locale === 'en' ? 'Corporate' : '企業'} <span style={{ fontSize: '.6rem' }}>▾</span>
+                {t(locale, '企業', 'Corporate', '企业')} <span style={{ fontSize: '.6rem' }}>▾</span>
               </span>
               <div style={dropdownMenuStyle}>
                 {navCorporate.map(s => (
-                  <Link key={s.href} href={s.href} style={dropdownItemStyle}>
+                  <Link key={s.href} href={localePath(locale, s.href)} style={dropdownItemStyle}>
                     <span style={{ width: 6, height: 6, background: '#EF4444', borderRadius: '50%', flexShrink: 0, display: 'inline-block' }} />
-                    {locale === 'en' ? s.en : s.label}
+                    {t(locale, s.tc, s.en, s.sc)}
                   </Link>
                 ))}
               </div>
             </div>
 
-            <Link href="/tech" style={navLinkStyle}>RegTech</Link>
-            <Link href="/insights" style={navLinkStyle}>{locale === 'en' ? 'Insights' : '行業洞察'}</Link>
-            <Link href="/contact" style={navLinkStyle}>{locale === 'en' ? 'Contact' : '聯絡'}</Link>
+            <Link href={localePath(locale, '/tech')} style={navLinkStyle}>RegTech</Link>
+            <Link href={localePath(locale, '/insights')} style={navLinkStyle}>{t(locale, '行業洞察', 'Insights', '行业洞察')}</Link>
+            <Link href={localePath(locale, '/contact')} style={navLinkStyle}>{t(locale, '聯絡', 'Contact', '联络')}</Link>
           </nav>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -175,10 +181,10 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
               </svg>
               <span style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <span style={{ fontSize: '.82rem', fontWeight: 700, lineHeight: 1 }}>
-                  {locale === 'en' ? 'Free Consult' : '免費諮詢'}
+                  {t(locale, '免費諮詢', 'Free Consult', '免费咨询')}
                 </span>
                 <span style={{ fontSize: '.62rem', fontWeight: 500, opacity: .88, letterSpacing: '.02em', lineHeight: 1 }}>
-                  {locale === 'en' ? 'Quotation' : '索取報價'}
+                  {t(locale, '索取報價', 'Quotation', '索取报价')}
                 </span>
               </span>
             </a>
@@ -206,19 +212,19 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
             maxHeight: 'calc(100vh - 64px)', overflowY: 'auto',
           }}>
             {[
-              { href: '/', label: locale === 'en' ? 'Home' : '首頁' },
-              { href: '/about', label: locale === 'en' ? 'About Us' : '關於我們' },
-              { href: '/mso', label: locale === 'en' ? 'MSO Licensing' : 'MSO 牌照' },
-              { href: '/licensing', label: locale === 'en' ? 'Licensing' : 'SFC / 跨境牌照' },
-              { href: '/compliance', label: locale === 'en' ? 'Compliance' : '持續合規' },
-              { href: '/corporate', label: locale === 'en' ? 'Corporate' : '企業服務' },
+              { href: '/', label: t(locale, '首頁', 'Home', '首页') },
+              { href: '/about', label: t(locale, '關於我們', 'About Us', '关于我们') },
+              { href: '/mso', label: t(locale, 'MSO 牌照', 'MSO Licensing', 'MSO 牌照') },
+              { href: '/licensing', label: t(locale, 'SFC / 跨境牌照', 'Licensing', 'SFC / 跨境牌照') },
+              { href: '/compliance', label: t(locale, '持續合規', 'Compliance', '持续合规') },
+              { href: '/corporate', label: t(locale, '企業服務', 'Corporate', '企业服务') },
               { href: '/tech', label: 'RegTech' },
-              { href: '/insights', label: locale === 'en' ? 'Insights' : '行業洞察' },
-              { href: '/contact', label: locale === 'en' ? 'Contact' : '聯絡我們' },
+              { href: '/insights', label: t(locale, '行業洞察', 'Insights', '行业洞察') },
+              { href: '/contact', label: t(locale, '聯絡我們', 'Contact', '联络我们') },
             ].map(item => (
               <Link
                 key={item.href}
-                href={item.href}
+                href={localePath(locale, item.href)}
                 onClick={() => setMobileOpen(false)}
                 style={{
                   display: 'block', padding: '13px 24px',
@@ -239,7 +245,7 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
                 fontWeight: 700, fontSize: '.9rem', textDecoration: 'none',
               }}
             >
-              {locale === 'en' ? 'WhatsApp Free Consult' : '免費 WhatsApp 諮詢'}
+              {t(locale, '免費 WhatsApp 諮詢', 'WhatsApp Free Consult', '免费 WhatsApp 咨询')}
             </a>
           </div>
         )}
