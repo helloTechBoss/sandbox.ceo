@@ -11,12 +11,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
 
   return (
-    <html lang="en">
-      <body style={{ margin: 0, fontFamily: "'Inter',system-ui,sans-serif", background: '#F8FAFC' }}>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet" />
-        {children}
-      </body>
-    </html>
+    <div style={{ margin: 0, fontFamily: "'Inter',system-ui,sans-serif", background: '#F8FAFC', minHeight: '100vh' }}>
+      {children}
+    </div>
   );
 }
