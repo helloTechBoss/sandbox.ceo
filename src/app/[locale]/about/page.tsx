@@ -4,7 +4,7 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
-import { OrgJsonLd } from '@/components/JsonLd';
+import { OrgJsonLd, BreadcrumbJsonLd } from '@/components/JsonLd';
 import { hreflang, ogImage } from '@/lib/seo';
 import { getSeoMeta } from '@/lib/getSeoMeta';
 
@@ -16,12 +16,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const isSc = locale === 'zh-Hans';
   const lk = isEn ? 'en' : isSc ? 'sc' : 'tc';
   const { title, description, keywords } = await getSeoMeta('about', lk, {
-    title: isEn ? 'About Us' : isSc ? '关于我们' : '關於我們',
+    title: isEn ? 'About Sandbox Group — Former Banking Compliance Officers Hong Kong' : isSc ? '关于Sandbox Group | 前银行合规主任' : '關於Sandbox Group | 前銀行合規主任',
     description: isEn
-      ? 'Founded by former banking compliance officers and MLRO professionals with 10+ years in Hong Kong financial regulation. Institutional-grade compliance for your business.'
+      ? 'Sandbox Group is founded by former banking compliance officers and MLROs with 10+ years in Hong Kong financial regulation — SFC, HKMA and Customs. Institutional-grade compliance for MSOs, fund managers and fintech firms.'
       : isSc
-      ? 'Sandbox Group 由前银行合规主任及洗钱申报主任创立，深耕香港金融监管市场逾十年，提供机构级合规支持。'
-      : 'Sandbox Group 由前銀行合規主任及洗錢申報主任（MLRO）創立，深耕香港金融監管市場逾十年，提供機構級合規支援。',
+      ? 'Sandbox Group由前银行合规主任及MLRO创立，在SFC、HKMA及海关合规领域深耕逾十年，为MSO、基金经理及金融科技公司提供机构级合规支持。'
+      : 'Sandbox Group由前銀行合規主任及MLRO創立，在SFC、HKMA及海關合規領域深耕逾十年，為MSO、基金經理及金融科技公司提供機構級合規支援。',
     keywords: ['Sandbox Group', '香港合規顧問', 'MLRO', '前銀行合規主任', 'compliance consultant Hong Kong', 'AML specialist', 'licensed compliance officer', 'Sandbox CEO'],
   });
   return {
@@ -123,6 +123,10 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   return (
     <>
       <OrgJsonLd />
+      <BreadcrumbJsonLd items={[
+        { name: isEn ? 'Home' : '主頁', item: 'https://www.sandbox.ceo' },
+        { name: isEn ? 'About Us' : isSc ? '关于我们' : '關於我們', item: 'https://www.sandbox.ceo/about' },
+      ]} />
       <SiteHeader locale={locale} waNumber={waNumber} />
       <style>{`
         .about-story-grid { display: grid; grid-template-columns: 1fr 380px; gap: 60px; align-items: start; }

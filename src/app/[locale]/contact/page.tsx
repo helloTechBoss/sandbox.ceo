@@ -4,7 +4,7 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
-import { OrgJsonLd } from '@/components/JsonLd';
+import { OrgJsonLd, BreadcrumbJsonLd } from '@/components/JsonLd';
 import { hreflang, ogImage } from '@/lib/seo';
 import { getSeoMeta } from '@/lib/getSeoMeta';
 
@@ -16,12 +16,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const isSc = locale === 'zh-Hans';
   const lk = isEn ? 'en' : isSc ? 'sc' : 'tc';
   const { title, description, keywords } = await getSeoMeta('contact', lk, {
-    title: isEn ? 'Contact Us' : isSc ? '联络我们' : '聯絡我們',
+    title: isEn ? 'Free Compliance Consultation Hong Kong — WhatsApp Sandbox Group' : isSc ? '免费合规咨询香港 | WhatsApp Sandbox Group' : '免費合規諮詢香港 | WhatsApp Sandbox Group',
     description: isEn
-      ? 'Get immediate expert advice from our compliance and licensing advisory team via WhatsApp. Free initial consultation — reply within 1 hour during business hours.'
+      ? 'Get a free initial compliance and licensing consultation via WhatsApp. MSO, SFC, AML and corporate queries answered by former compliance officers — reply within 1 hour during business hours.'
       : isSc
-      ? '透过WhatsApp即时获取我们合规及牌照顾问团队的专业建议，提供免费初步评估，办公时间内1小时内回复。'
-      : '透過WhatsApp即時獲取我們合規及牌照顧問團隊的專業建議，提供免費初步評估，辦公時間內1小時內回覆。',
+      ? '透过WhatsApp获取免费初步合规及牌照咨询，MSO、SFC、AML及企业问题由前合规主任解答，办公时间内1小时内回复。'
+      : '透過WhatsApp獲取免費初步合規及牌照諮詢，MSO、SFC、AML及企業問題由前合規主任解答，辦公時間內1小時內回覆。',
     keywords: ['香港合規諮詢', '牌照申請查詢', 'WhatsApp合規顧問', 'compliance consultation Hong Kong', 'MSO licensing enquiry', 'SFC licence advice', 'free compliance consultation'],
   });
   return {
@@ -45,6 +45,10 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
   return (
     <>
       <OrgJsonLd />
+      <BreadcrumbJsonLd items={[
+        { name: isEn ? 'Home' : '主頁', item: 'https://www.sandbox.ceo' },
+        { name: isEn ? 'Contact Us' : isSc ? '联络我们' : '聯絡我們', item: 'https://www.sandbox.ceo/contact' },
+      ]} />
       <SiteHeader locale={locale} waNumber={waNumber} />
       <main>
         {/* Page Hero */}

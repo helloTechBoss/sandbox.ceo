@@ -4,7 +4,7 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
-import { OrgJsonLd, ServiceJsonLd } from '@/components/JsonLd';
+import { OrgJsonLd, ServiceJsonLd, BreadcrumbJsonLd } from '@/components/JsonLd';
 import { hreflang, ogImage } from '@/lib/seo';
 import { getSeoMeta } from '@/lib/getSeoMeta';
 
@@ -16,12 +16,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const isSc = locale === 'zh-Hans';
   const lk = isEn ? 'en' : isSc ? 'sc' : 'tc';
   const { title, description, keywords } = await getSeoMeta('tech', lk, {
-    title: isEn ? 'RegTech Solutions' : isSc ? 'RegTech合规科技方案' : 'RegTech合規科技方案',
+    title: isEn ? 'AML System & RegTech Compliance Solutions Hong Kong' : isSc ? 'AML系统及合规科技方案香港' : 'AML系統及合規科技方案香港',
     description: isEn
-      ? 'Technology-driven compliance solutions for Hong Kong licensed institutions — AML systems, KYC platforms, transaction monitoring and regulatory reporting tools.'
+      ? 'AML compliance systems, KYC/CDD platforms, transaction monitoring and STR reporting tools for MSOs, SFC-licensed firms and banks in Hong Kong. Integrated RegTech solutions.'
       : isSc
-      ? '为香港持牌机构提供科技驱动的合规解决方案，包括AML系统、KYC平台、交易监控及监管申报工具。'
-      : '為香港持牌機構提供科技驅動的合規解決方案，包括AML系統、KYC平台、交易監控及監管申報工具。',
+      ? '为香港MSO、SFC持牌机构及银行提供AML合规系统、KYC/CDD平台、交易监控及可疑交易申报工具，一体化合规科技解决方案。'
+      : '為香港MSO、SFC持牌機構及銀行提供AML合規系統、KYC/CDD平台、交易監控及可疑交易申報工具，一體化合規科技解決方案。',
     keywords: ['RegTech', 'AML系統', 'KYC平台', '合規科技', '交易監控', '監管申報', '可疑交易申報', 'regtech Hong Kong', 'AML system Hong Kong', 'KYC platform', 'compliance technology', 'transaction monitoring', 'STR system', 'regulatory reporting'],
   });
   return {
@@ -112,10 +112,14 @@ export default async function TechPage({ params }: { params: Promise<{ locale: L
     <>
       <OrgJsonLd />
       <ServiceJsonLd
-        name={isEn ? 'RegTech Solutions' : 'RegTech合規科技方案'}
+        name={isEn ? 'AML System & RegTech Solutions Hong Kong' : 'AML系統及合規科技方案香港'}
         description={isEn ? 'AML systems, KYC platforms and compliance technology for Hong Kong licensed institutions.' : 'AML系統、KYC平台及合規科技方案。'}
         url="/tech"
       />
+      <BreadcrumbJsonLd items={[
+        { name: isEn ? 'Home' : '主頁', item: 'https://www.sandbox.ceo' },
+        { name: isEn ? 'RegTech Solutions' : isSc ? '合规科技' : '合規科技', item: 'https://www.sandbox.ceo/tech' },
+      ]} />
       <SiteHeader locale={locale} waNumber={waNumber} />
       <main>
         {/* ── HERO ── */}

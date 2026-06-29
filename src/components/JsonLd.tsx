@@ -55,6 +55,34 @@ export function ServiceJsonLd({ name, description, url }: { name: string; descri
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
 }
 
+export function BreadcrumbJsonLd({ items }: { items: { name: string; item: string }[] }) {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((crumb, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: crumb.name,
+      item: crumb.item,
+    })),
+  };
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
+}
+
+export function FaqPageJsonLd({ faqs }: { faqs: { question: string; answer: string }[] }) {
+  if (!faqs.length) return null;
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(f => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: { '@type': 'Answer', text: f.answer },
+    })),
+  };
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
+}
+
 export function ArticleJsonLd({ title, description, slug, publishedAt, modifiedAt }: {
   title: string; description: string; slug: string; publishedAt?: Date | null; modifiedAt?: Date | null;
 }) {

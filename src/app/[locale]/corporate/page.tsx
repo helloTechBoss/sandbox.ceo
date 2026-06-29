@@ -4,7 +4,7 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import SubTabNav from '@/components/SubTabNav';
 import FaqAccordion from '@/components/FaqAccordion';
-import { OrgJsonLd, ServiceJsonLd } from '@/components/JsonLd';
+import { OrgJsonLd, ServiceJsonLd, BreadcrumbJsonLd, FaqPageJsonLd } from '@/components/JsonLd';
 import { hreflang, ogImage } from '@/lib/seo';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
@@ -18,12 +18,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const isSc = locale === 'zh-Hans';
   const lk = isEn ? 'en' : isSc ? 'sc' : 'tc';
   const { title, description, keywords } = await getSeoMeta('corporate', lk, {
-    title: isEn ? 'Corporate Services' : isSc ? '企业及商业服务' : '企業及商業服務',
+    title: isEn ? 'Company Incorporation & Secretary Services Hong Kong' : isSc ? '香港公司成立及秘书服务' : '香港公司成立及秘書服務',
     description: isEn
-      ? 'One-stop corporate services in Hong Kong — company incorporation, company secretary, accounting & audit, annual return filing and deregistration.'
+      ? 'Hong Kong company incorporation, company secretary, accounting & audit, annual return filing and company deregistration. TCSP-licensed corporate service provider.'
       : isSc
-      ? '香港一站式企业服务，涵盖公司成立、公司秘书、会计审计、周年申报及撤销注册服务。'
-      : '香港一站式企業服務，涵蓋公司成立、公司秘書、會計審計、周年申報及撤銷註冊服務。',
+      ? '香港公司成立、公司秘书、会计审计、周年申报及公司撤销服务，持牌TCSP企业服务提供商。'
+      : '香港公司成立、公司秘書、會計審計、周年申報及公司撤銷服務，持牌TCSP企業服務提供商。',
     keywords: ['香港公司成立', '公司秘書', '會計審計', '周年申報', '企業服務', 'TCSP牌照', '撤銷公司', '香港開公司', 'Hong Kong company incorporation', 'company secretary Hong Kong', 'accounting audit Hong Kong', 'TCSP licence', 'company deregistration Hong Kong', 'annual return filing'],
   });
   return {
@@ -201,10 +201,17 @@ export default async function CorporatePage({
     <>
       <OrgJsonLd />
       <ServiceJsonLd
-        name={isEn ? 'Corporate Services' : '企業及商業服務'}
+        name={isEn ? 'Company Incorporation & Secretary Services Hong Kong' : '香港公司成立及秘書服務'}
         description={isEn ? 'Company incorporation, secretary, accounting and corporate services in Hong Kong.' : '香港公司成立、秘書、會計及企業服務。'}
         url="/corporate"
       />
+      <BreadcrumbJsonLd items={[
+        { name: isEn ? 'Home' : '主頁', item: 'https://www.sandbox.ceo' },
+        { name: isEn ? 'Corporate Services' : isSc ? '企业服务' : '企業服務', item: 'https://www.sandbox.ceo/corporate' },
+      ]} />
+      {Object.values(faqsBySubTab).flat().length > 0 && (
+        <FaqPageJsonLd faqs={Object.values(faqsBySubTab).flat()} />
+      )}
       <SiteHeader locale={locale} waNumber={waNumber} />
       <main>
         <div className="corp-hero" style={{ background: '#0F2557', padding: '56px 0', position: 'relative', overflow: 'hidden' }}>

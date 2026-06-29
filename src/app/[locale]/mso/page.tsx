@@ -4,7 +4,7 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import SubTabNav from '@/components/SubTabNav';
 import FaqAccordion from '@/components/FaqAccordion';
-import { OrgJsonLd, ServiceJsonLd } from '@/components/JsonLd';
+import { OrgJsonLd, ServiceJsonLd, BreadcrumbJsonLd, FaqPageJsonLd } from '@/components/JsonLd';
 import { hreflang, ogImage } from '@/lib/seo';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
@@ -18,12 +18,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const isSc = locale === 'zh-Hans';
   const lk = isEn ? 'en' : isSc ? 'sc' : 'tc';
   const { title, description, keywords } = await getSeoMeta('mso', lk, {
-    title: isEn ? 'MSO Licensing' : isSc ? 'MSO牌照服务' : 'MSO牌照服務',
+    title: isEn ? 'MSO Licence Application Hong Kong' : isSc ? 'MSO牌照申请香港' : 'MSO牌照申請香港',
     description: isEn
-      ? 'Full-service MSO (Money Service Operator) licensing in Hong Kong — new applications, renewals, transfers and AML compliance systems. Approved by Hong Kong Customs.'
+      ? 'Expert MSO (Money Service Operator) licence application, renewal and transfer in Hong Kong. Former Customs-approved compliance officers — fast approval, full AML system setup.'
       : isSc
-      ? '香港全面MSO（金钱服务经营者）牌照服务，涵盖新牌申请、续期、转让及AML合规系统，由香港海关认可持牌从业员提供。'
-      : '香港全面MSO（金錢服務經營者）牌照服務，涵蓋新牌申請、續期、轉讓及AML合規系統，由香港海關認可持牌從業員提供。',
+      ? '由前香港海关认可合规从业员提供专业MSO（金钱服务经营者）牌照新申请、续期及转让，快速审批、全套AML系统设置。'
+      : '由前香港海關認可合規從業員提供專業MSO（金錢服務經營者）牌照新申請、續期及轉讓，快速審批、全套AML系統設置。',
     keywords: ['MSO牌照', '金錢服務經營者', 'MSO申請', 'AML合規系統', '匯款牌照', '海關MSO', 'MSO牌照費用', 'MSO licensing Hong Kong', 'money service operator Hong Kong', 'MSO application', 'AMLO compliance', 'customs MSO licence', 'CSTB MSO'],
   });
   return {
@@ -100,10 +100,15 @@ export default async function MsoPage({
     <>
       <OrgJsonLd />
       <ServiceJsonLd
-        name={isEn ? 'MSO Licensing' : 'MSO牌照服務'}
+        name={isEn ? 'MSO Licence Application Hong Kong' : 'MSO牌照申請香港'}
         description={isEn ? 'Hong Kong MSO licensing — new applications, renewals, transfers and AML compliance systems.' : 'MSO 牌照申請、續期、轉讓及AML合規系統。'}
         url="/mso"
       />
+      <BreadcrumbJsonLd items={[
+        { name: isEn ? 'Home' : '主頁', item: 'https://www.sandbox.ceo' },
+        { name: isEn ? 'MSO Licence Application' : 'MSO牌照申請', item: 'https://www.sandbox.ceo/mso' },
+      ]} />
+      <FaqPageJsonLd faqs={faqItems.length > 0 ? faqItems : FAQ_NEW} />
       <SiteHeader locale={locale} waNumber={waNumber} />
       <main>
         {/* Hero */}

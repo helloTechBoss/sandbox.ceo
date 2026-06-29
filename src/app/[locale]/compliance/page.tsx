@@ -4,7 +4,7 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import SubTabNav from '@/components/SubTabNav';
 import FaqAccordion from '@/components/FaqAccordion';
-import { OrgJsonLd, ServiceJsonLd } from '@/components/JsonLd';
+import { OrgJsonLd, ServiceJsonLd, BreadcrumbJsonLd, FaqPageJsonLd } from '@/components/JsonLd';
 import { hreflang, ogImage } from '@/lib/seo';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
@@ -18,12 +18,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const isSc = locale === 'zh-Hans';
   const lk = isEn ? 'en' : isSc ? 'sc' : 'tc';
   const { title, description, keywords } = await getSeoMeta('compliance', lk, {
-    title: isEn ? 'AML & Ongoing Compliance' : isSc ? 'AML及持续合规服务' : 'AML及持續合規服務',
+    title: isEn ? 'Outsourced Compliance Officer & AML Audit Hong Kong' : isSc ? '外判合规主任及AML审计香港' : '外判合規主任及AML審計香港',
     description: isEn
-      ? 'Outsourced compliance officer, AML audits, staff training and ESG advisory for licensed financial institutions in Hong Kong. Institutional-grade compliance support.'
+      ? 'Outsourced MLRO and compliance officer, AML independent audit, CPT staff training and ESG advisory for MSOs, SFC-licensed firms and banks in Hong Kong.'
       : isSc
-      ? '为香港持牌金融机构提供外判合规主任、AML审计、员工培训及ESG顾问服务，提供机构级合规支持。'
-      : '為香港持牌金融機構提供外判合規主任、AML審計、員工培訓及ESG顧問服務，提供機構級合規支援。',
+      ? '为香港MSO、SFC持牌机构及银行提供外判MLRO及合规主任、AML独立审计、CPT员工培训及ESG顾问服务。'
+      : '為香港MSO、SFC持牌機構及銀行提供外判MLRO及合規主任、AML獨立審計、CPT員工培訓及ESG顧問服務。',
     keywords: ['AML合規', '持續合規', '外判合規', 'MLRO', 'ESG顧問', 'CPT培訓', 'AML獨立審計', '外判合規主任', 'AML compliance Hong Kong', 'outsourced compliance officer Hong Kong', 'MLRO services', 'AML audit', 'CPT training Hong Kong', 'ESG compliance'],
   });
   return {
@@ -159,10 +159,17 @@ export default async function CompliancePage({
     <>
       <OrgJsonLd />
       <ServiceJsonLd
-        name={isEn ? 'AML & Ongoing Compliance' : 'AML及持續合規服務'}
+        name={isEn ? 'Outsourced Compliance Officer & AML Audit Hong Kong' : '外判合規主任及AML審計香港'}
         description={isEn ? 'Outsourced compliance officer, AML audits, training and ESG advisory for Hong Kong licensed institutions.' : '外判合規主任、AML審計、培訓及ESG顧問服務。'}
         url="/compliance"
       />
+      <BreadcrumbJsonLd items={[
+        { name: isEn ? 'Home' : '主頁', item: 'https://www.sandbox.ceo' },
+        { name: isEn ? 'AML & Ongoing Compliance' : isSc ? 'AML及持续合规' : 'AML及持續合規', item: 'https://www.sandbox.ceo/compliance' },
+      ]} />
+      {Object.values(faqsBySubTab).flat().length > 0 && (
+        <FaqPageJsonLd faqs={Object.values(faqsBySubTab).flat()} />
+      )}
       <SiteHeader locale={locale} waNumber={waNumber} />
       <main>
         <div className="comp-hero" style={{ background: '#0F2557', padding: '56px 0', position: 'relative', overflow: 'hidden' }}>

@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import { prisma } from '@/lib/prisma';
-import { OrgJsonLd } from '@/components/JsonLd';
+import { OrgJsonLd, BreadcrumbJsonLd } from '@/components/JsonLd';
 import { hreflang, ogImage } from '@/lib/seo';
 import { getSeoMeta } from '@/lib/getSeoMeta';
 
@@ -52,6 +52,10 @@ export default async function InsightsPage({ params }: { params: Promise<{ local
   return (
     <>
       <OrgJsonLd />
+      <BreadcrumbJsonLd items={[
+        { name: isEn ? 'Home' : '主頁', item: 'https://www.sandbox.ceo' },
+        { name: isEn ? 'Insights' : isSc ? '专业见解' : '專業見解', item: 'https://www.sandbox.ceo/insights' },
+      ]} />
       <SiteHeader locale={locale} waNumber={waNumber} />
       <main>
         {/* ── HERO ── */}

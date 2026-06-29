@@ -4,7 +4,7 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import SubTabNav from '@/components/SubTabNav';
 import FaqAccordion from '@/components/FaqAccordion';
-import { OrgJsonLd, ServiceJsonLd } from '@/components/JsonLd';
+import { OrgJsonLd, ServiceJsonLd, BreadcrumbJsonLd, FaqPageJsonLd } from '@/components/JsonLd';
 import { hreflang, ogImage } from '@/lib/seo';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
@@ -18,12 +18,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const isSc = locale === 'zh-Hans';
   const lk = isEn ? 'en' : isSc ? 'sc' : 'tc';
   const { title, description, keywords } = await getSeoMeta('licensing', lk, {
-    title: isEn ? 'SFC & Cross-border Licensing' : isSc ? 'SFC及跨境牌照' : 'SFC及跨境牌照',
+    title: isEn ? 'SFC Type 1–9 Licence Application Hong Kong' : isSc ? 'SFC牌照申请香港 | Type 1至9' : 'SFC牌照申請香港 | Type 1至9',
     description: isEn
-      ? 'SFC Type 1–9 licensing, Hong Kong TCSP, US MSB/MTL and cross-border financial licensing. Expert advisory from former regulatory professionals.'
+      ? 'SFC Type 1, 4, 9 licence applications, virtual asset (VASP) licensing, TCSP, and US MSB/MTL cross-border financial licences. Advisory by former SFC-regulated professionals.'
       : isSc
-      ? 'SFC Type 1–9牌照、香港TCSP、美国MSB/MTL及跨境金融牌照申请。由前监管专业人士提供专业顾问服务。'
-      : 'SFC Type 1–9牌照、香港TCSP、美國MSB/MTL及跨境金融牌照申請。由前監管專業人士提供專業顧問服務。',
+      ? '专业处理SFC Type 1、4、9牌照申请、虚拟资产(VASP)牌照、TCSP及美国MSB/MTL跨境金融牌照，由前受SFC规管从业员提供顾问服务。'
+      : '專業處理SFC Type 1、4、9牌照申請、虛擬資產(VASP)牌照、TCSP及美國MSB/MTL跨境金融牌照，由前受SFC規管從業員提供顧問服務。',
     keywords: ['SFC牌照', 'Type 1牌照', 'Type 9牌照', 'TCSP牌照', 'MSB牌照', 'MTL牌照', '跨境牌照', '虛擬資產牌照', 'VASP', 'SFC licensing Hong Kong', 'Type 1 SFC licence', 'Type 9 asset management licence', 'cross-border licensing', 'virtual asset licence Hong Kong', 'TCSP licence'],
   });
   return {
@@ -167,10 +167,17 @@ export default async function LicensingPage({
     <>
       <OrgJsonLd />
       <ServiceJsonLd
-        name={isEn ? 'SFC & Cross-border Licensing' : 'SFC及跨境牌照服務'}
+        name={isEn ? 'SFC Type 1–9 Licence Application Hong Kong' : 'SFC牌照申請香港'}
         description={isEn ? 'SFC Type 1–9, TCSP, MSB/MTL and cross-border financial licensing advisory.' : 'SFC Type 1–9、TCSP、MSB/MTL及跨境金融牌照顧問服務。'}
         url="/licensing"
       />
+      <BreadcrumbJsonLd items={[
+        { name: isEn ? 'Home' : '主頁', item: 'https://www.sandbox.ceo' },
+        { name: isEn ? 'SFC & Cross-border Licensing' : isSc ? 'SFC及跨境牌照' : 'SFC及跨境牌照', item: 'https://www.sandbox.ceo/licensing' },
+      ]} />
+      {Object.values(faqsBySubTab).flat().length > 0 && (
+        <FaqPageJsonLd faqs={Object.values(faqsBySubTab).flat()} />
+      )}
       <SiteHeader locale={locale} waNumber={waNumber} />
       <main>
         <div style={{ background: '#0F2557', padding: '56px 0', position: 'relative', overflow: 'hidden' }}>
