@@ -6,6 +6,7 @@ import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
 import { OrgJsonLd, ServiceJsonLd } from '@/components/JsonLd';
 import { hreflang, ogImage } from '@/lib/seo';
+import { getSeoMeta } from '@/lib/getSeoMeta';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
 
@@ -13,16 +14,20 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const { locale } = await params;
   const isEn = locale === 'en';
   const isSc = locale === 'zh-Hans';
-  const title = isEn ? 'RegTech Solutions' : isSc ? 'RegTech合规科技方案' : 'RegTech合規科技方案';
-  const description = isEn
-    ? 'Technology-driven compliance solutions for Hong Kong licensed institutions — AML systems, KYC platforms, transaction monitoring and regulatory reporting tools.'
-    : isSc
-    ? '为香港持牌机构提供科技驱动的合规解决方案，包括AML系统、KYC平台、交易监控及监管申报工具。'
-    : '為香港持牌機構提供科技驅動的合規解決方案，包括AML系統、KYC平台、交易監控及監管申報工具。';
+  const lk = isEn ? 'en' : isSc ? 'sc' : 'tc';
+  const { title, description, keywords } = await getSeoMeta('tech', lk, {
+    title: isEn ? 'RegTech Solutions' : isSc ? 'RegTech合规科技方案' : 'RegTech合規科技方案',
+    description: isEn
+      ? 'Technology-driven compliance solutions for Hong Kong licensed institutions — AML systems, KYC platforms, transaction monitoring and regulatory reporting tools.'
+      : isSc
+      ? '为香港持牌机构提供科技驱动的合规解决方案，包括AML系统、KYC平台、交易监控及监管申报工具。'
+      : '為香港持牌機構提供科技驅動的合規解決方案，包括AML系統、KYC平台、交易監控及監管申報工具。',
+    keywords: ['RegTech', 'AML系統', 'KYC平台', '合規科技', '交易監控', '監管申報', '可疑交易申報', 'regtech Hong Kong', 'AML system Hong Kong', 'KYC platform', 'compliance technology', 'transaction monitoring', 'STR system', 'regulatory reporting'],
+  });
   return {
     title,
     description,
-    keywords: ['RegTech', 'AML系統', 'KYC平台', '合規科技', '交易監控', '監管申報', '可疑交易申報', 'regtech Hong Kong', 'AML system Hong Kong', 'KYC platform', 'compliance technology', 'transaction monitoring', 'STR system', 'regulatory reporting'],
+    keywords,
     alternates: hreflang('/tech'),
     openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/tech', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },

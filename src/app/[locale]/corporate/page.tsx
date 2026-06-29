@@ -8,6 +8,7 @@ import { OrgJsonLd, ServiceJsonLd } from '@/components/JsonLd';
 import { hreflang, ogImage } from '@/lib/seo';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
+import { getSeoMeta } from '@/lib/getSeoMeta';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
 
@@ -15,16 +16,20 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const { locale } = await params;
   const isEn = locale === 'en';
   const isSc = locale === 'zh-Hans';
-  const title = isEn ? 'Corporate Services' : isSc ? '企业及商业服务' : '企業及商業服務';
-  const description = isEn
-    ? 'One-stop corporate services in Hong Kong — company incorporation, company secretary, accounting & audit, annual return filing and deregistration.'
-    : isSc
-    ? '香港一站式企业服务，涵盖公司成立、公司秘书、会计审计、周年申报及撤销注册服务。'
-    : '香港一站式企業服務，涵蓋公司成立、公司秘書、會計審計、周年申報及撤銷註冊服務。';
+  const lk = isEn ? 'en' : isSc ? 'sc' : 'tc';
+  const { title, description, keywords } = await getSeoMeta('corporate', lk, {
+    title: isEn ? 'Corporate Services' : isSc ? '企业及商业服务' : '企業及商業服務',
+    description: isEn
+      ? 'One-stop corporate services in Hong Kong — company incorporation, company secretary, accounting & audit, annual return filing and deregistration.'
+      : isSc
+      ? '香港一站式企业服务，涵盖公司成立、公司秘书、会计审计、周年申报及撤销注册服务。'
+      : '香港一站式企業服務，涵蓋公司成立、公司秘書、會計審計、周年申報及撤銷註冊服務。',
+    keywords: ['香港公司成立', '公司秘書', '會計審計', '周年申報', '企業服務', 'TCSP牌照', '撤銷公司', '香港開公司', 'Hong Kong company incorporation', 'company secretary Hong Kong', 'accounting audit Hong Kong', 'TCSP licence', 'company deregistration Hong Kong', 'annual return filing'],
+  });
   return {
     title,
     description,
-    keywords: ['香港公司成立', '公司秘書', '會計審計', '周年申報', '企業服務', 'TCSP牌照', '撤銷公司', '香港開公司', 'Hong Kong company incorporation', 'company secretary Hong Kong', 'accounting audit Hong Kong', 'TCSP licence', 'company deregistration Hong Kong', 'annual return filing'],
+    keywords,
     alternates: hreflang('/corporate'),
     openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/corporate', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },
@@ -151,10 +156,29 @@ export default async function CorporatePage({
   const activeTab = tab ?? 'overview';
 
   const lk = isEn ? 'en' : isSc ? 'sc' : 'tc';
-  const [waNum, dbFaqs] = await Promise.all([
+  const [waNum, dbFaqs, dbPackages] = await Promise.all([
     prisma.setting.findUnique({ where: { key: 'whatsapp_number' } }).catch(() => null),
     prisma.faq.findMany({ where: { pageSlug: 'corporate' }, orderBy: [{ subTab: 'asc' }, { order: 'asc' }] }).catch(() => []),
+    prisma.package.findMany({ include: { features: { where: { enabled: true }, orderBy: { order: 'asc' } } }, orderBy: { order: 'asc' } }).catch(() => []),
   ]);
+  const pkgsByGroup: Record<string, any[]> = {};
+  for (const pkg of dbPackages as any[]) {
+    if (!pkgsByGroup[pkg.group]) pkgsByGroup[pkg.group] = [];
+    pkgsByGroup[pkg.group].push(pkg);
+  }
+  function dbPkgCards(group: string) {
+    const pkgs = pkgsByGroup[group];
+    if (!pkgs || pkgs.length === 0) return null;
+    return pkgs.map((pkg: any) => (
+      <PkgCard
+        key={pkg.id}
+        name={(pkg.name as any)?.[lk] || (pkg.name as any)?.tc || ''}
+        price={pkg.price}
+        features={((pkg.features || []) as any[]).map((f: any) => (f.label as any)?.[lk] || (f.label as any)?.tc || '')}
+        highlight={pkg.featured}
+      />
+    ));
+  }
   const waNumber = waNum?.value || '+85292318254';
   const waHref = `https://wa.me/${waNumber.replace(/\D/g, '')}?text=${encodeURIComponent('Hi，我想查詢企業服務')}`;
   const faqsBySubTab: Record<string, { question: string; answer: string }[]> = {};
@@ -266,34 +290,36 @@ export default async function CorporatePage({
                 {isEn ? 'PRICING PACKAGES' : isSc ? '收费套餐' : '收費套餐'}
               </div>
               <div className="corp-pricing-grid">
-                <PkgCard
-                  name={isEn ? 'Basic' : isSc ? '基础' : '基礎'}
-                  price="HK$1,800"
-                  features={isEn
-                    ? ['Company Registration', 'Legal Share Capital', 'Articles of Association', 'Electronic Company Documents']
-                    : isSc
-                    ? ['公司成立申请', '法定股本', '公司章程', '电子公司宪章']
-                    : ['公司成立申請', '法定股本', '公司章程', '電子公司憲章']}
-                />
-                <PkgCard
-                  name={isEn ? 'Standard' : isSc ? '标准' : '標準'}
-                  price="HK$3,200"
-                  highlight
-                  features={isEn
-                    ? ['All Basic Features', 'First Year Secretarial', 'Business Registration', 'Annual Return (1st Year)']
-                    : isSc
-                    ? ['基础套餐全部内容', '首年公司秘书', '商业登记', '周年申报表（首年）']
-                    : ['基礎套餐全部內容', '首年公司秘書', '商業登記', '周年申報表（首年）']}
-                />
-                <PkgCard
-                  name={isEn ? 'Premium' : isSc ? '高级' : '高級'}
-                  price="HK$5,500"
-                  features={isEn
-                    ? ['All Standard Features', 'Bank Account Opening Assistance', 'Virtual Office', 'Initial Compliance Consultation']
-                    : isSc
-                    ? ['标准套餐全部内容', '银行开户协助', '虚拟办公室', '合规初步咨询']
-                    : ['標準套餐全部內容', '銀行開戶協助', '虛擬辦公室', '合規初步諮詢']}
-                />
+                {dbPkgCards('incorporation') ?? (<>
+                  <PkgCard
+                    name={isEn ? 'Basic' : isSc ? '基础' : '基礎'}
+                    price="HK$1,800"
+                    features={isEn
+                      ? ['Company Registration', 'Legal Share Capital', 'Articles of Association', 'Electronic Company Documents']
+                      : isSc
+                      ? ['公司成立申请', '法定股本', '公司章程', '电子公司宪章']
+                      : ['公司成立申請', '法定股本', '公司章程', '電子公司憲章']}
+                  />
+                  <PkgCard
+                    name={isEn ? 'Standard' : isSc ? '标准' : '標準'}
+                    price="HK$3,200"
+                    highlight
+                    features={isEn
+                      ? ['All Basic Features', 'First Year Secretarial', 'Business Registration', 'Annual Return (1st Year)']
+                      : isSc
+                      ? ['基础套餐全部内容', '首年公司秘书', '商业登记', '周年申报表（首年）']
+                      : ['基礎套餐全部內容', '首年公司秘書', '商業登記', '周年申報表（首年）']}
+                  />
+                  <PkgCard
+                    name={isEn ? 'Premium' : isSc ? '高级' : '高級'}
+                    price="HK$5,500"
+                    features={isEn
+                      ? ['All Standard Features', 'Bank Account Opening Assistance', 'Virtual Office', 'Initial Compliance Consultation']
+                      : isSc
+                      ? ['标准套餐全部内容', '银行开户协助', '虚拟办公室', '合规初步咨询']
+                      : ['標準套餐全部內容', '銀行開戶協助', '虛擬辦公室', '合規初步諮詢']}
+                  />
+                </>)}
               </div>
             </div>
             <div>
@@ -365,34 +391,36 @@ export default async function CorporatePage({
                 {isEn ? 'MONTHLY PLANS' : isSc ? '月费计划' : '月費計劃'}
               </div>
               <div className="corp-pricing-grid">
-                <PkgCard
-                  name="Basic"
-                  price="HK$350/月"
-                  features={isEn
-                    ? ['Annual Return Filing', 'BR Renewal', 'SCR Maintenance']
-                    : isSc
-                    ? ['周年申报表递交', '商业登记证续期', '重要控制人登记册']
-                    : ['周年申報表遞交', '商業登記證續期', '重要控制人登記冊']}
-                />
-                <PkgCard
-                  name="Elite"
-                  price="HK$680/月"
-                  highlight
-                  features={isEn
-                    ? ['All Basic Features', 'Director/Secretary Changes', 'Board Resolutions', 'Registered Address']
-                    : isSc
-                    ? ['基础全部内容', '董事/秘书变更', '董事会决议', '注册地址']
-                    : ['基礎全部內容', '董事/秘書變更', '董事會決議', '註冊地址']}
-                />
-                <PkgCard
-                  name="Premium"
-                  price="HK$1,200/月"
-                  features={isEn
-                    ? ['All Elite Features', 'Unlimited Resolutions', 'Share Transfer Docs', 'Priority Response']
-                    : isSc
-                    ? ['精英全部内容', '无限董事会决议', '股份转让文件', '优先回复']
-                    : ['精英全部內容', '無限董事會決議', '股份轉讓文件', '優先回覆']}
-                />
+                {dbPkgCards('comsec') ?? (<>
+                  <PkgCard
+                    name="Basic"
+                    price="HK$350/月"
+                    features={isEn
+                      ? ['Annual Return Filing', 'BR Renewal', 'SCR Maintenance']
+                      : isSc
+                      ? ['周年申报表递交', '商业登记证续期', '重要控制人登记册']
+                      : ['周年申報表遞交', '商業登記證續期', '重要控制人登記冊']}
+                  />
+                  <PkgCard
+                    name="Elite"
+                    price="HK$680/月"
+                    highlight
+                    features={isEn
+                      ? ['All Basic Features', 'Director/Secretary Changes', 'Board Resolutions', 'Registered Address']
+                      : isSc
+                      ? ['基础全部内容', '董事/秘书变更', '董事会决议', '注册地址']
+                      : ['基礎全部內容', '董事/秘書變更', '董事會決議', '註冊地址']}
+                  />
+                  <PkgCard
+                    name="Premium"
+                    price="HK$1,200/月"
+                    features={isEn
+                      ? ['All Elite Features', 'Unlimited Resolutions', 'Share Transfer Docs', 'Priority Response']
+                      : isSc
+                      ? ['精英全部内容', '无限董事会决议', '股份转让文件', '优先回复']
+                      : ['精英全部內容', '無限董事會決議', '股份轉讓文件', '優先回覆']}
+                  />
+                </>)}
               </div>
             </div>
             <div>
@@ -433,34 +461,36 @@ export default async function CorporatePage({
                 {isEn ? 'SERVICE PLANS' : isSc ? '服务计划' : '服務計劃'}
               </div>
               <div className="corp-pricing-grid" style={{ marginBottom: 24 }}>
-                <PkgCard
-                  name={isEn ? 'Audit + Tax' : isSc ? '审计+报税' : '審計+報稅'}
-                  price={isEn ? 'From HK$3,800' : '由HK$3,800起'}
-                  features={isEn
-                    ? ['Statutory Audit', 'Profits Tax Return (BIR51)', 'Tax Computation', 'Employer Return (BIR56A)']
-                    : isSc
-                    ? ['法定审计', '利得税报税表 (BIR51)', '税务计算', '雇主报税表 (BIR56A)']
-                    : ['法定審計', '利得稅報稅表 (BIR51)', '稅務計算', '僱主報稅表 (BIR56A)']}
-                />
-                <PkgCard
-                  name={isEn ? 'Accounting + Audit + Tax' : isSc ? '会计+审计+报税' : '會計+審計+報稅'}
-                  price={isEn ? 'From HK$6,800' : '由HK$6,800起'}
-                  highlight
-                  features={isEn
-                    ? ['All Audit+Tax Features', 'Annual Bookkeeping', 'Bank Reconciliation', 'Management Accounts']
-                    : isSc
-                    ? ['审计+报税全部内容', '年度记账', '银行对账', '管理账目']
-                    : ['審計+報稅全部內容', '年度記賬', '銀行對賬', '管理賬目']}
-                />
-                <PkgCard
-                  name={isEn ? 'Monthly Bookkeeping' : isSc ? '月结服务' : '月結服務'}
-                  price={isEn ? 'From HK$1,200/mo' : '由HK$1,200/月起'}
-                  features={isEn
-                    ? ['Monthly Bookkeeping', 'Bank Reconciliation', 'Monthly Reports', 'Annual Audit & Tax']
-                    : isSc
-                    ? ['月度记账', '银行对账', '月度财务报告', '年度审计及报税']
-                    : ['月度記賬', '銀行對賬', '月度財務報告', '年度審計及報稅']}
-                />
+                {dbPkgCards('accounting') ?? (<>
+                  <PkgCard
+                    name={isEn ? 'Audit + Tax' : isSc ? '审计+报税' : '審計+報稅'}
+                    price={isEn ? 'From HK$3,800' : '由HK$3,800起'}
+                    features={isEn
+                      ? ['Statutory Audit', 'Profits Tax Return (BIR51)', 'Tax Computation', 'Employer Return (BIR56A)']
+                      : isSc
+                      ? ['法定审计', '利得税报税表 (BIR51)', '税务计算', '雇主报税表 (BIR56A)']
+                      : ['法定審計', '利得稅報稅表 (BIR51)', '稅務計算', '僱主報稅表 (BIR56A)']}
+                  />
+                  <PkgCard
+                    name={isEn ? 'Accounting + Audit + Tax' : isSc ? '会计+审计+报税' : '會計+審計+報稅'}
+                    price={isEn ? 'From HK$6,800' : '由HK$6,800起'}
+                    highlight
+                    features={isEn
+                      ? ['All Audit+Tax Features', 'Annual Bookkeeping', 'Bank Reconciliation', 'Management Accounts']
+                      : isSc
+                      ? ['审计+报税全部内容', '年度记账', '银行对账', '管理账目']
+                      : ['審計+報稅全部內容', '年度記賬', '銀行對賬', '管理賬目']}
+                  />
+                  <PkgCard
+                    name={isEn ? 'Monthly Bookkeeping' : isSc ? '月结服务' : '月結服務'}
+                    price={isEn ? 'From HK$1,200/mo' : '由HK$1,200/月起'}
+                    features={isEn
+                      ? ['Monthly Bookkeeping', 'Bank Reconciliation', 'Monthly Reports', 'Annual Audit & Tax']
+                      : isSc
+                      ? ['月度记账', '银行对账', '月度财务报告', '年度审计及报税']
+                      : ['月度記賬', '銀行對賬', '月度財務報告', '年度審計及報稅']}
+                  />
+                </>)}
               </div>
               <SvcItem
                 title={isEn ? 'Statutory Audit' : isSc ? '法定审计' : '法定審計'}

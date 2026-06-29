@@ -6,6 +6,7 @@ import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
 import { OrgJsonLd } from '@/components/JsonLd';
 import { hreflang, ogImage } from '@/lib/seo';
+import { getSeoMeta } from '@/lib/getSeoMeta';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
 
@@ -13,16 +14,20 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const { locale } = await params;
   const isEn = locale === 'en';
   const isSc = locale === 'zh-Hans';
-  const title = isEn ? 'About Us' : isSc ? '关于我们' : '關於我們';
-  const description = isEn
-    ? 'Founded by former banking compliance officers and MLRO professionals with 10+ years in Hong Kong financial regulation. Institutional-grade compliance for your business.'
-    : isSc
-    ? 'Sandbox Group 由前银行合规主任及洗钱申报主任创立，深耕香港金融监管市场逾十年，提供机构级合规支持。'
-    : 'Sandbox Group 由前銀行合規主任及洗錢申報主任（MLRO）創立，深耕香港金融監管市場逾十年，提供機構級合規支援。';
+  const lk = isEn ? 'en' : isSc ? 'sc' : 'tc';
+  const { title, description, keywords } = await getSeoMeta('about', lk, {
+    title: isEn ? 'About Us' : isSc ? '关于我们' : '關於我們',
+    description: isEn
+      ? 'Founded by former banking compliance officers and MLRO professionals with 10+ years in Hong Kong financial regulation. Institutional-grade compliance for your business.'
+      : isSc
+      ? 'Sandbox Group 由前银行合规主任及洗钱申报主任创立，深耕香港金融监管市场逾十年，提供机构级合规支持。'
+      : 'Sandbox Group 由前銀行合規主任及洗錢申報主任（MLRO）創立，深耕香港金融監管市場逾十年，提供機構級合規支援。',
+    keywords: ['Sandbox Group', '香港合規顧問', 'MLRO', '前銀行合規主任', 'compliance consultant Hong Kong', 'AML specialist', 'licensed compliance officer', 'Sandbox CEO'],
+  });
   return {
     title,
     description,
-    keywords: ['Sandbox Group', '香港合規顧問', 'MLRO', '前銀行合規主任', 'compliance consultant Hong Kong', 'AML specialist', 'licensed compliance officer', 'Sandbox CEO'],
+    keywords,
     alternates: hreflang('/about'),
     openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/about', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },

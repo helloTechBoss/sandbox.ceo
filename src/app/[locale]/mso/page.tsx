@@ -8,6 +8,7 @@ import { OrgJsonLd, ServiceJsonLd } from '@/components/JsonLd';
 import { hreflang, ogImage } from '@/lib/seo';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
+import { getSeoMeta } from '@/lib/getSeoMeta';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
 
@@ -15,16 +16,20 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const { locale } = await params;
   const isEn = locale === 'en';
   const isSc = locale === 'zh-Hans';
-  const title = isEn ? 'MSO Licensing' : isSc ? 'MSO牌照服务' : 'MSO牌照服務';
-  const description = isEn
-    ? 'Full-service MSO (Money Service Operator) licensing in Hong Kong — new applications, renewals, transfers and AML compliance systems. Approved by Hong Kong Customs.'
-    : isSc
-    ? '香港全面MSO（金钱服务经营者）牌照服务，涵盖新牌申请、续期、转让及AML合规系统，由香港海关认可持牌从业员提供。'
-    : '香港全面MSO（金錢服務經營者）牌照服務，涵蓋新牌申請、續期、轉讓及AML合規系統，由香港海關認可持牌從業員提供。';
+  const lk = isEn ? 'en' : isSc ? 'sc' : 'tc';
+  const { title, description, keywords } = await getSeoMeta('mso', lk, {
+    title: isEn ? 'MSO Licensing' : isSc ? 'MSO牌照服务' : 'MSO牌照服務',
+    description: isEn
+      ? 'Full-service MSO (Money Service Operator) licensing in Hong Kong — new applications, renewals, transfers and AML compliance systems. Approved by Hong Kong Customs.'
+      : isSc
+      ? '香港全面MSO（金钱服务经营者）牌照服务，涵盖新牌申请、续期、转让及AML合规系统，由香港海关认可持牌从业员提供。'
+      : '香港全面MSO（金錢服務經營者）牌照服務，涵蓋新牌申請、續期、轉讓及AML合規系統，由香港海關認可持牌從業員提供。',
+    keywords: ['MSO牌照', '金錢服務經營者', 'MSO申請', 'AML合規系統', '匯款牌照', '海關MSO', 'MSO牌照費用', 'MSO licensing Hong Kong', 'money service operator Hong Kong', 'MSO application', 'AMLO compliance', 'customs MSO licence', 'CSTB MSO'],
+  });
   return {
     title,
     description,
-    keywords: ['MSO牌照', '金錢服務經營者', 'MSO申請', 'AML合規系統', '匯款牌照', '海關MSO', 'MSO牌照費用', 'MSO licensing Hong Kong', 'money service operator Hong Kong', 'MSO application', 'AMLO compliance', 'customs MSO licence', 'CSTB MSO'],
+    keywords,
     alternates: hreflang('/mso'),
     openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/mso', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },

@@ -8,6 +8,7 @@ import { OrgJsonLd, ServiceJsonLd } from '@/components/JsonLd';
 import { hreflang, ogImage } from '@/lib/seo';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
+import { getSeoMeta } from '@/lib/getSeoMeta';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
 
@@ -15,16 +16,20 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const { locale } = await params;
   const isEn = locale === 'en';
   const isSc = locale === 'zh-Hans';
-  const title = isEn ? 'AML & Ongoing Compliance' : isSc ? 'AML及持续合规服务' : 'AML及持續合規服務';
-  const description = isEn
-    ? 'Outsourced compliance officer, AML audits, staff training and ESG advisory for licensed financial institutions in Hong Kong. Institutional-grade compliance support.'
-    : isSc
-    ? '为香港持牌金融机构提供外判合规主任、AML审计、员工培训及ESG顾问服务，提供机构级合规支持。'
-    : '為香港持牌金融機構提供外判合規主任、AML審計、員工培訓及ESG顧問服務，提供機構級合規支援。';
+  const lk = isEn ? 'en' : isSc ? 'sc' : 'tc';
+  const { title, description, keywords } = await getSeoMeta('compliance', lk, {
+    title: isEn ? 'AML & Ongoing Compliance' : isSc ? 'AML及持续合规服务' : 'AML及持續合規服務',
+    description: isEn
+      ? 'Outsourced compliance officer, AML audits, staff training and ESG advisory for licensed financial institutions in Hong Kong. Institutional-grade compliance support.'
+      : isSc
+      ? '为香港持牌金融机构提供外判合规主任、AML审计、员工培训及ESG顾问服务，提供机构级合规支持。'
+      : '為香港持牌金融機構提供外判合規主任、AML審計、員工培訓及ESG顧問服務，提供機構級合規支援。',
+    keywords: ['AML合規', '持續合規', '外判合規', 'MLRO', 'ESG顧問', 'CPT培訓', 'AML獨立審計', '外判合規主任', 'AML compliance Hong Kong', 'outsourced compliance officer Hong Kong', 'MLRO services', 'AML audit', 'CPT training Hong Kong', 'ESG compliance'],
+  });
   return {
     title,
     description,
-    keywords: ['AML合規', '持續合規', '外判合規', 'MLRO', 'ESG顧問', 'CPT培訓', 'AML獨立審計', '外判合規主任', 'AML compliance Hong Kong', 'outsourced compliance officer Hong Kong', 'MLRO services', 'AML audit', 'CPT training Hong Kong', 'ESG compliance'],
+    keywords,
     alternates: hreflang('/compliance'),
     openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/compliance', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },

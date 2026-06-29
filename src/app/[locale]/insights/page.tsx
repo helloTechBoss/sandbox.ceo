@@ -5,28 +5,33 @@ import SiteFooter from '@/components/SiteFooter';
 import { prisma } from '@/lib/prisma';
 import { OrgJsonLd } from '@/components/JsonLd';
 import { hreflang, ogImage } from '@/lib/seo';
+import { getSeoMeta } from '@/lib/getSeoMeta';
+
+type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
   const isEn = locale === 'en';
   const isSc = locale === 'zh-Hans';
-  const title = isEn ? 'Compliance & Licensing Insights' : isSc ? '合规及牌照行业洞察' : '合規及牌照行業洞察';
-  const description = isEn
-    ? 'Latest regulatory updates, compliance guides and licensing news for Hong Kong financial institutions — SFC, HKMA, Customs and cross-border developments.'
-    : isSc
-    ? '香港金融机构最新监管动态、合规指引及牌照资讯，涵盖SFC、HKMA、海关及跨境发展。'
-    : '香港金融機構最新監管動態、合規指引及牌照資訊，涵蓋SFC、HKMA、海關及跨境發展。';
+  const lk = isEn ? 'en' : isSc ? 'sc' : 'tc';
+  const { title, description, keywords } = await getSeoMeta('insights', lk, {
+    title: isEn ? 'Compliance & Licensing Insights' : isSc ? '合规及牌照行业洞察' : '合規及牌照行業洞察',
+    description: isEn
+      ? 'Latest regulatory updates, compliance guides and licensing news for Hong Kong financial institutions — SFC, HKMA, Customs and cross-border developments.'
+      : isSc
+      ? '香港金融机构最新监管动态、合规指引及牌照资讯，涵盖SFC、HKMA、海关及跨境发展。'
+      : '香港金融機構最新監管動態、合規指引及牌照資訊，涵蓋SFC、HKMA、海關及跨境發展。',
+    keywords: ['SFC監管動向', 'MSO合規更新', 'AML新聞', '香港金融監管', 'Hong Kong regulatory update', 'SFC circular', 'HKMA AML', 'compliance news Hong Kong', 'MSO licensing news'],
+  });
   return {
     title,
     description,
-    keywords: ['SFC監管動向', 'MSO合規更新', 'AML新聞', '香港金融監管', 'Hong Kong regulatory update', 'SFC circular', 'HKMA AML', 'compliance news Hong Kong', 'MSO licensing news'],
+    keywords,
     alternates: hreflang('/insights'),
     openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/insights', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },
   };
 }
-
-type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
 
 export default async function InsightsPage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;

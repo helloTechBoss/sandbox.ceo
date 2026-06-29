@@ -71,9 +71,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
   const lk = locale === 'zh-Hant' ? 'tc' : locale === 'en' ? 'en' : 'sc';
   const isEn = locale === 'en';
   const isSc = locale === 'zh-Hans';
-  const [waNumber, articles] = await Promise.all([
+  const [waNumber, articles, heroTagline, heroDesc] = await Promise.all([
     getSetting('whatsapp_number').then(v => v || '+85292318254'),
     getArticles(),
+    getSection('home', 'hero_tagline', locale),
+    getSection('home', 'hero_description', locale),
   ]);
 
   const waBase = `https://wa.me/${waNumber.replace(/\D/g, '')}`;
@@ -102,13 +104,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
                 SANDBOX<br /><span style={{ color: '#EF4444' }}>GROUP</span>
               </h1>
               <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: 'clamp(1rem,2vw,1.3rem)', color: '#E8D28A', marginBottom: 10 }}>
-                {isEn ? 'Your Compliance & Business Growth Partner' : isSc ? '您的合规与业务增长伙伴' : '您的合規與業務增長夥伴'}
+                {heroTagline || (isEn ? 'Your Compliance & Business Growth Partner' : isSc ? '您的合规与业务增长伙伴' : '您的合規與業務增長夥伴')}
               </p>
               <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.95rem', color: 'rgba(255,255,255,.65)', marginBottom: 32, lineHeight: 1.9, maxWidth: 500 }}>
-                {isEn
+                {heroDesc || (isEn
                   ? 'Led by former compliance officers and MLROs from top financial institutions, delivering institutional-grade compliance, licensing and corporate services efficiently and competitively.'
                   : isSc ? '由前金融机构合规主管及 MLRO 领导，以机构级合规标准，高效、具竞争力地提供牌照申请、持续合规及企业服务。'
-                  : '由前金融機構合規主管及 MLRO 領導，以機構級合規標準，高效、具競爭力地提供牌照申請、持續合規及企業服務。'}
+                  : '由前金融機構合規主管及 MLRO 領導，以機構級合規標準，高效、具競爭力地提供牌照申請、持續合規及企業服務。')}
               </p>
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                 <a href={waMso} target="_blank" rel="noopener noreferrer" style={btnRed}>

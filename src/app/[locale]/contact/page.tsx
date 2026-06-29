@@ -6,6 +6,7 @@ import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
 import { OrgJsonLd } from '@/components/JsonLd';
 import { hreflang, ogImage } from '@/lib/seo';
+import { getSeoMeta } from '@/lib/getSeoMeta';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
 
@@ -13,16 +14,20 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const { locale } = await params;
   const isEn = locale === 'en';
   const isSc = locale === 'zh-Hans';
-  const title = isEn ? 'Contact Us' : isSc ? '联络我们' : '聯絡我們';
-  const description = isEn
-    ? 'Get immediate expert advice from our compliance and licensing advisory team via WhatsApp. Free initial consultation — reply within 1 hour during business hours.'
-    : isSc
-    ? '透过WhatsApp即时获取我们合规及牌照顾问团队的专业建议，提供免费初步评估，办公时间内1小时内回复。'
-    : '透過WhatsApp即時獲取我們合規及牌照顧問團隊的專業建議，提供免費初步評估，辦公時間內1小時內回覆。';
+  const lk = isEn ? 'en' : isSc ? 'sc' : 'tc';
+  const { title, description, keywords } = await getSeoMeta('contact', lk, {
+    title: isEn ? 'Contact Us' : isSc ? '联络我们' : '聯絡我們',
+    description: isEn
+      ? 'Get immediate expert advice from our compliance and licensing advisory team via WhatsApp. Free initial consultation — reply within 1 hour during business hours.'
+      : isSc
+      ? '透过WhatsApp即时获取我们合规及牌照顾问团队的专业建议，提供免费初步评估，办公时间内1小时内回复。'
+      : '透過WhatsApp即時獲取我們合規及牌照顧問團隊的專業建議，提供免費初步評估，辦公時間內1小時內回覆。',
+    keywords: ['香港合規諮詢', '牌照申請查詢', 'WhatsApp合規顧問', 'compliance consultation Hong Kong', 'MSO licensing enquiry', 'SFC licence advice', 'free compliance consultation'],
+  });
   return {
     title,
     description,
-    keywords: ['香港合規諮詢', '牌照申請查詢', 'WhatsApp合規顧問', 'compliance consultation Hong Kong', 'MSO licensing enquiry', 'SFC licence advice', 'free compliance consultation'],
+    keywords,
     alternates: hreflang('/contact'),
     openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/contact', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },

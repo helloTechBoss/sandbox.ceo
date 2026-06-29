@@ -8,6 +8,7 @@ import { OrgJsonLd, ServiceJsonLd } from '@/components/JsonLd';
 import { hreflang, ogImage } from '@/lib/seo';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
+import { getSeoMeta } from '@/lib/getSeoMeta';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
 
@@ -15,16 +16,20 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const { locale } = await params;
   const isEn = locale === 'en';
   const isSc = locale === 'zh-Hans';
-  const title = isEn ? 'SFC & Cross-border Licensing' : isSc ? 'SFC及跨境牌照' : 'SFC及跨境牌照';
-  const description = isEn
-    ? 'SFC Type 1–9 licensing, Hong Kong TCSP, US MSB/MTL and cross-border financial licensing. Expert advisory from former regulatory professionals.'
-    : isSc
-    ? 'SFC Type 1–9牌照、香港TCSP、美国MSB/MTL及跨境金融牌照申请。由前监管专业人士提供专业顾问服务。'
-    : 'SFC Type 1–9牌照、香港TCSP、美國MSB/MTL及跨境金融牌照申請。由前監管專業人士提供專業顧問服務。';
+  const lk = isEn ? 'en' : isSc ? 'sc' : 'tc';
+  const { title, description, keywords } = await getSeoMeta('licensing', lk, {
+    title: isEn ? 'SFC & Cross-border Licensing' : isSc ? 'SFC及跨境牌照' : 'SFC及跨境牌照',
+    description: isEn
+      ? 'SFC Type 1–9 licensing, Hong Kong TCSP, US MSB/MTL and cross-border financial licensing. Expert advisory from former regulatory professionals.'
+      : isSc
+      ? 'SFC Type 1–9牌照、香港TCSP、美国MSB/MTL及跨境金融牌照申请。由前监管专业人士提供专业顾问服务。'
+      : 'SFC Type 1–9牌照、香港TCSP、美國MSB/MTL及跨境金融牌照申請。由前監管專業人士提供專業顧問服務。',
+    keywords: ['SFC牌照', 'Type 1牌照', 'Type 9牌照', 'TCSP牌照', 'MSB牌照', 'MTL牌照', '跨境牌照', '虛擬資產牌照', 'VASP', 'SFC licensing Hong Kong', 'Type 1 SFC licence', 'Type 9 asset management licence', 'cross-border licensing', 'virtual asset licence Hong Kong', 'TCSP licence'],
+  });
   return {
     title,
     description,
-    keywords: ['SFC牌照', 'Type 1牌照', 'Type 9牌照', 'TCSP牌照', 'MSB牌照', 'MTL牌照', '跨境牌照', '虛擬資產牌照', 'VASP', 'SFC licensing Hong Kong', 'Type 1 SFC licence', 'Type 9 asset management licence', 'cross-border licensing', 'virtual asset licence Hong Kong', 'TCSP licence'],
+    keywords,
     alternates: hreflang('/licensing'),
     openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/licensing', images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },
