@@ -11,7 +11,11 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   const isEn = locale === 'en';
   const isSc = locale === 'zh-Hans';
 
-  const waSetting = await prisma.setting.findUnique({ where: { key: 'whatsapp_number' } }).catch(() => null);
+  const lk = isEn ? 'en' : isSc ? 'sc' : 'tc';
+  const [waSetting, dbTeam] = await Promise.all([
+    prisma.setting.findUnique({ where: { key: 'whatsapp_number' } }).catch(() => null),
+    prisma.teamMember.findMany({ where: { active: true }, orderBy: { order: 'asc' } }).catch(() => []),
+  ]);
   const waNumber = waSetting?.value || '+85292318254';
   const waBase = `https://wa.me/${waNumber.replace(/\D/g, '')}`;
   const waContact = `${waBase}?text=${encodeURIComponent('Hi，我想查詢合規及牌照服務')}`;
@@ -213,25 +217,45 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
               <div style={{ ...goldBar, margin: '12px auto 36px' }} />
             </div>
             <div className="about-team-grid">
-              {teamCards.map((member, i) => (
-                <div key={i} style={{ background: '#fff', border: '1px solid #E2E8F0', overflow: 'hidden' }}>
-                  <div style={{ height: 8, background: '#0F2557' }} />
-                  <div style={{ padding: '32px 28px' }}>
-                    <div style={{ width: 64, height: 64, background: '#C9A84C', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
-                      <span style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: '1.2rem', color: '#fff' }}>{member.initials}</span>
+              {(dbTeam.length > 0 ? dbTeam : teamCards.map((m) => ({
+                id: m.titleEn,
+                name: { tc: m.titleTc, en: m.titleEn, sc: m.titleSc },
+                title: { tc: m.titleTc, en: m.titleEn, sc: m.titleSc },
+                bio: { tc: m.bio, en: m.bio, sc: m.bio },
+                initials: m.initials,
+              }))).map((member: any, i: number) => {
+                const nm = member.name as any;
+                const ttl = member.title as any;
+                const bio = member.bio as any;
+                const nameStr: string = nm[lk] || nm.tc;
+                const titleStr: string = ttl[lk] || ttl.tc;
+                const bioStr: string = bio ? (bio[lk] || bio.tc) : '';
+                const initials = member.initials || nameStr.slice(0, 2).toUpperCase();
+                const titleEn: string = ttl.en || ttl.tc;
+                return (
+                  <div key={i} style={{ background: '#fff', border: '1px solid #E2E8F0', overflow: 'hidden' }}>
+                    <div style={{ height: 8, background: '#0F2557' }} />
+                    <div style={{ padding: '32px 28px' }}>
+                      {member.photoUrl ? (
+                        <img src={member.photoUrl} alt={nameStr} style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', marginBottom: 20 }} />
+                      ) : (
+                        <div style={{ width: 64, height: 64, background: '#C9A84C', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
+                          <span style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: '1.2rem', color: '#fff' }}>{initials}</span>
+                        </div>
+                      )}
+                      <h3 style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '1rem', color: '#0F2557', marginBottom: 4 }}>
+                        {titleStr}
+                      </h3>
+                      <div style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.75rem', color: '#C9A84C', fontWeight: 600, letterSpacing: '.05em', marginBottom: 14 }}>
+                        {titleEn.toUpperCase()}
+                      </div>
+                      <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.85rem', color: '#64748B', lineHeight: 1.8 }}>
+                        {bioStr}
+                      </p>
                     </div>
-                    <h3 style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '1rem', color: '#0F2557', marginBottom: 4 }}>
-                      {isEn ? member.titleEn : isSc ? member.titleSc : member.titleTc}
-                    </h3>
-                    <div style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.75rem', color: '#C9A84C', fontWeight: 600, letterSpacing: '.05em', marginBottom: 14 }}>
-                      {member.titleEn.toUpperCase()}
-                    </div>
-                    <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.85rem', color: '#64748B', lineHeight: 1.8 }}>
-                      {member.bio}
-                    </p>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>

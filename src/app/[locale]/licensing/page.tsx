@@ -100,8 +100,18 @@ export default async function LicensingPage({
   const isSc = locale === 'zh-Hans';
   const activeTab = tab ?? 'overview';
 
-  const waNum = await prisma.setting.findUnique({ where: { key: 'whatsapp_number' } }).catch(() => null);
+  const lk = isEn ? 'en' : isSc ? 'sc' : 'tc';
+  const [waNum, dbFaqs] = await Promise.all([
+    prisma.setting.findUnique({ where: { key: 'whatsapp_number' } }).catch(() => null),
+    prisma.faq.findMany({ where: { pageSlug: 'licensing' }, orderBy: [{ subTab: 'asc' }, { order: 'asc' }] }).catch(() => []),
+  ]);
   const waNumber = waNum?.value || '+85292318254';
+  const faqsBySubTab: Record<string, { question: string; answer: string }[]> = {};
+  for (const f of dbFaqs as any[]) {
+    const st = f.subTab || 'overview';
+    if (!faqsBySubTab[st]) faqsBySubTab[st] = [];
+    faqsBySubTab[st].push({ question: f.question[lk] || f.question.tc, answer: f.answer[lk] || f.answer.tc });
+  }
 
   const waMessages: Record<string, string> = {
     overview: 'Hi，我想查詢牌照申請服務',
@@ -277,18 +287,7 @@ export default async function LicensingPage({
                 <div style={{ background: '#0F2557', padding: '12px 16px', fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.85rem', color: '#fff' }}>
                   {isEn ? 'Frequently Asked Questions' : isSc ? '常见问题' : '常見問題'}
                 </div>
-                <FaqAccordion
-                  faqs={[
-                    {
-                      question: isEn ? 'How long does SFC licence application take?' : isSc ? '申请SFC牌照需时多久？' : '申請SFC牌照需時多久？',
-                      answer: isEn ? 'Generally 6–12 months, depending on the completeness of documents and the complexity of the applicant\'s background.' : isSc ? '一般需时6-12个月，视乎文件完整性及申请人背景复杂程度而定。' : '一般需時 6–12 個月，視乎文件完整性及申請人背景複雜程度而定。',
-                    },
-                    {
-                      question: isEn ? 'What are the Responsible Officer requirements?' : isSc ? '负责人员有何要求？' : '負責人員有何要求？',
-                      answer: isEn ? 'Responsible Officers must possess relevant qualifications and pass SFC\'s fit and proper assessment, demonstrating expertise in their area of regulated activity.' : isSc ? '负责人员须具备相关资历及通过SFC适当人选评核，证明其在受规管活动范围内具备专业知识。' : '負責人員須具備相關資歷及通過 SFC 適當人選評核，證明其在受規管活動範圍內具備專業知識。',
-                    },
-                  ]}
-                />
+                <FaqAccordion faqs={faqsBySubTab['sfc'] ?? []} />
               </div>
             </div>
           </div>
@@ -414,18 +413,7 @@ export default async function LicensingPage({
                 <div style={{ background: '#0F2557', padding: '12px 16px', fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.85rem', color: '#fff' }}>
                   {isEn ? 'FAQ' : isSc ? '常见问题' : '常見問題'}
                 </div>
-                <FaqAccordion
-                  faqs={[
-                    {
-                      question: isEn ? 'What is the difference between US MSB and MTL?' : isSc ? '美国MSB和MTL有什么分别？' : '美國 MSB 和 MTL 有什麼分別？',
-                      answer: isEn ? 'MSB is a federal-level registration with FinCEN required for all money services businesses. MTL (Money Transmitter Licence) is a state-level licence required in most states where you conduct business.' : isSc ? 'MSB是向FinCEN进行的联邦层面登记，所有货币服务业务均须登记。MTL（汇款牌照）是州级牌照，在大多数开展业务的州份均须申请。' : 'MSB 是向 FinCEN 進行的聯邦層面登記，所有貨幣服務業務均須登記。MTL（匯款牌照）是州級牌照，在大多數開展業務的州份均須申請。',
-                    },
-                    {
-                      question: isEn ? 'How long does a US MTL application take?' : isSc ? '申请美国MTL需要多长时间？' : '申請美國 MTL 需要多長時間？',
-                      answer: isEn ? 'Timelines vary by state, ranging from 3 months to over 18 months. States like New York and California are known for longer review periods. We advise prioritising key states first.' : isSc ? '时间因州而异，从3个月到18个月以上不等。纽约和加州以审查周期较长著称。我们建议优先申请重点州份。' : '時間因州而異，從 3 個月到 18 個月以上不等。紐約及加州以審查周期較長著稱。我們建議優先申請重點州份。',
-                    },
-                  ]}
-                />
+                <FaqAccordion faqs={faqsBySubTab['overseas'] ?? []} />
               </div>
             </div>
           </div>

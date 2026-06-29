@@ -127,9 +127,19 @@ export default async function CorporatePage({
   const isSc = locale === 'zh-Hans';
   const activeTab = tab ?? 'overview';
 
-  const waNum = await prisma.setting.findUnique({ where: { key: 'whatsapp_number' } }).catch(() => null);
+  const lk = isEn ? 'en' : isSc ? 'sc' : 'tc';
+  const [waNum, dbFaqs] = await Promise.all([
+    prisma.setting.findUnique({ where: { key: 'whatsapp_number' } }).catch(() => null),
+    prisma.faq.findMany({ where: { pageSlug: 'corporate' }, orderBy: [{ subTab: 'asc' }, { order: 'asc' }] }).catch(() => []),
+  ]);
   const waNumber = waNum?.value || '+85292318254';
   const waHref = `https://wa.me/${waNumber.replace(/\D/g, '')}?text=${encodeURIComponent('Hi，我想查詢企業服務')}`;
+  const faqsBySubTab: Record<string, { question: string; answer: string }[]> = {};
+  for (const f of dbFaqs as any[]) {
+    const st = f.subTab || 'overview';
+    if (!faqsBySubTab[st]) faqsBySubTab[st] = [];
+    faqsBySubTab[st].push({ question: f.question[lk] || f.question.tc, answer: f.answer[lk] || f.answer.tc });
+  }
 
   const tabs = [
     { key: 'overview', label: isEn ? 'Overview' : isSc ? '概览' : '概覽' },
@@ -275,6 +285,14 @@ export default async function CorporatePage({
                   : ['公司名稱預留', '文件準備', '遞交公司註冊處', '公司註冊證發出', '商業登記及銀行開戶']}
               />
               <WaCta href={waHref} label={isEn ? 'WhatsApp Us – Incorporation' : isSc ? '立即 WhatsApp 查询公司成立' : '立即 WhatsApp 查詢公司成立'} />
+              {(faqsBySubTab['incorporation'] ?? []).length > 0 && (
+                <div style={{ border: '1px solid #E2E8F0', marginTop: 24 }}>
+                  <div style={{ background: '#0F2557', padding: '12px 16px', fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.85rem', color: '#fff' }}>
+                    {isEn ? 'Frequently Asked Questions' : isSc ? '常见问题' : '常見問題'}
+                  </div>
+                  <FaqAccordion faqs={faqsBySubTab['incorporation']} />
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -358,6 +376,14 @@ export default async function CorporatePage({
                   : ['周年申報 – 周年日起42日內', '商業登記 – 到期前續期', '重要控制人 – 變更後7日內更新', '須有香港註冊地址']}
               />
               <WaCta href={waHref} label={isEn ? 'WhatsApp Us – Company Sec.' : isSc ? '立即 WhatsApp 查询公司秘书' : '立即 WhatsApp 查詢公司秘書'} />
+              {(faqsBySubTab['comsec'] ?? []).length > 0 && (
+                <div style={{ border: '1px solid #E2E8F0', marginTop: 24 }}>
+                  <div style={{ background: '#0F2557', padding: '12px 16px', fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.85rem', color: '#fff' }}>
+                    {isEn ? 'Frequently Asked Questions' : isSc ? '常见问题' : '常見問題'}
+                  </div>
+                  <FaqAccordion faqs={faqsBySubTab['comsec']} />
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -423,6 +449,14 @@ export default async function CorporatePage({
                   : ['利得稅報稅表 – 發出後1個月內', '僱主報稅表 – 每年4月', '財務記錄 – 保存7年', '審計 – 報稅前完成']}
               />
               <WaCta href={waHref} label={isEn ? 'WhatsApp Us – Accounting' : isSc ? '立即 WhatsApp 查询会计服务' : '立即 WhatsApp 查詢會計服務'} />
+              {(faqsBySubTab['accounting'] ?? []).length > 0 && (
+                <div style={{ border: '1px solid #E2E8F0', marginTop: 24 }}>
+                  <div style={{ background: '#0F2557', padding: '12px 16px', fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.85rem', color: '#fff' }}>
+                    {isEn ? 'Frequently Asked Questions' : isSc ? '常见问题' : '常見問題'}
+                  </div>
+                  <FaqAccordion faqs={faqsBySubTab['accounting']} />
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -481,6 +515,14 @@ export default async function CorporatePage({
                   : ['清理資產', '股東決議', '申請撤銷', '政府審核', '完成撤銷（3-4個月）']}
               />
               <WaCta href={waHref} label={isEn ? 'WhatsApp Us – Deregistration' : isSc ? '立即 WhatsApp 查询撤销登记' : '立即 WhatsApp 查詢撤銷登記'} />
+              {(faqsBySubTab['deregistration'] ?? []).length > 0 && (
+                <div style={{ border: '1px solid #E2E8F0', marginTop: 24 }}>
+                  <div style={{ background: '#0F2557', padding: '12px 16px', fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.85rem', color: '#fff' }}>
+                    {isEn ? 'Frequently Asked Questions' : isSc ? '常见问题' : '常見問題'}
+                  </div>
+                  <FaqAccordion faqs={faqsBySubTab['deregistration']} />
+                </div>
+              )}
             </div>
           </div>
         )}

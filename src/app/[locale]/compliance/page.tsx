@@ -106,9 +106,19 @@ export default async function CompliancePage({
   const isSc = locale === 'zh-Hans';
   const activeTab = tab ?? 'overview';
 
-  const waNum = await prisma.setting.findUnique({ where: { key: 'whatsapp_number' } }).catch(() => null);
+  const lk = isEn ? 'en' : isSc ? 'sc' : 'tc';
+  const [waNum, dbFaqs] = await Promise.all([
+    prisma.setting.findUnique({ where: { key: 'whatsapp_number' } }).catch(() => null),
+    prisma.faq.findMany({ where: { pageSlug: 'compliance' }, orderBy: [{ subTab: 'asc' }, { order: 'asc' }] }).catch(() => []),
+  ]);
   const waNumber = waNum?.value || '+85292318254';
   const waHref = `https://wa.me/${waNumber.replace(/\D/g, '')}?text=${encodeURIComponent('Hi，我想查詢合規服務')}`;
+  const faqsBySubTab: Record<string, { question: string; answer: string }[]> = {};
+  for (const f of dbFaqs as any[]) {
+    const st = f.subTab || 'overview';
+    if (!faqsBySubTab[st]) faqsBySubTab[st] = [];
+    faqsBySubTab[st].push({ question: f.question[lk] || f.question.tc, answer: f.answer[lk] || f.answer.tc });
+  }
 
   const tabs = [
     { key: 'overview', label: isEn ? 'Overview' : isSc ? '概览' : '概覽' },
@@ -305,14 +315,7 @@ export default async function CompliancePage({
                 }
               />
               <WaCta href={waHref} label={isEn ? 'WhatsApp Us – AML Audit' : isSc ? '立即 WhatsApp 查询 AML 审计' : '立即 WhatsApp 查詢 AML 審計'} />
-              <FaqAccordion
-                faqs={[
-                  {
-                    question: isEn ? 'How often should an AML audit be conducted?' : isSc ? '应多久进行一次AML审计？' : '應多久進行一次 AML 審計？',
-                    answer: isEn ? 'Most regulators recommend at least an annual independent AML audit. High-risk businesses or those with prior findings may require more frequent reviews.' : isSc ? '大多数监管机构建议每年至少进行一次独立AML审计。高风险业务或曾有发现的机构可能需要更频繁的审查。' : '大多數監管機構建議每年至少進行一次獨立 AML 審計。高風險業務或曾有發現的機構可能需要更頻繁的審查。',
-                  },
-                ]}
-              />
+              <FaqAccordion faqs={faqsBySubTab['audit'] ?? []} />
             </div>
           </div>
         )}

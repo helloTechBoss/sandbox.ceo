@@ -45,8 +45,15 @@ export default async function MsoPage({
   const lk = isEn ? 'en' : isSc ? 'sc' : 'tc';
   const activeTab = TABS.find(t => t.key === tab)?.key ?? 'overview';
 
-  const waNum = await prisma.setting.findUnique({ where: { key: 'whatsapp_number' } }).catch(() => null);
+  const [waNum, dbFaqs] = await Promise.all([
+    prisma.setting.findUnique({ where: { key: 'whatsapp_number' } }).catch(() => null),
+    prisma.faq.findMany({ where: { pageSlug: 'mso' }, orderBy: { order: 'asc' } }).catch(() => []),
+  ]);
   const waNumber = waNum?.value || '+85292318254';
+  const faqItems = dbFaqs.map((f: any) => ({
+    question: (f.question as any)[lk] || (f.question as any).tc,
+    answer: (f.answer as any)[lk] || (f.answer as any).tc,
+  }));
   const waBase = `https://wa.me/${waNumber.replace(/\D/g, '')}`;
 
   const waMessages: Record<string, string> = {
@@ -181,7 +188,7 @@ export default async function MsoPage({
                 <div style={{ background: '#F8FAFC', padding: '14px 20px', borderBottom: '1px solid #E2E8F0' }}>
                   <h3 style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 700, fontSize: '.8rem', color: '#0F2557', letterSpacing: '.06em', textTransform: 'uppercase' }}>FAQ</h3>
                 </div>
-                <FaqAccordion faqs={activeTab === 'new-application' ? FAQ_NEW : FAQ_RENEWAL} />
+                <FaqAccordion faqs={faqItems.length > 0 ? faqItems : (activeTab === 'new-application' ? FAQ_NEW : FAQ_RENEWAL)} />
               </div>
             )}
           </div>
