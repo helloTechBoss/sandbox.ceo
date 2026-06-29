@@ -113,8 +113,12 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
                     <div style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.68rem', fontWeight: 700, letterSpacing: '.15em', color: '#C9A84C', textTransform: 'uppercase', marginBottom: 6 }}>
                       {isEn ? 'Office' : isSc ? '办公室' : '辦公室'}
                     </div>
-                    <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.9rem', color: '#334155', lineHeight: 1.6 }}>
-                      {isEn ? 'Kowloon Bay, Hong Kong' : isSc ? '香港九龙湾' : '香港九龍灣'}
+                    <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.9rem', color: '#334155', lineHeight: 1.7, whiteSpace: 'pre-line' }}>
+                      {isEn
+                        ? 'Room 1002B, 10/F, Metro Centre II\n21 Lam Hing St, Kowloon Bay\nHong Kong'
+                        : isSc
+                        ? '香港九龙湾临兴街21号\n美罗中心二期10楼1002B室'
+                        : '香港九龍灣臨興街21號\n美羅中心二期10樓1002B室'}
                     </p>
                   </div>
                   <div>

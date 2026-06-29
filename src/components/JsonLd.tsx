@@ -13,9 +13,11 @@ export function OrgJsonLd() {
     telephone: '+85292318254',
     address: {
       '@type': 'PostalAddress',
+      streetAddress: 'Room 1002B, 10/F, Metro Centre II, 21 Lam Hing Street',
       addressLocality: 'Kowloon Bay',
       addressRegion: 'Kowloon',
       addressCountry: 'HK',
+      postalCode: '',
     },
     openingHoursSpecification: {
       '@type': 'OpeningHoursSpecification',

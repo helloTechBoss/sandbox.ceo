@@ -104,11 +104,15 @@ export default function SiteFooter({ locale = 'zh-Hant', waNumber = '+8529231825
               {isEn ? 'Contact' : isSc ? '联络' : '聯絡'}
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.83rem', color: 'rgba(255,255,255,.55)', lineHeight: 1.6 }}>
-                <div style={{ color: 'rgba(255,255,255,.8)', fontWeight: 500, marginBottom: 2 }}>
+              <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.83rem', color: 'rgba(255,255,255,.55)', lineHeight: 1.6, whiteSpace: 'pre-line' }}>
+                <div style={{ color: 'rgba(255,255,255,.8)', fontWeight: 500, marginBottom: 2, whiteSpace: 'normal' }}>
                   {isEn ? 'Hong Kong Office' : isSc ? '香港办公室' : '香港辦公室'}
                 </div>
-                {isEn ? 'Kowloon Bay, Hong Kong' : isSc ? '香港九龙湾' : '香港九龍灣'}
+                {isEn
+                  ? 'Room 1002B, 10/F, Metro Centre II,\n21 Lam Hing St, Kowloon Bay, HK'
+                  : isSc
+                  ? '香港九龙湾临兴街21号\n美罗中心二期10楼1002B室'
+                  : '香港九龍灣臨興街21號\n美羅中心二期10樓1002B室'}
               </div>
               <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.83rem', color: 'rgba(255,255,255,.55)' }}>
                 <div style={{ color: 'rgba(255,255,255,.8)', fontWeight: 500, marginBottom: 2 }}>WhatsApp</div>
