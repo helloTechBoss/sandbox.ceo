@@ -11,6 +11,7 @@ import { prisma } from '@/lib/prisma';
 import { getSeoMeta } from '@/lib/getSeoMeta';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
+const localePath = (locale: Locale, path: string) => locale === 'zh-Hant' ? path : `/${locale}${path}`;
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -379,11 +380,25 @@ export default async function CompliancePage({
               <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.88rem', color: '#C9A84C', letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 12 }}>
                 {isEn ? 'TRAINING & ADVISORY SERVICES' : isSc ? '培训及顾问服务' : '培訓及顧問服務'}
               </div>
-              <SvcItem
-                title={isEn ? 'Continuing Professional Training (CPT)' : isSc ? '持续专业培训 (CPT)' : '持續專業培訓 (CPT)'}
-                enSub="Continuing Professional Training (CPT)"
-                desc={isEn ? 'SFC-recognised CPT programmes covering AML/CFT, regulatory updates, product knowledge, and compliance best practices. Available online or in-person with training record maintenance.' : isSc ? 'SFC认可CPT课程，涵盖AML/CFT、监管更新、产品知识及合规最佳实践。提供线上或面对面培训，并维护培训记录。' : 'SFC 認可 CPT 課程，涵蓋 AML/CFT、監管更新、產品知識及合規最佳實踐。提供線上或面對面培訓，並維護培訓記錄。'}
-              />
+              <a href={localePath(locale, '/compliance/cpt-marketplace')} style={{ textDecoration: 'none', display: 'block' }}>
+                <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start', background: '#F8FAFC', border: '1px solid #E2E8F0', borderLeft: '3px solid #EF4444', padding: '20px 22px', marginBottom: 2 }}>
+                  <div style={{ width: 40, height: 40, background: '#EF4444', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    {docIcon}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <h3 style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, color: '#0F2557', fontSize: '.93rem', marginBottom: 2 }}>
+                      {isEn ? 'Continuing Professional Training (CPT)' : isSc ? '持续专业培训 (CPT)' : '持續專業培訓 (CPT)'}
+                    </h3>
+                    <div style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.72rem', fontWeight: 600, color: '#94A3B8', marginBottom: 6 }}>Continuing Professional Training (CPT)</div>
+                    <p style={{ fontSize: '.83rem', color: '#64748B', lineHeight: 1.75, marginBottom: 8 }}>
+                      {isEn ? 'SFC-recognised CPT programmes covering AML/CFT, regulatory updates, product knowledge, and compliance best practices. Available online or in-person with training record maintenance.' : isSc ? 'SFC认可CPT课程，涵盖AML/CFT、监管更新、产品知识及合规最佳实践。提供线上或面对面培训，并维护培训记录。' : 'SFC 認可 CPT 課程，涵蓋 AML/CFT、監管更新、產品知識及合規最佳實踐。提供線上或面對面培訓，並維護培訓記錄。'}
+                    </p>
+                    <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.75rem', fontWeight: 700, color: '#EF4444' }}>
+                      {isEn ? '→ Browse CPT Courses' : isSc ? '→ 瀏覽 CPT 課程' : '→ 瀏覽 CPT 課程'}
+                    </span>
+                  </div>
+                </div>
+              </a>
               <SvcItem
                 title={isEn ? 'ESG Advisory Services' : isSc ? 'ESG 顾问服务' : 'ESG 顧問服務'}
                 enSub="ESG Advisory"

@@ -143,3 +143,32 @@ model AdminUser {
   role         String   @default("editor")
   createdAt    DateTime @default(now())
 }
+
+model CptCourse {
+  id           String        @id @default(cuid())
+  name         Json          // {tc, en, sc}
+  description  Json          // {tc, en, sc}
+  price        Int           // HKD in dollars (e.g. 880)
+  videoUrl     String?       // Vimeo/YouTube embed URL or Blob URL
+  thumbnailUrl String?
+  published    Boolean       @default(false)
+  featured     Boolean       @default(false)
+  order        Int           @default(0)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  purchases    CptPurchase[]
+}
+
+model CptPurchase {
+  id              String    @id @default(cuid())
+  course          CptCourse @relation(fields: [courseId], references: [id])
+  courseId        String
+  email           String
+  name            String?
+  stripeSessionId String    @unique
+  amountPaid      Int       // HKD
+  paidAt          DateTime  @default(now())
+
+  @@index([courseId])
+  @@index([email])
+}
