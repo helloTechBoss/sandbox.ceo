@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic';
 import { prisma } from '@/lib/prisma';
 import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
+import DeleteButton from '@/app/admin/components/DeleteButton';
 
 export default async function EditArticlePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -68,9 +69,7 @@ export default async function EditArticlePage({ params }: { params: Promise<{ id
       <Link href="/admin/articles" style={{ fontSize: '.85rem', color: '#64748B', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4, marginBottom: 24 }}>← Back</Link>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
         <h1 style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 700, fontSize: '1.4rem', color: '#0F2557' }}>Edit Article</h1>
-        <form action={deleteArticle}>
-          <button type="submit" onClick={() => confirm('Delete this article?')} style={{ background: '#EF4444', color: '#fff', padding: '10px 20px', fontFamily: "'Montserrat',sans-serif", fontSize: '.85rem', fontWeight: 700, border: 'none', cursor: 'pointer' }}>Delete Article</button>
-        </form>
+        <DeleteButton action={deleteArticle} />
       </div>
 
       <form action={updateArticle}>
