@@ -4,9 +4,11 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const intlMiddleware = createMiddleware(routing);
 
+const BYPASS = ['/admin', '/opengraph-image', '/twitter-image', '/sitemap.xml', '/robots.txt'];
+
 export default function middleware(request: NextRequest) {
-  // Skip admin routes for i18n
-  if (request.nextUrl.pathname.startsWith('/admin')) {
+  const { pathname } = request.nextUrl;
+  if (BYPASS.some(p => pathname.startsWith(p))) {
     return NextResponse.next();
   }
   return intlMiddleware(request);
