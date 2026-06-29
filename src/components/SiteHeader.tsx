@@ -48,6 +48,16 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  useEffect(() => {
+    if (!langOpen) return;
+    const onClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('[data-lang-switcher]')) setLangOpen(false);
+    };
+    document.addEventListener('mousedown', onClickOutside);
+    return () => document.removeEventListener('mousedown', onClickOutside);
+  }, [langOpen]);
+
   const localeHref = (l: Locale) => {
     if (l === 'zh-Hant') return '/';
     return `/${l}`;
@@ -122,7 +132,7 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             {/* Language switcher */}
-            <div style={{ position: 'relative' }} onMouseLeave={() => setLangOpen(false)}>
+            <div style={{ position: 'relative' }} data-lang-switcher>
               <button
                 onClick={() => setLangOpen(!langOpen)}
                 style={{
