@@ -33,7 +33,7 @@ export default function AdminLoginPage() {
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <div style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: '1.4rem', color: '#0F2557', marginBottom: 4 }}>
-            SANDBOX<span style={{ color: '#EF4444' }}>.</span>CEO
+            SANDBOX <span style={{ color: '#EF4444' }}>GROUP</span>
           </div>
           <div style={{ fontSize: '.85rem', color: '#64748B' }}>Admin Panel</div>
         </div>

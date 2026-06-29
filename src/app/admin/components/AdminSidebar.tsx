@@ -27,7 +27,7 @@ export default function AdminSidebar() {
       <div style={{ padding: '20px 20px 16px', borderBottom: '1px solid rgba(255,255,255,.1)' }}>
         <Link href="/" target="_blank" style={{ textDecoration: 'none' }}>
           <div style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: '1rem', color: '#fff', letterSpacing: '.05em' }}>
-            SANDBOX<span style={{ color: '#EF4444' }}>.</span>CEO
+            SANDBOX <span style={{ color: '#EF4444' }}>GROUP</span>
           </div>
           <div style={{ fontSize: '.65rem', color: 'rgba(255,255,255,.4)', letterSpacing: '.1em', textTransform: 'uppercase', marginTop: 2 }}>
             Admin Panel
