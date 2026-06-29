@@ -54,8 +54,8 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
       const target = e.target as HTMLElement;
       if (!target.closest('[data-lang-switcher]')) setLangOpen(false);
     };
-    document.addEventListener('mousedown', onClickOutside);
-    return () => document.removeEventListener('mousedown', onClickOutside);
+    document.addEventListener('click', onClickOutside);
+    return () => document.removeEventListener('click', onClickOutside);
   }, [langOpen]);
 
   const localeHref = (l: Locale) => {
@@ -154,10 +154,10 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
                   position: 'absolute', top: 'calc(100% + 8px)', right: 0,
                   background: '#fff', border: '1px solid #E2E8F0',
                   borderTop: '3px solid #0F2557', minWidth: 160,
-                  zIndex: 500, boxShadow: '0 12px 32px rgba(15,37,87,.12)',
+                  zIndex: 9999, boxShadow: '0 12px 32px rgba(15,37,87,.12)',
                 }}>
                   {(['zh-Hant', 'en', 'zh-Hans'] as Locale[]).map(l => (
-                    <a key={l} href={localeHref(l)} style={{
+                    <a key={l} href={localeHref(l)} onClick={() => setLangOpen(false)} style={{
                       display: 'flex', alignItems: 'center', gap: 10,
                       padding: '11px 16px',
                       borderBottom: l === 'zh-Hans' ? 'none' : '1px solid #F1F5F9',
