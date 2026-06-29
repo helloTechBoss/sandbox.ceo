@@ -65,7 +65,7 @@ export default function SiteFooter({ locale = 'zh-Hant', waNumber = '+8529231825
                 { href: '/licensing', label: isEn ? 'SFC Licensing' : 'SFC 牌照' },
                 { href: '/compliance', label: isEn ? 'AML Compliance' : isSc ? 'AML 合规' : 'AML 合規' },
                 { href: '/corporate', label: isEn ? 'Corporate Services' : isSc ? '企业服务' : '企業服務' },
-                { href: '/tech', label: 'RegTech' },
+                { href: '/tech', label: isEn ? 'RegTech' : isSc ? '合规科技' : '合規科技' },
               ].map(item => (
                 <li key={item.href}>
                   <Link href={item.href} style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.83rem', color: 'rgba(255,255,255,.55)', textDecoration: 'none', transition: 'color .2s' }}>
@@ -84,8 +84,8 @@ export default function SiteFooter({ locale = 'zh-Hant', waNumber = '+8529231825
             <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {[
                 { href: '/about', label: isEn ? 'About Us' : isSc ? '关于我们' : '關於我們' },
-                { href: '/insights', label: isEn ? 'Insights' : isSc ? '行业洞察' : '行業洞察' },
-                { href: '/contact', label: isEn ? 'Contact' : isSc ? '联络我们' : '聯絡我們' },
+                { href: '/insights', label: isEn ? 'Insights' : isSc ? '专业见解' : '專業見解' },
+                { href: '/contact', label: isEn ? 'Contact Us' : isSc ? '联络我们' : '聯絡我們' },
                 { href: '/terms', label: isEn ? 'Terms of Service' : isSc ? '服务条款' : '服務條款' },
                 { href: '/privacy', label: isEn ? 'Privacy Policy' : isSc ? '隐私政策' : '私隱政策' },
               ].map(item => (

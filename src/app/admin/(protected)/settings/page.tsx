@@ -8,6 +8,7 @@ const SETTING_FIELDS = [
   { key: 'ga_id', label: 'Google Analytics ID', placeholder: 'G-XXXXXXXXXX', hint: 'GA4 measurement ID.' },
   { key: 'social_linkedin', label: 'LinkedIn URL', placeholder: 'https://linkedin.com/company/...', hint: 'Optional.' },
   { key: 'social_facebook', label: 'Facebook URL', placeholder: 'https://facebook.com/...', hint: 'Optional.' },
+  { key: 'social_instagram', label: 'Instagram URL', placeholder: 'https://www.instagram.com/...', hint: 'Optional.' },
   { key: 'og_image', label: 'Default OG Image URL', placeholder: 'https://www.sandbox.ceo/og-image.jpg', hint: 'Used for social sharing by default.' },
 ];
 

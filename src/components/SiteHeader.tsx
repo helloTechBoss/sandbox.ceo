@@ -194,7 +194,7 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
               </svg>
               <span style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <span style={{ fontSize: '.82rem', fontWeight: 700, lineHeight: 1 }}>
-                  {t(locale, '企業報價', 'Get Quote', '企业报价')}
+                  {t(locale, '企業報價', 'Quotation', '企业报价')}
                 </span>
                 <span style={{ fontSize: '.62rem', fontWeight: 500, opacity: .88, letterSpacing: '.02em', lineHeight: 1 }}>
                   {t(locale, '索取報價', 'Quotation', '索取报价')}
@@ -258,7 +258,7 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
                 fontWeight: 700, fontSize: '.9rem', textDecoration: 'none',
               }}
             >
-              {t(locale, 'WhatsApp 企業報價', 'WhatsApp Quote', 'WhatsApp 企业报价')}
+              {t(locale, 'WhatsApp 企業報價', 'WhatsApp Quotation', 'WhatsApp 企业报价')}
             </a>
           </div>
         )}
