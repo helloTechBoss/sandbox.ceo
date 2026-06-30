@@ -17,6 +17,7 @@ const nav = [
   { href: '/admin/sections', label: 'Pages & Sections', icon: '📄' },
   { href: '/admin/team', label: 'Team Members', icon: '👥' },
   { href: '/admin/settings', label: 'Settings', icon: '⚙️' },
+  { href: '/admin/register', label: 'Add Admin User', icon: '➕' },
 ];
 
 export default function AdminSidebar() {

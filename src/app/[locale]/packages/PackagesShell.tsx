@@ -324,10 +324,7 @@ export default function PackagesShell({ locale, waNumber, packageGroups, cptCour
                                 </div>
                                 {canBuy ? (
                                   <button
-                                    onClick={() => {
-                                      if (!member) { setShowMemberModal(true); return; }
-                                      toggle({ type: 'package', id: pkg.id, name, amount: pkg.stripeAmount! });
-                                    }}
+                                    onClick={() => toggle({ type: 'package', id: pkg.id, name, amount: pkg.stripeAmount! })}
                                     style={{
                                       background: selected ? '#EF4444' : '#0F2557', color: '#fff',
                                       padding: '9px 16px', fontFamily: "'Montserrat',sans-serif",
@@ -416,10 +413,7 @@ export default function PackagesShell({ locale, waNumber, packageGroups, cptCour
                               HK${c.price.toLocaleString()}
                             </span>
                             <button
-                              onClick={() => {
-                                if (!member) { setShowMemberModal(true); return; }
-                                toggle({ type: 'cpt', id: c.id, name, amount: c.price });
-                              }}
+                              onClick={() => toggle({ type: 'cpt', id: c.id, name, amount: c.price })}
                               style={{
                                 background: selected ? '#EF4444' : '#0F2557', color: '#fff',
                                 padding: '9px 18px', fontFamily: "'Montserrat',sans-serif",
