@@ -1,389 +1,567 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import './techboss.css';
 
 const YELLOW = '#F5C518';
-const PURPLE = '#5B3EE8';
 
+/* ─── ANNOUNCEMENT BAR ─── */
 function AnnouncementBar() {
   const [visible, setVisible] = useState(true);
   if (!visible) return null;
   return (
-    <div style={{ background: '#111', color: '#fff', textAlign: 'center', padding: '10px 40px', fontSize: 14, position: 'relative' }}>
-      預約科技波士，學習更多AI資訊
-      <button onClick={() => setVisible(false)} style={{ position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#fff', fontSize: 20, cursor: 'pointer', lineHeight: 1 }}>×</button>
+    <div className="tb-announce">
+      預約科技波士，學習更多AI資訊 ✦ Book a consultation with Tech Boss today
+      <button className="tb-announce-close" onClick={() => setVisible(false)} aria-label="Close">×</button>
     </div>
   );
 }
 
+/* ─── HEADER ─── */
+const NAV_LINKS = [
+  { label: 'Home', href: '/techboss' },
+  { label: 'Corporate Services', href: '/techboss/corporate-services' },
+  { label: 'AI Project', href: '/techboss/ai-project' },
+  { label: 'Our Client', href: '/techboss/clients' },
+  { label: 'Our Story', href: '/techboss/our-story' },
+  { label: 'Pricing', href: '/techboss/pricing' },
+];
+
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const navLinks = [
-    { label: 'Home', href: '/techboss' },
-    { label: 'Corporate Services', href: '/techboss/corporate' },
-    { label: 'AI Project', href: '/techboss/ai' },
-    { label: 'Our Client', href: '/techboss/clients' },
-    { label: 'Our Story', href: '/techboss/about' },
-  ];
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   return (
     <>
-      <header className="tb-header">
-        <Link href="/techboss" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-          <div style={{ width: 44, height: 44, background: PURPLE, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>🤖</div>
-          <div>
-            <div style={{ fontWeight: 900, fontSize: 15, color: '#fff', letterSpacing: 1 }}>TECH BOSS</div>
-            <div style={{ fontSize: 10, color: '#aaa' }}>科技波士</div>
-          </div>
+      <header className={`tb-header${scrolled ? ' scrolled' : ''}`}>
+        <Link href="/techboss" className="tb-logo">
+          <Image src="/techboss/images/logo.png" alt="Tech Boss" width={120} height={40} style={{ height: 38, width: 'auto' }} />
         </Link>
 
         <nav className="tb-nav">
-          {navLinks.map(item => (
-            <Link key={item.label} href={item.href} style={{ color: '#fff', textDecoration: 'none' }}>{item.label}</Link>
+          {NAV_LINKS.map(l => (
+            <Link key={l.label} href={l.href}>{l.label}</Link>
           ))}
         </nav>
 
         <div className="tb-nav-right">
-          <Link href="/techboss/login" style={{ color: '#fff', fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Login</Link>
-          <div style={{ display: 'flex', gap: 12 }}>
-            <a href="https://facebook.com" target="_blank" rel="noreferrer" style={{ color: '#fff', fontSize: 16, textDecoration: 'none', fontWeight: 700 }}>f</a>
-            <a href="https://instagram.com" target="_blank" rel="noreferrer" style={{ color: '#fff', fontSize: 14, textDecoration: 'none' }}>ig</a>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" style={{ color: '#fff', fontSize: 14, fontWeight: 900, textDecoration: 'none' }}>in</a>
+          <div className="tb-nav-social" style={{ display: 'flex', gap: 14 }}>
+            <a href="https://www.facebook.com/techboss.hk" target="_blank" rel="noreferrer">FB</a>
+            <a href="https://www.instagram.com/techboss.hk" target="_blank" rel="noreferrer">IG</a>
+            <a href="https://www.linkedin.com/company/tech-boss-limited" target="_blank" rel="noreferrer">LI</a>
           </div>
-          <span className="tb-lang" style={{ color: '#fff', fontSize: 12, border: '1px solid #444', padding: '2px 8px', borderRadius: 4 }}>🌐 English ▾</span>
-          <span className="tb-cart" style={{ color: '#fff', fontSize: 16 }}>🛒 0</span>
-          <button className="tb-hamburger" onClick={() => setMenuOpen(o => !o)} aria-label="Menu">☰</button>
+          <a href="https://app.techboss.app" target="_blank" rel="noreferrer" className="tb-btn-yellow" style={{ padding: '10px 22px', fontSize: 13 }}>
+            Login
+          </a>
+          <button className="tb-hamburger" onClick={() => setMenuOpen(o => !o)} aria-label="Toggle menu">
+            {menuOpen ? '✕' : '☰'}
+          </button>
         </div>
       </header>
+
       <div className={`tb-mobile-menu${menuOpen ? ' open' : ''}`}>
-        {navLinks.map(item => (
-          <Link key={item.label} href={item.href} onClick={() => setMenuOpen(false)}>{item.label}</Link>
+        {NAV_LINKS.map(l => (
+          <Link key={l.label} href={l.href} onClick={() => setMenuOpen(false)}>{l.label}</Link>
         ))}
-        <Link href="/techboss/login" onClick={() => setMenuOpen(false)} style={{ color: '#F5C518' }}>Login</Link>
+        <a href="https://app.techboss.app" target="_blank" rel="noreferrer" style={{ color: YELLOW }}>Login →</a>
       </div>
     </>
   );
 }
 
+/* ─── TICKER ─── */
+function Ticker() {
+  const items = ['AI創業支援', 'App Builder', 'ERP System', 'Branding', 'Corporate Services', 'IoT Solutions', 'AI個人成長', 'AI內容變現', 'Tech Boss Course', 'Smart Vending', 'STEAM Education'];
+  const doubled = [...items, ...items];
+  return (
+    <div className="tb-ticker">
+      <div className="tb-ticker-inner">
+        {doubled.map((item, i) => (
+          <span key={i} className="tb-ticker-item">
+            {item} <span className="tb-ticker-sep">✦</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─── HERO ─── */
 function Hero() {
   return (
-    <section className="tb-hero" style={{ background: '#000', minHeight: '90vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '0 60px 80px' }}>
-      <h1 style={{ fontSize: 'clamp(1.8rem, 5vw, 4.5rem)', fontWeight: 900, lineHeight: 1.2, color: '#fff', marginBottom: 24 }}>
-        「AI創業支援」、「AI個人成長」、「AI內容變現」
-      </h1>
-      <h2 style={{ fontSize: 'clamp(1.4rem, 3vw, 2.5rem)', fontWeight: 900, color: '#fff' }}>
-        All In Tech Boss
-      </h2>
+    <section className="tb-hero-grid" style={{ background: '#000', minHeight: '88vh', display: 'grid', gridTemplateColumns: '1fr 1fr', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '80px 80px 80px 60px' }}>
+        <span className="tb-label">Tech Boss Limited · 科技波士</span>
+        <h1 className="tb-h1" style={{ marginBottom: 24 }}>
+          Learn the Future.<br />
+          <span style={{ color: YELLOW }}>Be the Future.</span>
+        </h1>
+        <div className="tb-gold-bar" />
+        <p style={{ fontFamily: "'Noto Sans TC', sans-serif", fontSize: 16, color: '#aaa', lineHeight: 1.8, marginBottom: 40, maxWidth: 460 }}>
+          一個結合AI企業支援、AI個人成長與AI創意孵化的AI平台，專為創業者與創作者而設，助你從靈感走向實踐，成就更有影響力的未來。
+        </p>
+        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+          <a href="https://wa.me/85292318254" target="_blank" rel="noreferrer" className="tb-btn-yellow">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            WhatsApp Us
+          </a>
+          <Link href="/techboss/corporate-services" className="tb-btn-outline">Our Services</Link>
+        </div>
+
+        <div style={{ display: 'flex', gap: 40, marginTop: 64 }}>
+          {[['50+', 'App Clients'], ['3', 'Award Winners'], ['2', 'Offices'], ['5+', 'Years Exp']].map(([n, l]) => (
+            <div key={l}>
+              <div style={{ fontFamily: 'Montserrat, sans-serif', fontSize: 28, fontWeight: 900, color: YELLOW }}>{n}</div>
+              <div style={{ fontSize: 12, color: '#666', marginTop: 2 }}>{l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ position: 'relative', overflow: 'hidden', background: '#0a0a0a' }}>
+        <Image
+          src="/techboss/images/hero-tshirt.png"
+          alt="Tech Boss"
+          fill
+          style={{ objectFit: 'contain', objectPosition: 'center', padding: 40 }}
+          priority
+        />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, #000 0%, transparent 20%)' }} />
+      </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .tb-hero-grid { grid-template-columns: 1fr !important; }
+          .tb-hero-img { min-height: 300px; }
+        }
+      `}</style>
     </section>
   );
 }
 
+/* ─── SERVICES ─── */
+const SERVICES = [
+  {
+    zh: '會計及審計', en: 'Account & Audit',
+    desc: '企業會計、稅務申報、年度審計及財務管理諮詢服務',
+    icon: '/techboss/icons/accounting.png',
+    href: '/techboss/corporate-services',
+  },
+  {
+    zh: '公司秘書', en: 'Com Sec',
+    desc: '公司成立、周年申報、法定文件管理及公司秘書服務',
+    icon: '/techboss/icons/comsec.png',
+    href: '/techboss/corporate-services',
+  },
+  {
+    zh: '沙盒商務中心', en: 'Office Booking',
+    desc: '九龍灣辦公空間、會議室及虛擬辦公室預訂服務',
+    icon: '/techboss/icons/booking.png',
+    href: '/techboss/corporate-services',
+  },
+  {
+    zh: '波士學堂', en: 'Tech Boss Course',
+    desc: 'AI工具實戰課程、創業培訓及科技應用工作坊',
+    icon: '/techboss/icons/course.png',
+    href: '/techboss/pricing',
+  },
+];
+
+function ServicesSection() {
+  return (
+    <section className="tb-section" style={{ background: '#000' }}>
+      <div className="tb-container">
+        <span className="tb-label">What We Do</span>
+        <h2 className="tb-h2" style={{ marginBottom: 12 }}>Corporate Services</h2>
+        <div className="tb-gold-bar" />
+
+        <div className="tb-grid-4">
+          {SERVICES.map(s => (
+            <Link key={s.en} href={s.href} className="tb-card" style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+              <Image src={s.icon} alt={s.en} width={64} height={64} className="tb-service-icon" />
+              <div className="tb-label" style={{ marginBottom: 6 }}>{s.en}</div>
+              <h3 className="tb-h3" style={{ marginBottom: 12 }}>{s.zh}</h3>
+              <p style={{ fontSize: 13, color: '#888', lineHeight: 1.7, flex: 1 }}>{s.desc}</p>
+              <div style={{ marginTop: 24, color: YELLOW, fontSize: 13, fontWeight: 700, fontFamily: 'Montserrat, sans-serif' }}>Learn More →</div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── WELCOME / MAP ─── */
 function WelcomeSection() {
   return (
-    <section className="tb-grid-2" style={{ background: '#000', minHeight: '60vh' }}>
-      <div className="tb-welcome-left" style={{ padding: '80px 60px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, color: '#fff', marginBottom: 32 }}>Welcome to TechBoss</h2>
-        <p style={{ fontSize: 16, color: '#ccc', lineHeight: 1.8, marginBottom: 24 }}>
+    <section className="tb-grid-2" style={{ background: '#0a0a0a', minHeight: '55vh' }}>
+      <div style={{ padding: '80px 60px 80px 80px', display: 'flex', flexDirection: 'column', justifyContent: 'center', maxWidth: 600 }}>
+        <span className="tb-label">About Us · 關於我們</span>
+        <h2 className="tb-h2" style={{ marginBottom: 12 }}>Welcome to Tech Boss</h2>
+        <div className="tb-gold-bar" />
+        <p style={{ fontSize: 15, color: '#aaa', lineHeight: 1.85, marginBottom: 16 }}>
           一個結合AI企業支援、AI個人成長與AI創意孵化的AI平台，專為創業者與創作者而設，助你從靈感走向實踐，成就更有影響力的未來。
         </p>
-        <p style={{ fontSize: 14, color: '#888', marginBottom: 40 }}>
-          Room 1002B, 10/F, Metro Centre II, 21 Lam Hing St, Kowloon Bay
+        <p style={{ fontSize: 13, color: '#555', marginBottom: 40 }}>
+          Room 1002B, 10/F, Metro Centre II, 21 Lam Hing St, Kowloon Bay, Hong Kong
         </p>
-        <a href="https://wa.me/85292318254" target="_blank" rel="noreferrer" style={{ display: 'inline-block', background: YELLOW, color: '#000', fontWeight: 700, fontSize: 16, padding: '16px 40px', borderRadius: 8, textDecoration: 'none', width: 'fit-content' }}>
-          Whatspps
+        <a href="https://wa.me/85292318254" target="_blank" rel="noreferrer" className="tb-btn-yellow" style={{ width: 'fit-content' }}>
+          Contact Us
         </a>
       </div>
-      <div className="tb-welcome-map" style={{ overflow: 'hidden', minHeight: 400 }}>
+      <div style={{ overflow: 'hidden', minHeight: 400 }}>
         <iframe
           src="https://maps.google.com/maps?q=Metro+Centre+II,+21+Lam+Hing+St,+Kowloon+Bay,+Hong+Kong&output=embed"
           width="100%" height="100%"
-          style={{ border: 0, minHeight: 400, filter: 'grayscale(100%)' }}
+          style={{ border: 0, minHeight: 480, filter: 'invert(90%) hue-rotate(180deg)' }}
           loading="lazy"
+          title="Tech Boss Office Location"
         />
       </div>
     </section>
   );
 }
 
-const SERVICES = [
-  { zh: '會計及審計', en: 'Account & Audit', icon: '📊', href: '/techboss/corporate/accounting' },
-  { zh: '公司秘書', en: 'Com Sec', icon: '💼', href: '/techboss/corporate/comsec' },
-  { zh: '沙盒商務中心', en: 'Booking', icon: '🏢', href: '/techboss/booking' },
-  { zh: '波士學堂', en: 'Tech Boss Course', icon: '🎓', href: '/techboss/courses' },
-];
-
-function ServicesSection() {
-  return (
-    <section className="tb-pad" style={{ background: '#000', padding: '80px 60px' }}>
-      <div className="tb-grid-4">
-        {SERVICES.map(s => (
-          <div key={s.en} style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-            <div style={{ fontSize: 56, lineHeight: 1 }}>{s.icon}</div>
-            <div style={{ color: '#fff', fontSize: 18, fontWeight: 700 }}>{s.zh}</div>
-            <Link href={s.href} style={{ background: YELLOW, color: '#000', fontWeight: 700, padding: '12px 28px', borderRadius: 8, textDecoration: 'none', fontSize: 14 }}>
-              {s.en}
-            </Link>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function ClientStorySection() {
-  return (
-    <section className="tb-pad" style={{ background: '#000', padding: '100px 60px' }}>
-      <div style={{ textAlign: 'center', marginBottom: 60 }}>
-        <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900, color: '#fff', marginBottom: 16 }}>
-          Tech Boss App<br />Client Story
-        </h2>
-        <p style={{ fontStyle: 'italic', color: '#aaa', fontSize: 16 }}>Our Client Feedback</p>
-      </div>
-      <div className="tb-videos">
-        {[
-          { title: 'Hong Kong Designer Vivian Poon with Tech Boss' },
-          { title: 'Coffee Cat with Tech Boss' },
-        ].map((v, i) => (
-          <div key={i} style={{ background: '#111', borderRadius: 12, overflow: 'hidden' }}>
-            <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 10, borderBottom: '1px solid #222' }}>
-              <div style={{ width: 36, height: 36, background: PURPLE, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0 }}>🤖</div>
-              <div>
-                <div style={{ fontWeight: 700, fontSize: 13, color: '#fff' }}>{v.title}</div>
-                <div style={{ fontSize: 11, color: '#888' }}>科技波士 Tech Boss</div>
-              </div>
-            </div>
-            <div style={{ background: '#1a1a1a', height: 220, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <div style={{ width: 56, height: 56, background: 'rgba(220,0,0,0.9)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                <span style={{ color: '#fff', fontSize: 20, marginLeft: 4 }}>▶</span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
+/* ─── ERP / AI SECTION ─── */
 function ERPSection() {
   return (
-    <section className="tb-grid-2" style={{ background: '#000', minHeight: '50vh' }}>
-      <div style={{ padding: '80px 60px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, color: '#fff', marginBottom: 32 }}>ERP powered by AI</h2>
-        <p style={{ fontSize: 15, color: '#ccc', lineHeight: 1.8, marginBottom: 40 }}>
-          Tech Boss, an award-winning team recognized by Cyberport HK Tech 300 (CityU) and PolyU Microfund, specializes in AI-powered ERP systems for clinics, Chinese medicine, inventory and logistics, and property management. Our IoT solutions include smart vending machines, IoT farms, STEAM classrooms, and POS machines. We are dedicated to driving innovation and efficiency through cutting-edge technology.
-        </p>
-        <Link href="/techboss/contact" style={{ display: 'inline-block', background: YELLOW, color: '#000', fontWeight: 700, fontSize: 16, padding: '16px 40px', borderRadius: 8, textDecoration: 'none', width: 'fit-content' }}>
-          Find Us
-        </Link>
+    <section className="tb-grid-2" style={{ background: '#000', minHeight: '55vh' }}>
+      <div style={{ background: YELLOW, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, overflow: 'hidden', minHeight: 480 }}>
+        <Image
+          src="/techboss/images/mascot-headset.jpg"
+          alt="Tech Boss Mascot"
+          width={600}
+          height={600}
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
       </div>
-      <div style={{ background: YELLOW, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40, minHeight: 400 }}>
-        <div style={{ textAlign: 'center', color: '#000' }}>
-          <div style={{ fontSize: 72, marginBottom: 16 }}>👕</div>
-          <div style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 900, letterSpacing: -2 }}>TECH BOSS</div>
-          <div style={{ fontSize: 18, fontWeight: 700 }}>科技波士</div>
-          <div style={{ fontSize: 12, marginTop: 8, lineHeight: 1.6 }}>START MAKING REAL APP WITHOUT CODING<br />無代碼平台 輕鬆發佈APP</div>
+      <div style={{ padding: '80px 80px 80px 60px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <span className="tb-label">Award-Winning Technology</span>
+        <h2 className="tb-h2" style={{ marginBottom: 12 }}>ERP Powered by AI</h2>
+        <div className="tb-gold-bar" />
+        <p style={{ fontSize: 15, color: '#aaa', lineHeight: 1.85, marginBottom: 40 }}>
+          Tech Boss, an award-winning team recognized by Cyberport HK Tech 300 (CityU) and PolyU Microfund, specializes in AI-powered ERP systems for clinics, Chinese medicine, inventory and logistics, and property management. Our IoT solutions include smart vending machines, IoT farms, STEAM classrooms, and POS machines.
+        </p>
+        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+          <Link href="/techboss/ai-project" className="tb-btn-yellow">AI Solutions</Link>
+          <Link href="/techboss/our-story" className="tb-btn-outline">Our Story</Link>
         </div>
       </div>
     </section>
   );
 }
 
-function ITClientsSection() {
-  const clients = [
-    'Pet IoT App', 'Travel Platform', 'E-commerce', 'Food Delivery',
-    'Clinic ERP', 'Property Mgmt', 'Smart Vending', 'IoT Farm',
-    'STEAM Class', 'POS System', 'Logistics', 'Inventory Mgmt',
-  ];
+/* ─── APP CLIENTS ─── */
+const APP_CLIENTS = [
+  { src: '/techboss/images/client-pet-iot.png', alt: 'Pet IoT App' },
+  { src: '/techboss/images/client-job.jpg', alt: 'Job Platform' },
+  { src: '/techboss/images/client-travel.png', alt: 'Travel Platform' },
+  { src: '/techboss/images/client-cat.jpg', alt: 'Coffee Cat App' },
+  { src: '/techboss/images/client-lobo.jpg', alt: 'Lobo Lobo App' },
+  { src: '/techboss/images/client-bag.png', alt: 'Bag Brand App' },
+  { src: '/techboss/images/client-rfood.png', alt: 'Food Delivery App' },
+  { src: '/techboss/images/client-petclothing.png', alt: 'Pet Clothing App' },
+];
+
+function ClientsSection() {
   return (
-    <section className="tb-pad" style={{ background: '#000', padding: '80px 60px' }}>
-      <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 900, color: '#fff', textAlign: 'center', marginBottom: 60 }}>Our IT Solution Client</h2>
+    <section className="tb-section" style={{ background: '#0a0a0a' }}>
+      <div className="tb-container" style={{ marginBottom: 48 }}>
+        <span className="tb-label">Tech Boss App</span>
+        <h2 className="tb-h2" style={{ marginBottom: 12 }}>Client Stories</h2>
+        <div className="tb-gold-bar" />
+        <p style={{ fontSize: 15, color: '#888', maxWidth: 560 }}>
+          Over 50 Hong Kong startups and businesses have launched their own apps with Tech Boss — without writing a single line of code.
+        </p>
+      </div>
       <div className="tb-clients">
-        {clients.map(c => (
-          <div key={c} style={{ background: '#111', border: '1px solid #222', borderRadius: 12, padding: '24px 16px', textAlign: 'center', color: '#ccc', fontSize: 14, fontWeight: 600 }}>
-            {c}
+        {APP_CLIENTS.map(c => (
+          <div key={c.alt} style={{ overflow: 'hidden', position: 'relative' }}>
+            <Image src={c.src} alt={c.alt} width={400} height={300} style={{ width: '100%', aspectRatio: '4/3', objectFit: 'cover', transition: 'transform 0.3s' }} />
           </div>
         ))}
       </div>
+      <div className="tb-container" style={{ marginTop: 48, textAlign: 'center' }}>
+        <Link href="/techboss/clients" className="tb-btn-yellow">View All Clients</Link>
+      </div>
     </section>
   );
 }
 
+/* ─── DIY APP BUILDER ─── */
 function AppBuilderSection() {
+  const screens = [
+    { src: '/techboss/images/diy-burger.png', alt: 'Menu Builder' },
+    { src: '/techboss/images/diy-calendar.png', alt: 'Booking Calendar' },
+    { src: '/techboss/images/diy-payment.png', alt: 'Payment Module' },
+    { src: '/techboss/images/diy-address.png', alt: 'Address Module' },
+    { src: '/techboss/images/diy-cart.png', alt: 'Shopping Cart' },
+  ];
+
   return (
     <section style={{ background: '#000' }}>
-      <div className="tb-pad" style={{ padding: '80px 60px', textAlign: 'center' }}>
-        <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 900, color: '#fff', marginBottom: 12 }}>DIY Your APP</h2>
-        <h3 style={{ fontSize: 'clamp(1.5rem, 3vw, 2.5rem)', fontWeight: 900, color: YELLOW, marginBottom: 16 }}>Just Like Burger</h3>
-        <p style={{ fontSize: 16, color: '#ccc', marginBottom: 40, maxWidth: 600, margin: '0 auto 40px' }}>
-          Tech Boss App aims to catalyze all the new growth startups by providing various code templates.
-        </p>
-        <Link href="/techboss/booking" style={{ display: 'inline-block', background: YELLOW, color: '#000', fontWeight: 700, fontSize: 16, padding: '16px 40px', borderRadius: 8, textDecoration: 'none' }}>
-          Book
-        </Link>
-      </div>
-
-      <div className="tb-grid-2" style={{ minHeight: '50vh' }}>
-        <div style={{ padding: '80px 60px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)', fontWeight: 900, color: '#fff', marginBottom: 32 }}>Build Your Own App Without Coding</h2>
-          <p style={{ fontSize: 15, color: '#ccc', lineHeight: 1.8, marginBottom: 40 }}>
-            Tech Boss App is an intelligent app builder platform that aims to allow startup owners to build apps without coding straightforwardly at the lowest cost with various ready-made templates. Our vision is to become the &ldquo;SquareSpace&rdquo; / &ldquo;Wix&rdquo; in the Mobile Application Sector.
+      <div className="tb-section" style={{ paddingBottom: 60 }}>
+        <div className="tb-container" style={{ textAlign: 'center' }}>
+          <span className="tb-label">No-Code Platform · 無代碼平台</span>
+          <h2 className="tb-h2" style={{ marginBottom: 8 }}>DIY Your App</h2>
+          <h3 style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 900, fontSize: 'clamp(1.4rem, 3vw, 2rem)', color: YELLOW, marginBottom: 20 }}>
+            Just Like Building a Burger
+          </h3>
+          <div className="tb-gold-bar" style={{ margin: '0 auto 32px' }} />
+          <p style={{ fontSize: 15, color: '#888', maxWidth: 560, margin: '0 auto 40px', lineHeight: 1.8 }}>
+            Tech Boss App is an intelligent app builder platform that allows startup owners to build apps without coding — at the lowest cost with various ready-made templates.
           </p>
-          <a href="https://app.techboss.app" style={{ display: 'inline-block', background: YELLOW, color: '#000', fontWeight: 700, fontSize: 16, padding: '16px 40px', borderRadius: 8, textDecoration: 'none', width: 'fit-content' }}>
-            Build Now
+          <a href="https://app.techboss.app" target="_blank" rel="noreferrer" className="tb-btn-yellow">
+            Start Building Free
           </a>
         </div>
-        <div style={{ background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40, minHeight: 360 }}>
-          <div style={{ background: '#f5f5f5', borderRadius: 16, padding: '28px 24px', maxWidth: 360, width: '100%', textAlign: 'center' }}>
-            <div style={{ fontSize: 40, marginBottom: 12 }}>📱</div>
-            <div style={{ fontSize: 18, fontWeight: 900, color: '#000' }}>Chat with</div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, margin: '4px 0' }}>
-              <span style={{ color: 'red', fontSize: 18 }}>▶</span>
-              <span style={{ fontSize: 18, fontWeight: 900, color: '#000' }}>YouTube</span>
+      </div>
+
+      <div className="tb-container" style={{ paddingBottom: 80 }}>
+        <div className="tb-diy-screens">
+          {screens.map(s => (
+            <div key={s.alt} style={{ background: '#111', borderRadius: 16, overflow: 'hidden', padding: 8 }}>
+              <Image src={s.src} alt={s.alt} width={200} height={380} style={{ width: '100%', height: 'auto', objectFit: 'contain' }} />
             </div>
-            <div style={{ fontSize: 14, color: '#555', marginBottom: 6 }}>Various App Template</div>
-            <div style={{ fontSize: 24, fontWeight: 900, color: '#000' }}>Specialist!</div>
-          </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="tb-grid-2" style={{ borderTop: '1px solid #111' }}>
+        <div style={{ padding: '80px 80px 80px 60px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <span className="tb-label">AI App Builder</span>
+          <h2 className="tb-h2" style={{ marginBottom: 12 }}>Build Without Coding</h2>
+          <div className="tb-gold-bar" />
+          <p style={{ fontSize: 15, color: '#aaa', lineHeight: 1.85, marginBottom: 40 }}>
+            Our vision is to become the &ldquo;Squarespace&rdquo; / &ldquo;Wix&rdquo; of the mobile application sector. Pick your modules, configure your brand, and launch your app — all without writing code.
+          </p>
+          <a href="https://app.techboss.app" target="_blank" rel="noreferrer" className="tb-btn-yellow" style={{ width: 'fit-content' }}>
+            Build Now →
+          </a>
+        </div>
+        <div style={{ background: '#0a0a0a', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 60, minHeight: 400 }}>
+          <Image
+            src="/techboss/images/mascot-thumbsup.jpg"
+            alt="Tech Boss App Builder"
+            width={500}
+            height={500}
+            style={{ width: '100%', maxWidth: 400, height: 'auto', objectFit: 'cover', borderRadius: 8 }}
+          />
         </div>
       </div>
     </section>
   );
 }
 
-const BRANDING_CLIENTS = [
-  { name: 'Lobo Lobo', bg: PURPLE },
-  { name: '蓬禧閣', bg: '#8B6914' },
-  { name: 'Coffee Cat', bg: '#6B3A2A' },
-  { name: 'Vivian Poon', bg: '#2A4A6B' },
+/* ─── BRANDING CLIENTS ─── */
+const BRANDING_IMGS = [
+  '/techboss/images/brand-1.png',
+  '/techboss/images/brand-2.png',
+  '/techboss/images/brand-3.png',
+  '/techboss/images/brand-4.png',
+  '/techboss/images/brand-5.png',
+  '/techboss/images/brand-6.png',
+  '/techboss/images/brand-7.png',
+  '/techboss/images/brand-1.png',
 ];
 
 function BrandingSection() {
   return (
-    <section className="tb-pad" style={{ background: '#000', padding: '80px 60px' }}>
-      <p style={{ color: '#888', fontSize: 14, marginBottom: 16 }}>Whatever it is, the way you tell your story online can make all the difference.</p>
-      <Link href="/techboss/contact" style={{ display: 'inline-block', background: YELLOW, color: '#000', fontWeight: 700, padding: '12px 28px', borderRadius: 8, textDecoration: 'none', fontSize: 14, marginBottom: 60 }}>
-        Find Us
-      </Link>
-      <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 900, color: '#fff', marginBottom: 48, marginTop: 60 }}>Our Branding Client</h2>
-      <div className="tb-branding">
-        {BRANDING_CLIENTS.map(c => (
-          <div key={c.name} style={{ background: c.bg, borderRadius: 12, aspectRatio: '4/3', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ color: '#fff', fontWeight: 900, fontSize: 18, textAlign: 'center', padding: '0 12px' }}>{c.name}</span>
+    <section className="tb-section" style={{ background: '#0a0a0a' }}>
+      <div className="tb-container">
+        <span className="tb-label">Branding & Design</span>
+        <h2 className="tb-h2" style={{ marginBottom: 12 }}>Our Branding Clients</h2>
+        <div className="tb-gold-bar" />
+        <p style={{ fontSize: 14, color: '#666', marginBottom: 48, maxWidth: 500 }}>
+          Whatever it is, the way you tell your story online can make all the difference.
+        </p>
+        <div className="tb-branding">
+          {BRANDING_IMGS.slice(0, 7).map((src, i) => (
+            <div key={i} style={{ overflow: 'hidden', borderRadius: 4, border: '1px solid #1a1a1a' }}>
+              <Image src={src} alt={`Branding Client ${i + 1}`} width={300} height={225} style={{ width: '100%', height: 'auto', objectFit: 'cover', transition: 'transform 0.3s' }} />
+            </div>
+          ))}
+          <div style={{ background: '#111', borderRadius: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, padding: 24, border: '1px solid #222' }}>
+            <span style={{ fontFamily: 'Montserrat, sans-serif', fontSize: 24, fontWeight: 900, color: YELLOW }}>50+</span>
+            <span style={{ color: '#888', fontSize: 13, textAlign: 'center' }}>Happy Clients</span>
+            <Link href="/techboss/clients" className="tb-btn-yellow" style={{ fontSize: 12, padding: '10px 20px' }}>View All</Link>
           </div>
-        ))}
+        </div>
       </div>
     </section>
   );
 }
 
+/* ─── AWARDS ─── */
 function AwardsSection() {
   const timeline = [
-    { year: '2022', label: 'Dream it' },
-    { year: '2023', label: 'Build it' },
-    { year: '2024', label: 'Grow it\nEducate it' },
-    { year: '2025', label: '' },
+    { year: '2022', short: '22', label: 'Dream It', sub: 'Founded Tech Boss' },
+    { year: '2023', short: '23', label: 'Build It', sub: 'Cyberport HK Tech 300\nCityU Award' },
+    { year: '2024', short: '24', label: 'Grow It', sub: 'PolyU Microfund\nEducate It' },
+    { year: '2025', short: '25', label: 'Scale It', sub: 'AI Platform Launch' },
   ];
   return (
-    <section className="tb-pad" style={{ background: '#000', padding: '80px 60px' }}>
-      <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 900, color: '#fff', marginBottom: 60, textAlign: 'center' }}>Awards</h2>
-      <div className="tb-grid-awards">
-        <div style={{ position: 'absolute', top: 20, left: '12.5%', right: '12.5%', height: 2, background: '#333' }} />
-        {timeline.map(t => (
-          <div key={t.year} style={{ flex: 1, textAlign: 'center', position: 'relative', minWidth: 80 }}>
-            <div style={{ width: 40, height: 40, background: YELLOW, borderRadius: '50%', margin: '0 auto 16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, color: '#000', fontSize: 12, position: 'relative', zIndex: 1 }}>
-              {t.year.slice(2)}
+    <section className="tb-section" style={{ background: '#000' }}>
+      <div className="tb-container">
+        <div style={{ textAlign: 'center', marginBottom: 64 }}>
+          <span className="tb-label">Recognition</span>
+          <h2 className="tb-h2" style={{ marginBottom: 12 }}>Awards & Milestones</h2>
+          <div className="tb-gold-bar" style={{ margin: '0 auto' }} />
+        </div>
+        <div className="tb-timeline">
+          {timeline.map(t => (
+            <div key={t.year} className="tb-timeline-item">
+              <div className="tb-timeline-dot">{t.short}</div>
+              <div className="tb-timeline-year">{t.year}</div>
+              <div style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, fontSize: 14, color: YELLOW, marginBottom: 8 }}>{t.label}</div>
+              <div className="tb-timeline-label" style={{ whiteSpace: 'pre-line' }}>{t.sub}</div>
             </div>
-            <div style={{ fontWeight: 900, fontSize: 18, color: '#fff', marginBottom: 8 }}>{t.year}</div>
-            <div style={{ fontSize: 13, color: '#aaa', whiteSpace: 'pre-line' }}>{t.label}</div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
+/* ─── CONTACT ─── */
 function ContactSection() {
   return (
-    <section className="tb-grid-contact tb-pad" style={{ background: '#000', padding: '80px 60px' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 900, color: '#fff', marginBottom: 24 }}>Get in touch.</h2>
-        <p style={{ color: '#888', fontSize: 15, lineHeight: 1.7 }}>
-          Our Specialist will send you the updated news and contact with you to understand your need within 24 hours.
-        </p>
+    <section className="tb-section" style={{ background: '#0a0a0a', borderTop: '1px solid #111' }}>
+      <div className="tb-container">
+        <div className="tb-grid-contact">
+          <div>
+            <span className="tb-label">Get In Touch</span>
+            <h2 className="tb-h2" style={{ marginBottom: 12 }}>Let&apos;s Work Together.</h2>
+            <div className="tb-gold-bar" />
+            <p style={{ fontSize: 15, color: '#888', lineHeight: 1.85, marginBottom: 32 }}>
+              Our specialist will contact you within 24 hours to understand your needs and propose the best solution.
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <div style={{ fontSize: 13, color: '#666' }}>
+                <strong style={{ color: '#aaa', display: 'block', marginBottom: 4 }}>Hong Kong Office</strong>
+                Room 1002B, 10/F, Metro Centre II, 21 Lam Hing St, Kowloon Bay
+              </div>
+              <div style={{ fontSize: 13, color: '#666' }}>
+                <strong style={{ color: '#aaa', display: 'block', marginBottom: 4 }}>Email</strong>
+                <a href="mailto:hello@techboss.app" style={{ color: YELLOW }}>hello@techboss.app</a>
+              </div>
+              <div style={{ fontSize: 13, color: '#666' }}>
+                <strong style={{ color: '#aaa', display: 'block', marginBottom: 4 }}>WhatsApp</strong>
+                <a href="https://wa.me/85292318254" style={{ color: YELLOW }}>+852 9231 8254</a>
+              </div>
+            </div>
+          </div>
+
+          <form style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+              <div>
+                <label className="tb-form-label">First Name</label>
+                <input className="tb-form-input" placeholder="First Name" />
+              </div>
+              <div>
+                <label className="tb-form-label">Last Name</label>
+                <input className="tb-form-input" placeholder="Last Name" />
+              </div>
+            </div>
+            <div>
+              <label className="tb-form-label">Email <span style={{ color: YELLOW }}>*</span></label>
+              <input type="email" className="tb-form-input" placeholder="your@email.com" />
+            </div>
+            <div>
+              <label className="tb-form-label">Phone</label>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <select className="tb-form-input" style={{ width: 90, flexShrink: 0 }}>
+                  <option>+852</option><option>+86</option><option>+1</option>
+                </select>
+                <input className="tb-form-input" style={{ flex: 1 }} placeholder="Phone number" />
+              </div>
+            </div>
+            <div>
+              <label className="tb-form-label">Your Need</label>
+              <input className="tb-form-input" placeholder="Company / Product name" style={{ marginBottom: 8 }} />
+              <textarea className="tb-form-input" style={{ minHeight: 120, resize: 'vertical' }} placeholder="Tell us about your project..." />
+            </div>
+            <button type="submit" className="tb-btn-yellow" style={{ width: 'fit-content' }}>
+              Send Message →
+            </button>
+          </form>
+        </div>
       </div>
-      <form style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-          <div>
-            <label style={{ color: '#aaa', fontSize: 12, display: 'block', marginBottom: 6 }}>First Name</label>
-            <input style={{ width: '100%', padding: '12px 14px', background: '#fff', border: 'none', borderRadius: 4, fontSize: 14, color: '#000', boxSizing: 'border-box' }} placeholder="First Name" />
-          </div>
-          <div>
-            <label style={{ color: '#aaa', fontSize: 12, display: 'block', marginBottom: 6 }}>Last Name</label>
-            <input style={{ width: '100%', padding: '12px 14px', background: '#fff', border: 'none', borderRadius: 4, fontSize: 14, color: '#000', boxSizing: 'border-box' }} placeholder="Last Name" />
-          </div>
-        </div>
-        <div>
-          <label style={{ color: '#aaa', fontSize: 12, display: 'block', marginBottom: 6 }}>Email <span style={{ color: 'red' }}>(required)</span></label>
-          <input type="email" style={{ width: '100%', padding: '12px 14px', background: '#fff', border: 'none', borderRadius: 4, fontSize: 14, color: '#000', boxSizing: 'border-box' }} placeholder="Email" />
-        </div>
-        <div>
-          <label style={{ color: '#aaa', fontSize: 12, display: 'block', marginBottom: 6 }}>Phone No</label>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <select style={{ padding: '12px 8px', background: '#fff', border: 'none', borderRadius: 4, fontSize: 14, color: '#000', width: 80, flexShrink: 0 }}>
-              <option>+852</option><option>+86</option><option>+1</option>
-            </select>
-            <input style={{ flex: 1, padding: '12px 14px', background: '#fff', border: 'none', borderRadius: 4, fontSize: 14, color: '#000' }} placeholder="Phone number" />
-          </div>
-        </div>
-        <div>
-          <label style={{ color: '#aaa', fontSize: 12, display: 'block', marginBottom: 6 }}>Your need</label>
-          <input style={{ width: '100%', padding: '12px 14px', background: '#fff', border: 'none', borderRadius: 4, fontSize: 14, color: '#000', marginBottom: 8, boxSizing: 'border-box' }} placeholder="Company/Product" />
-          <textarea style={{ width: '100%', padding: '12px 14px', background: '#fff', border: 'none', borderRadius: 4, fontSize: 14, color: '#000', minHeight: 120, resize: 'vertical', boxSizing: 'border-box' }} />
-        </div>
-        <button type="submit" style={{ background: YELLOW, color: '#000', fontWeight: 700, fontSize: 16, padding: '14px 40px', borderRadius: 8, border: 'none', cursor: 'pointer', width: 'fit-content' }}>
-          Send
-        </button>
-      </form>
     </section>
   );
 }
 
+/* ─── FOOTER ─── */
 function Footer() {
   return (
-    <footer style={{ background: '#000', borderTop: '1px solid #222', padding: '60px 40px 40px' }}>
-      <div className="tb-grid-footer">
-        <div>
-          <div style={{ fontWeight: 700, fontSize: 15, color: '#fff', marginBottom: 6 }}>Sandbox Corporate Services</div>
-          <div style={{ color: '#888', fontSize: 13, marginBottom: 24 }}>©Tech Boss Limited. All Rights Reserved.</div>
-          <div style={{ color: '#aaa', fontSize: 12, lineHeight: 1.8 }}>
-            <strong style={{ color: '#ccc' }}>Hong Kong Office:</strong><br />
-            Tech Boss Limited, Room 1002B, 10/F, Metro Centre II, 21 Lam Hing St, Kowloon Bay, Hong Kong
+    <footer style={{ background: '#000', borderTop: '1px solid #111', padding: '64px 0 40px' }}>
+      <div className="tb-container">
+        <div className="tb-grid-footer" style={{ marginBottom: 48 }}>
+          <div>
+            <div style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, fontSize: 13, color: '#fff', marginBottom: 6, letterSpacing: '0.06em' }}>SANDBOX CORPORATE SERVICES</div>
+            <div style={{ color: '#555', fontSize: 12, marginBottom: 24 }}>©Tech Boss Limited. All Rights Reserved.</div>
+            <div style={{ fontSize: 12, color: '#555', lineHeight: 1.9 }}>
+              <strong style={{ color: '#888' }}>Hong Kong:</strong><br />
+              Tech Boss Limited, Room 1002B, 10/F, Metro Centre II,<br />
+              21 Lam Hing St, Kowloon Bay
+            </div>
+            <div style={{ fontSize: 12, color: '#555', lineHeight: 1.9, marginTop: 12 }}>
+              <strong style={{ color: '#888' }}>China:</strong><br />
+              惠州波士智能科技有限公司<br />
+              惠州仲恺高新区和畅五路西10号
+            </div>
           </div>
-          <div style={{ color: '#aaa', fontSize: 12, lineHeight: 1.8, marginTop: 12 }}>
-            <strong style={{ color: '#ccc' }}>China Office:</strong><br />
-            惠州波士智能科技有限公司，惠州仲恺高新区和畅五路西10号汇港城惠州仲恺港澳青年创业基地八楼公共孵化区B01-A09工位
-          </div>
-        </div>
 
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12, background: '#111', padding: '16px 20px', borderRadius: 12 }}>
-            <div style={{ fontSize: 28 }}>🤖</div>
-            <div>
-              <div style={{ fontWeight: 900, fontSize: 16, color: '#fff' }}>TECH BOSS 科技波士</div>
-              <div style={{ fontSize: 10, color: '#888' }}>START MAKING REAL APP WITHOUT CODING</div>
-              <div style={{ fontSize: 10, color: '#888' }}>無代碼平台 輕鬆發佈APP</div>
+          <div style={{ textAlign: 'center' }}>
+            <Image src="/techboss/images/logo.png" alt="Tech Boss" width={140} height={50} style={{ height: 44, width: 'auto', margin: '0 auto 12px' }} />
+            <div style={{ fontSize: 11, color: '#444', letterSpacing: '0.08em', lineHeight: 1.8 }}>
+              START MAKING REAL APP WITHOUT CODING<br />
+              無代碼平台 輕鬆發佈APP
+            </div>
+          </div>
+
+          <div style={{ textAlign: 'right' }}>
+            <a href="mailto:hello@techboss.app" style={{ display: 'block', fontFamily: 'Montserrat, sans-serif', fontWeight: 700, fontSize: 15, color: '#fff', marginBottom: 20, transition: 'color 0.2s' }}>hello@techboss.app</a>
+            <div style={{ display: 'flex', gap: 20, justifyContent: 'flex-end', marginBottom: 28 }}>
+              {[
+                { label: 'Facebook', href: 'https://www.facebook.com/techboss.hk', short: 'FB' },
+                { label: 'Instagram', href: 'https://www.instagram.com/techboss.hk', short: 'IG' },
+                { label: 'LinkedIn', href: 'https://www.linkedin.com/company/tech-boss-limited', short: 'LI' },
+              ].map(s => (
+                <a key={s.label} href={s.href} target="_blank" rel="noreferrer"
+                   style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, fontSize: 12, color: '#555', letterSpacing: '0.08em', transition: 'color 0.2s' }}
+                   onMouseEnter={e => (e.currentTarget.style.color = YELLOW)}
+                   onMouseLeave={e => (e.currentTarget.style.color = '#555')}
+                >{s.short}</a>
+              ))}
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'flex-end' }}>
+              {[
+                { label: 'Privacy Policy', href: '/techboss/privacy-policy' },
+                { label: 'Terms of Service', href: '/techboss/eula' },
+                { label: 'Delivery Policy', href: '/techboss/delivery-policy' },
+              ].map(l => (
+                <Link key={l.label} href={l.href} style={{ fontSize: 12, color: '#444', transition: 'color 0.2s' }}>{l.label}</Link>
+              ))}
             </div>
           </div>
         </div>
 
-        <div style={{ textAlign: 'right' }}>
-          <div style={{ marginBottom: 20 }}>
-            <a href="mailto:hello@techboss.app" style={{ color: '#fff', fontSize: 16, fontWeight: 700, textDecoration: 'none' }}>hello@techboss.app</a>
-          </div>
-          <div style={{ display: 'flex', gap: 20, justifyContent: 'flex-end' }}>
-            <a href="https://facebook.com" target="_blank" rel="noreferrer" style={{ color: '#fff', fontSize: 18, textDecoration: 'none', fontWeight: 700 }}>f</a>
-            <a href="https://instagram.com" target="_blank" rel="noreferrer" style={{ color: '#fff', fontSize: 16, textDecoration: 'none' }}>ig</a>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" style={{ color: '#fff', fontSize: 16, fontWeight: 900, textDecoration: 'none' }}>in</a>
+        <div className="tb-divider" />
+        <div style={{ marginTop: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+          <span style={{ fontSize: 11, color: '#333' }}>© 2022–2025 Tech Boss Limited. Powered by Sandbox Group.</span>
+          <div style={{ display: 'flex', gap: 20 }}>
+            {NAV_LINKS.map(l => (
+              <Link key={l.label} href={l.href} style={{ fontSize: 11, color: '#333', transition: 'color 0.2s' }}>{l.label}</Link>
+            ))}
           </div>
         </div>
       </div>
@@ -391,20 +569,28 @@ function Footer() {
   );
 }
 
+/* ─── PAGE ─── */
 export default function TechBossHomePage() {
   return (
     <>
       <AnnouncementBar />
       <Header />
+      <Ticker />
       <main>
         <Hero />
+        <div className="tb-divider" />
         <WelcomeSection />
+        <div className="tb-divider" />
         <ServicesSection />
-        <ClientStorySection />
+        <div className="tb-divider" />
         <ERPSection />
-        <ITClientsSection />
+        <div className="tb-divider" />
+        <ClientsSection />
+        <div className="tb-divider" />
         <AppBuilderSection />
+        <div className="tb-divider" />
         <BrandingSection />
+        <div className="tb-divider" />
         <AwardsSection />
         <ContactSection />
       </main>
