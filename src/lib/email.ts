@@ -1,24 +1,15 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
-function getTransporter() {
-  return nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_APP_PASSWORD,
-    },
-  });
-}
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendOtpEmail(to: string, name: string, code: string) {
-  if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
-    console.log(`[OTP DEV] ${to} → ${code}`);
+  if (!process.env.RESEND_API_KEY || process.env.RESEND_API_KEY === 're_placeholder') {
+    console.log(`[OTP DEV] To: ${to} | Code: ${code}`);
     return;
   }
 
-  const transporter = getTransporter();
-  await transporter.sendMail({
-    from: `"Sandbox Group" <${process.env.GMAIL_USER}>`,
+  await resend.emails.send({
+    from: 'Sandbox Group <onboarding@resend.dev>',
     to,
     subject: `Your Sandbox verification code: ${code}`,
     html: `
