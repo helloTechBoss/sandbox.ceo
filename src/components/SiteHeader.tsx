@@ -49,6 +49,25 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
+
+  // Close mobile menu on click outside
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('[data-mobile-nav]') && !target.closest('[data-hamburger]')) {
+        setMobileOpen(false);
+      }
+    };
+    document.addEventListener('click', onClickOutside);
+    return () => document.removeEventListener('click', onClickOutside);
+  }, [mobileOpen]);
+
   useEffect(() => {
     if (!langOpen) return;
     const onClickOutside = (e: MouseEvent) => {
@@ -200,24 +219,31 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
             {/* Hamburger */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              style={{ display: 'flex', flexDirection: 'column', gap: 5, cursor: 'pointer', padding: 8, flexShrink: 0, border: 'none', background: 'none' }}
+              data-hamburger
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', padding: 8, flexShrink: 0, border: 'none', background: 'none', width: 40, height: 40 }}
               className="hamburger"
-              aria-label="Menu"
+              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
             >
-              <span style={{ display: 'block', width: 24, height: 2, background: '#0F2557' }} />
-              <span style={{ display: 'block', width: 24, height: 2, background: '#0F2557' }} />
-              <span style={{ display: 'block', width: 24, height: 2, background: '#0F2557' }} />
+              {mobileOpen ? (
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0F2557" strokeWidth="2.5" strokeLinecap="round">
+                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              ) : (
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0F2557" strokeWidth="2.5" strokeLinecap="round">
+                  <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+              )}
             </button>
           </div>
         </div>
 
         {/* Mobile Nav */}
         {mobileOpen && (
-          <div style={{
+          <div data-mobile-nav style={{
             background: '#fff', borderTop: '1px solid #E2E8F0',
-            padding: '8px 0 16px', position: 'fixed', top: 64, left: 0, right: 0,
+            padding: '8px 0 16px', position: 'fixed', top: 73, left: 0, right: 0,
             zIndex: 999, boxShadow: '0 8px 24px rgba(0,0,0,.1)',
-            maxHeight: 'calc(100vh - 64px)', overflowY: 'auto',
+            maxHeight: 'calc(100vh - 73px)', overflowY: 'auto',
           }}>
             {/* Top-level links */}
             {[
