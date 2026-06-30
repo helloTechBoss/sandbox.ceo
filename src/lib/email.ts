@@ -9,7 +9,7 @@ export async function sendOtpEmail(to: string, name: string, code: string) {
   }
 
   await resend.emails.send({
-    from: 'Sandbox Group <onboarding@resend.dev>',
+    from: 'Sandbox Group <noreply@sandbox.ceo>',
     to,
     subject: `Your Sandbox verification code: ${code}`,
     html: `
