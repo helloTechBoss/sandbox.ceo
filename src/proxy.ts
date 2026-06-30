@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const intlMiddleware = createMiddleware(routing);
 
-const BYPASS = ['/admin', '/opengraph-image', '/twitter-image', '/sitemap.xml', '/robots.txt'];
+const BYPASS = ['/admin', '/techboss', '/opengraph-image', '/twitter-image', '/sitemap.xml', '/robots.txt'];
 
 export default function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
