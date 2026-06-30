@@ -84,10 +84,7 @@ export default async function CptMarketplacePage({ params }: { params: Promise<{
                 const desc = (c.description as Record<string, string>)[k] || '';
                 return (
                   <Link key={c.id} href={lp(locale, `/compliance/cpt-marketplace/${c.id}`)} style={{ textDecoration: 'none', display: 'block' }}>
-                    <div style={{ background: '#fff', border: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column', height: '100%', transition: 'box-shadow .2s', borderTop: c.featured ? '3px solid #C9A84C' : '3px solid #0F2557' }}
-                      onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.boxShadow = '0 8px 28px rgba(15,37,87,.12)'}
-                      onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.boxShadow = 'none'}
-                    >
+                    <div style={{ background: '#fff', border: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column', height: '100%', borderTop: c.featured ? '3px solid #C9A84C' : '3px solid #0F2557' }}>
                       {/* Thumbnail */}
                       <div style={{ position: 'relative', background: '#0F2557', aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0 }}>
                         {c.thumbnailUrl ? (
