@@ -215,46 +215,76 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
         {mobileOpen && (
           <div style={{
             background: '#fff', borderTop: '1px solid #E2E8F0',
-            padding: '12px 0', position: 'fixed', top: 64, left: 0, right: 0,
+            padding: '8px 0 16px', position: 'fixed', top: 64, left: 0, right: 0,
             zIndex: 999, boxShadow: '0 8px 24px rgba(0,0,0,.1)',
             maxHeight: 'calc(100vh - 64px)', overflowY: 'auto',
           }}>
+            {/* Top-level links */}
             {[
               { href: '/', label: t(locale, '主頁', 'Home', '主页') },
               { href: '/about', label: t(locale, '關於我們', 'About Us', '关于我们') },
-              { href: '/mso', label: t(locale, 'MSO 牌照', 'MSO Licensing', 'MSO 牌照') },
-              { href: '/licensing', label: t(locale, 'SFC / 跨境牌照', 'Licensing', 'SFC / 跨境牌照') },
-              { href: '/compliance', label: t(locale, '持續合規', 'Compliance', '持续合规') },
-              { href: '/packages', label: t(locale, 'Sandbox Marketplace', 'Sandbox Marketplace', 'Sandbox Marketplace') },
-              { href: '/corporate', label: t(locale, '企業服務', 'Corporate', '企业服务') },
+            ].map(item => (
+              <Link key={item.href} href={localePath(locale, item.href)} onClick={() => setMobileOpen(false)}
+                style={{ display: 'block', padding: '13px 24px', fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.95rem', color: '#334155', borderBottom: '1px solid #F1F5F9', textDecoration: 'none' }}>
+                {item.label}
+              </Link>
+            ))}
+
+            {/* 服務範疇 section */}
+            <div style={{ padding: '10px 24px 4px', fontFamily: "'Montserrat',sans-serif", fontSize: '.62rem', fontWeight: 700, letterSpacing: '.15em', color: '#C9A84C', textTransform: 'uppercase', borderBottom: '1px solid #F1F5F9' }}>
+              {t(locale, '服務範疇', 'Services', '服务范畴')}
+            </div>
+            {navServices.map(s => (
+              <Link key={s.href} href={localePath(locale, s.href)} onClick={() => setMobileOpen(false)}
+                style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 24px 12px 32px', fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.9rem', color: '#334155', borderBottom: '1px solid #F1F5F9', textDecoration: 'none' }}>
+                <span style={{ width: 5, height: 5, background: '#EF4444', borderRadius: '50%', flexShrink: 0 }} />
+                {t(locale, s.tc, s.en, s.sc)}
+              </Link>
+            ))}
+
+            {/* 企業服務 section */}
+            <div style={{ padding: '10px 24px 4px', fontFamily: "'Montserrat',sans-serif", fontSize: '.62rem', fontWeight: 700, letterSpacing: '.15em', color: '#C9A84C', textTransform: 'uppercase', borderBottom: '1px solid #F1F5F9' }}>
+              {t(locale, '企業服務', 'Corporate', '企业服务')}
+            </div>
+            {navCorporate.map(s => (
+              <Link key={s.href} href={localePath(locale, s.href)} onClick={() => setMobileOpen(false)}
+                style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 24px 12px 32px', fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.9rem', color: '#334155', borderBottom: '1px solid #F1F5F9', textDecoration: 'none' }}>
+                <span style={{ width: 5, height: 5, background: '#EF4444', borderRadius: '50%', flexShrink: 0 }} />
+                {t(locale, s.tc, s.en, s.sc)}
+              </Link>
+            ))}
+
+            {/* Remaining links */}
+            {[
               { href: '/tech', label: t(locale, '合規科技', 'RegTech', '合规科技') },
               { href: '/insights', label: t(locale, '專業見解', 'Insights', '专业见解') },
               { href: '/contact', label: t(locale, '聯絡我們', 'Contact', '联络我们') },
             ].map(item => (
-              <Link
-                key={item.href}
-                href={localePath(locale, item.href)}
-                onClick={() => setMobileOpen(false)}
-                style={{
-                  display: 'block', padding: '13px 24px',
-                  fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.95rem',
-                  color: '#334155', borderBottom: '1px solid #F1F5F9', textDecoration: 'none',
-                }}
-              >
+              <Link key={item.href} href={localePath(locale, item.href)} onClick={() => setMobileOpen(false)}
+                style={{ display: 'block', padding: '13px 24px', fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.95rem', color: '#334155', borderBottom: '1px solid #F1F5F9', textDecoration: 'none' }}>
                 {item.label}
               </Link>
             ))}
-            <a
-              href={waHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                margin: '16px 24px 8px', display: 'block', textAlign: 'center',
-                background: '#EF4444', color: '#fff', padding: 13,
-                fontWeight: 700, fontSize: '.9rem', textDecoration: 'none',
-              }}
-            >
-              {t(locale, 'WhatsApp 企業報價', 'WhatsApp Quotation', 'WhatsApp 企业报价')}
+
+            {/* Language switcher */}
+            <div style={{ padding: '12px 24px', display: 'flex', gap: 8, borderBottom: '1px solid #F1F5F9' }}>
+              {(['zh-Hant', 'en', 'zh-Hans'] as Locale[]).map(l => (
+                <button key={l} onClick={() => { switchLocale(l); setMobileOpen(false); }} style={{
+                  padding: '6px 14px', border: `1.5px solid ${l === locale ? '#0F2557' : '#E2E8F0'}`,
+                  background: l === locale ? '#0F2557' : 'transparent',
+                  color: l === locale ? '#fff' : '#64748B',
+                  fontFamily: "'Montserrat',sans-serif", fontSize: '.72rem', fontWeight: 700,
+                  cursor: 'pointer',
+                }}>
+                  {l === 'zh-Hant' ? '繁中' : l === 'en' ? 'EN' : '简中'}
+                </button>
+              ))}
+            </div>
+
+            {/* CTA */}
+            <a href={`/${locale}/quotation/corporate#calc-section`} onClick={() => setMobileOpen(false)}
+              style={{ margin: '12px 24px 4px', display: 'block', textAlign: 'center', background: '#EF4444', color: '#fff', padding: 13, fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.9rem', textDecoration: 'none' }}>
+              {t(locale, '企業報價', 'Quotation', '企业报价')}
             </a>
           </div>
         )}
