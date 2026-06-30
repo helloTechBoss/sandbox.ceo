@@ -237,44 +237,50 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
           </div>
         </div>
 
-        {/* Mobile Nav */}
-        {mobileOpen && (
-          <div data-mobile-nav style={{
-            background: '#fff', borderTop: '1px solid #E2E8F0',
-            padding: '8px 0 16px', position: 'fixed', top: 73, left: 0, right: 0,
-            zIndex: 999, boxShadow: '0 8px 24px rgba(0,0,0,.1)',
-            maxHeight: 'calc(100vh - 73px)', overflowY: 'auto',
-          }}>
+      </header>
+
+      {/* Mobile Nav — outside header to avoid sticky/fixed conflicts */}
+      {/* Backdrop */}
+      <div
+        onClick={() => setMobileOpen(false)}
+        className={mobileOpen ? 'mob-backdrop mob-backdrop--open' : 'mob-backdrop'}
+      />
+      {/* Drawer */}
+      <div
+        data-mobile-nav
+        className={mobileOpen ? 'mob-drawer mob-drawer--open' : 'mob-drawer'}
+        style={{ top: scrolled ? 68 : 73, maxHeight: `calc(100vh - ${scrolled ? 68 : 73}px)` }}
+      >
             {/* Top-level links */}
             {[
               { href: '/', label: t(locale, '主頁', 'Home', '主页') },
               { href: '/about', label: t(locale, '關於我們', 'About Us', '关于我们') },
             ].map(item => (
               <Link key={item.href} href={localePath(locale, item.href)} onClick={() => setMobileOpen(false)}
-                style={{ display: 'block', padding: '13px 24px', fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.95rem', color: '#334155', borderBottom: '1px solid #F1F5F9', textDecoration: 'none' }}>
+                style={{ display: 'block', padding: '14px 24px', fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.95rem', color: '#334155', borderBottom: '1px solid #F1F5F9', textDecoration: 'none' }}>
                 {item.label}
               </Link>
             ))}
 
             {/* 服務範疇 section */}
-            <div style={{ padding: '10px 24px 4px', fontFamily: "'Montserrat',sans-serif", fontSize: '.62rem', fontWeight: 700, letterSpacing: '.15em', color: '#C9A84C', textTransform: 'uppercase', borderBottom: '1px solid #F1F5F9' }}>
+            <div style={{ padding: '10px 24px 6px', fontFamily: "'Montserrat',sans-serif", fontSize: '.6rem', fontWeight: 700, letterSpacing: '.15em', color: '#C9A84C', textTransform: 'uppercase', background: '#FAFAFA', borderBottom: '1px solid #F1F5F9' }}>
               {t(locale, '服務範疇', 'Services', '服务范畴')}
             </div>
             {navServices.map(s => (
               <Link key={s.href} href={localePath(locale, s.href)} onClick={() => setMobileOpen(false)}
-                style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 24px 12px 32px', fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.9rem', color: '#334155', borderBottom: '1px solid #F1F5F9', textDecoration: 'none' }}>
+                style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '13px 24px 13px 32px', fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.9rem', color: '#334155', borderBottom: '1px solid #F1F5F9', textDecoration: 'none' }}>
                 <span style={{ width: 5, height: 5, background: '#EF4444', borderRadius: '50%', flexShrink: 0 }} />
                 {t(locale, s.tc, s.en, s.sc)}
               </Link>
             ))}
 
             {/* 企業服務 section */}
-            <div style={{ padding: '10px 24px 4px', fontFamily: "'Montserrat',sans-serif", fontSize: '.62rem', fontWeight: 700, letterSpacing: '.15em', color: '#C9A84C', textTransform: 'uppercase', borderBottom: '1px solid #F1F5F9' }}>
+            <div style={{ padding: '10px 24px 6px', fontFamily: "'Montserrat',sans-serif", fontSize: '.6rem', fontWeight: 700, letterSpacing: '.15em', color: '#C9A84C', textTransform: 'uppercase', background: '#FAFAFA', borderBottom: '1px solid #F1F5F9' }}>
               {t(locale, '企業服務', 'Corporate', '企业服务')}
             </div>
             {navCorporate.map(s => (
               <Link key={s.href} href={localePath(locale, s.href)} onClick={() => setMobileOpen(false)}
-                style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 24px 12px 32px', fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.9rem', color: '#334155', borderBottom: '1px solid #F1F5F9', textDecoration: 'none' }}>
+                style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '13px 24px 13px 32px', fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.9rem', color: '#334155', borderBottom: '1px solid #F1F5F9', textDecoration: 'none' }}>
                 <span style={{ width: 5, height: 5, background: '#EF4444', borderRadius: '50%', flexShrink: 0 }} />
                 {t(locale, s.tc, s.en, s.sc)}
               </Link>
@@ -287,19 +293,19 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
               { href: '/contact', label: t(locale, '聯絡我們', 'Contact', '联络我们') },
             ].map(item => (
               <Link key={item.href} href={localePath(locale, item.href)} onClick={() => setMobileOpen(false)}
-                style={{ display: 'block', padding: '13px 24px', fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.95rem', color: '#334155', borderBottom: '1px solid #F1F5F9', textDecoration: 'none' }}>
+                style={{ display: 'block', padding: '14px 24px', fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.95rem', color: '#334155', borderBottom: '1px solid #F1F5F9', textDecoration: 'none' }}>
                 {item.label}
               </Link>
             ))}
 
             {/* Language switcher */}
-            <div style={{ padding: '12px 24px', display: 'flex', gap: 8, borderBottom: '1px solid #F1F5F9' }}>
+            <div style={{ padding: '14px 24px', display: 'flex', gap: 8, borderBottom: '1px solid #F1F5F9' }}>
               {(['zh-Hant', 'en', 'zh-Hans'] as Locale[]).map(l => (
                 <button key={l} onClick={() => { switchLocale(l); setMobileOpen(false); }} style={{
-                  padding: '6px 14px', border: `1.5px solid ${l === locale ? '#0F2557' : '#E2E8F0'}`,
+                  padding: '7px 16px', border: `1.5px solid ${l === locale ? '#0F2557' : '#E2E8F0'}`,
                   background: l === locale ? '#0F2557' : 'transparent',
                   color: l === locale ? '#fff' : '#64748B',
-                  fontFamily: "'Montserrat',sans-serif", fontSize: '.72rem', fontWeight: 700,
+                  fontFamily: "'Montserrat',sans-serif", fontSize: '.75rem', fontWeight: 700,
                   cursor: 'pointer',
                 }}>
                   {l === 'zh-Hant' ? '繁中' : l === 'en' ? 'EN' : '简中'}
@@ -309,12 +315,10 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
 
             {/* CTA */}
             <a href={`/${locale}/quotation/corporate#calc-section`} onClick={() => setMobileOpen(false)}
-              style={{ margin: '12px 24px 4px', display: 'block', textAlign: 'center', background: '#EF4444', color: '#fff', padding: 13, fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.9rem', textDecoration: 'none' }}>
+              style={{ margin: '14px 24px 4px', display: 'block', textAlign: 'center', background: '#EF4444', color: '#fff', padding: '14px', fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.9rem', textDecoration: 'none' }}>
               {t(locale, '企業報價', 'Quotation', '企业报价')}
             </a>
-          </div>
-        )}
-      </header>
+      </div>
 
       {/* Floating WhatsApp FAB */}
       <a
@@ -349,6 +353,38 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
         @media(max-width:900px){.desktop-nav{display:none!important}}
         @media(max-width:900px){.wa-cta-desktop{display:none!important}}
         .dropdown:hover > div:last-child{display:block!important}
+
+        /* Mobile backdrop */
+        .mob-backdrop{
+          position:fixed;inset:0;z-index:998;
+          background:rgba(0,0,0,.38);
+          opacity:0;pointer-events:none;
+          transition:opacity .25s ease;
+        }
+        .mob-backdrop--open{opacity:1;pointer-events:auto;}
+
+        /* Mobile drawer */
+        .mob-drawer{
+          position:fixed;left:0;right:0;z-index:999;
+          background:#fff;
+          border-top:3px solid #EF4444;
+          box-shadow:0 12px 32px rgba(0,0,0,.15);
+          overflow-y:auto;
+          padding-bottom:16px;
+          /* closed state */
+          opacity:0;
+          transform:translateY(-10px);
+          pointer-events:none;
+          visibility:hidden;
+          transition:opacity .25s ease, transform .25s ease, visibility 0s linear .25s;
+        }
+        .mob-drawer--open{
+          opacity:1;
+          transform:translateY(0);
+          pointer-events:auto;
+          visibility:visible;
+          transition:opacity .25s ease, transform .25s ease, visibility 0s linear 0s;
+        }
       `}</style>
     </>
   );
