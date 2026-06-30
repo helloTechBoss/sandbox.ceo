@@ -1,5 +1,6 @@
 'use client';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import MemberModal, { MemberInfo } from './MemberModal';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
 type LK = 'tc' | 'en' | 'sc';
@@ -76,6 +77,16 @@ export default function PackagesShell({
   const [cartOpen, setCartOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState('');
+  const [member, setMember] = useState<MemberInfo | null>(null);
+  const [showMemberModal, setShowMemberModal] = useState(false);
+
+  // Restore member from localStorage on mount
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('sbx_member');
+      if (stored) setMember(JSON.parse(stored));
+    } catch {}
+  }, []);
 
   const inCart = useCallback((id: string) => cart.some(c => c.id === id), [cart]);
 
@@ -91,6 +102,7 @@ export default function PackagesShell({
 
   async function handleCheckout() {
     if (!cart.length) return;
+    if (!member) { setShowMemberModal(true); return; }
     setLoading(true);
     setErr('');
     try {
@@ -100,6 +112,7 @@ export default function PackagesShell({
         body: JSON.stringify({
           items: cart.map(c => ({ type: c.type, id: c.id })),
           locale,
+          memberId: member.id,
         }),
       });
       if (!res.ok) {
@@ -191,6 +204,13 @@ export default function PackagesShell({
 
   return (
     <>
+      {showMemberModal && (
+        <MemberModal
+          locale={locale}
+          onVerified={m => { setMember(m); setShowMemberModal(false); }}
+          onClose={() => setShowMemberModal(false)}
+        />
+      )}
       {cartBtn}
       {cartPanel}
 
@@ -208,12 +228,30 @@ export default function PackagesShell({
               );
             })}
           </div>
-          {cart.length > 0 && (
-            <button onClick={() => setCartOpen(o => !o)} style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#EF4444', color: '#fff', padding: '7px 16px', fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.82rem', fontWeight: 700, border: 'none', cursor: 'pointer' }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-              {cart.length} {t(locale, '項', 'item(s)', '项')} · HK${total.toLocaleString()}
-            </button>
-          )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            {member ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 12px', background: '#F0FDF4', border: '1px solid #86EFAC' }}>
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#22C55E', flexShrink: 0 }} />
+                <span style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.78rem', color: '#166534', fontWeight: 600 }}>
+                  {member.name}
+                </span>
+                <button onClick={() => { setMember(null); localStorage.removeItem('sbx_member'); }}
+                  style={{ background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer', fontSize: '.7rem', padding: 0 }}>
+                  {t(locale, '登出', 'Sign out', '登出')}
+                </button>
+              </div>
+            ) : (
+              <button onClick={() => setShowMemberModal(true)} style={{ padding: '6px 14px', background: 'none', border: '1.5px solid #0F2557', color: '#0F2557', fontFamily: "'Montserrat',sans-serif", fontSize: '.75rem', fontWeight: 700, cursor: 'pointer' }}>
+                {t(locale, '登記 / 登入', 'Register / Sign In', '登记 / 登入')}
+              </button>
+            )}
+            {cart.length > 0 && (
+              <button onClick={() => setCartOpen(o => !o)} style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#EF4444', color: '#fff', padding: '7px 16px', fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.82rem', fontWeight: 700, border: 'none', cursor: 'pointer' }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                {cart.length} {t(locale, '項', 'item(s)', '项')} · HK${total.toLocaleString()}
+              </button>
+            )}
+          </div>
         </div>
       </div>
 

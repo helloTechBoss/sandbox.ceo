@@ -11,6 +11,7 @@ const nav = [
   { href: '/admin/packages', label: 'Packages & Plans', icon: '📦' },
   { href: '/admin/quotation', label: 'Corporate Quotation', icon: '🧮' },
   { href: '/admin/cpt', label: 'CPT Marketplace', icon: '🎓' },
+  { href: '/admin/members', label: 'Members', icon: '👤' },
   { href: '/admin/orders', label: 'Orders & CRM', icon: '📑' },
   { href: '/admin/faqs', label: 'FAQs', icon: '❓' },
   { href: '/admin/sections', label: 'Pages & Sections', icon: '📄' },

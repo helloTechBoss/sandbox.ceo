@@ -9,7 +9,7 @@ interface CartItem {
 
 export async function POST(req: NextRequest) {
   try {
-    const { items, locale }: { items: CartItem[]; locale: string } = await req.json();
+    const { items, locale, memberId }: { items: CartItem[]; locale: string; memberId?: string } = await req.json();
     if (!items?.length) return NextResponse.json({ error: 'Empty cart' }, { status: 400 });
 
     const baseUrl = process.env.NEXTAUTH_URL || 'https://www.sandbox.ceo';
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       line_items: lineItems,
-      metadata: { itemMeta: JSON.stringify(itemMeta), locale },
+      metadata: { itemMeta: JSON.stringify(itemMeta), locale, memberId: memberId || '' },
       success_url: `${baseUrl}${prefix}/packages/onboarding?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}${prefix}/packages`,
       billing_address_collection: 'required',

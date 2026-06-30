@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
 
     const itemMeta: { type: string; id: string; name: Record<string, string>; amount: number }[] = JSON.parse(rawMeta);
     const total = itemMeta.reduce((sum, i) => sum + i.amount, 0);
+    const memberId = session.metadata?.memberId || null;
 
     await prisma.serviceOrder.upsert({
       where: { stripeSessionId: session.id },
@@ -29,6 +30,7 @@ export async function POST(req: NextRequest) {
         stripeSessionId: session.id,
         totalAmount: total,
         status: 'pending_onboarding',
+        memberId: memberId || undefined,
         items: {
           create: itemMeta.map(i => ({
             itemType: i.type,
