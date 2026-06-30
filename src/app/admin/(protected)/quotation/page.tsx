@@ -136,7 +136,6 @@ export default async function QuotationAdminPage({ searchParams }: { searchParam
                               <input type="hidden" name="id" value={svc.id} />
                               <button
                                 type="submit"
-                                onClick={(e) => { if (!confirm(`Delete "${name}"?`)) e.preventDefault(); }}
                                 style={{ fontSize: '.78rem', color: '#EF4444', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
                               >
                                 Delete

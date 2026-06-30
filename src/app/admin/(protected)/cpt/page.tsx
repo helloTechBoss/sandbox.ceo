@@ -79,7 +79,7 @@ export default async function CptAdminPage() {
                       <Link href={`/admin/cpt/${c.id}`} style={{ fontSize: '.78rem', color: '#0F2557', fontWeight: 600, textDecoration: 'none', marginRight: 14 }}>Edit</Link>
                       <form action={deleteCourse} style={{ display: 'inline' }}>
                         <input type="hidden" name="id" value={c.id} />
-                        <button type="submit" onClick={e => { if (!confirm(`Delete "${name}"?`)) e.preventDefault(); }} style={{ fontSize: '.78rem', color: '#EF4444', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                        <button type="submit" style={{ fontSize: '.78rem', color: '#EF4444', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
                           Delete
                         </button>
                       </form>
