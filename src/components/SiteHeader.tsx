@@ -9,7 +9,7 @@ const navServices = [
   { href: '/mso', tc: 'Sandbox MSO', sc: 'Sandbox MSO', en: 'Sandbox MSO' },
   { href: '/licensing', tc: 'Sandbox Licensing', sc: 'Sandbox Licensing', en: 'Sandbox Licensing' },
   { href: '/compliance', tc: 'Sandbox Compliance', sc: 'Sandbox Compliance', en: 'Sandbox Compliance' },
-  { href: '/marketplace', tc: 'Sandbox Marketplace', sc: 'Sandbox Marketplace', en: 'Sandbox Marketplace' },
+  { href: '/packages', tc: 'Sandbox Marketplace', sc: 'Sandbox Marketplace', en: 'Sandbox Marketplace' },
 ];
 
 const navCorporate = [
@@ -225,7 +225,7 @@ export default function SiteHeader({ locale, waNumber = WA_NUMBER }: Props) {
               { href: '/mso', label: t(locale, 'MSO 牌照', 'MSO Licensing', 'MSO 牌照') },
               { href: '/licensing', label: t(locale, 'SFC / 跨境牌照', 'Licensing', 'SFC / 跨境牌照') },
               { href: '/compliance', label: t(locale, '持續合規', 'Compliance', '持续合规') },
-              { href: '/marketplace', label: t(locale, 'Sandbox Marketplace', 'Sandbox Marketplace', 'Sandbox Marketplace') },
+              { href: '/packages', label: t(locale, 'Sandbox Marketplace', 'Sandbox Marketplace', 'Sandbox Marketplace') },
               { href: '/corporate', label: t(locale, '企業服務', 'Corporate', '企业服务') },
               { href: '/tech', label: t(locale, '合規科技', 'RegTech', '合规科技') },
               { href: '/insights', label: t(locale, '專業見解', 'Insights', '专业见解') },

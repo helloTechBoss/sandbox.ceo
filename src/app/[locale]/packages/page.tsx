@@ -15,15 +15,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   };
 }
 
-// Groups to exclude from the master packages page (handled separately on quotation page)
-const EXCLUDE_GROUPS = new Set(['A','B','C','D','E','F','G','H']);
+// Preferred display order for groups
+const GROUP_ORDER = ['A','B','C','D','E','F','G','H','mso','incorporation','comsec','accounting','audit','compliance','licensing','tech'];
 
 export default async function PackagesPage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
 
   const [allPkgs, cptRaw, waRow] = await Promise.all([
     prisma.package.findMany({
-      where: { group: { notIn: [...EXCLUDE_GROUPS] } },
       orderBy: [{ group: 'asc' }, { order: 'asc' }],
       include: { features: { where: { enabled: true }, orderBy: { order: 'asc' } } },
     }),
@@ -52,7 +51,12 @@ export default async function PackagesPage({ params }: { params: Promise<{ local
     });
   }
 
-  const packageGroups = [...groupMap.entries()].map(([group, items]) => ({ group, items }));
+  const packageGroups = [...groupMap.entries()]
+    .sort(([a], [b]) => {
+      const ai = GROUP_ORDER.indexOf(a), bi = GROUP_ORDER.indexOf(b);
+      return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+    })
+    .map(([group, items]) => ({ group, items }));
 
   const cptCourses: CptItem[] = cptRaw.map(c => ({
     id: c.id,

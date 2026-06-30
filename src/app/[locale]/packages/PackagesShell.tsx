@@ -30,9 +30,19 @@ export interface CptItem {
 interface CartEntry { type: 'package' | 'cpt'; id: string; name: string; amount: number }
 
 const GROUP_LABELS: Record<string, { tc: string; en: string; sc: string }> = {
+  // Quotation pillars A-H
+  A: { tc: '公司成立',           en: 'Company Formation',         sc: '公司成立' },
+  B: { tc: '公司秘書',           en: 'Company Secretary',         sc: '公司秘书' },
+  C: { tc: '會計',               en: 'Accounting',                sc: '会计' },
+  D: { tc: '審計',               en: 'Audit',                     sc: '审计' },
+  E: { tc: '稅務',               en: 'Tax Advisory',              sc: '税务' },
+  F: { tc: '商務中心',           en: 'Business Centre',           sc: '商务中心' },
+  G: { tc: '企業服務',           en: 'Other Corp Services',       sc: '企业服务' },
+  H: { tc: '簽證及移民',         en: 'Visa & Immigration',        sc: '签证及移民' },
+  // Pricing plan groups
   mso:           { tc: 'MSO 牌照服務',      en: 'MSO Licensing',         sc: 'MSO 牌照服务' },
-  incorporation: { tc: '公司成立',           en: 'Company Formation',     sc: '公司成立' },
-  comsec:        { tc: '公司秘書',           en: 'Company Secretary',     sc: '公司秘书' },
+  incorporation: { tc: '公司成立套餐',       en: 'Incorporation Packages', sc: '公司成立套餐' },
+  comsec:        { tc: '公司秘書套餐',       en: 'Company Secretary',     sc: '公司秘书套餐' },
   accounting:    { tc: '會計及稅務',         en: 'Accounting & Tax',      sc: '会计及税务' },
   audit:         { tc: '審計',              en: 'Audit',                 sc: '审计' },
   compliance:    { tc: '持續合規',           en: 'Compliance',            sc: '持续合规' },
