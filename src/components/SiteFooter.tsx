@@ -30,8 +30,14 @@ export default function SiteFooter({ locale = 'zh-Hant', waNumber = '+8529231825
         <div className="footer-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 48, paddingBottom: 48, borderBottom: '1px solid rgba(255,255,255,.1)' }}>
           {/* Brand */}
           <div>
-            <div style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: '1.2rem', color: '#fff', letterSpacing: '.05em', marginBottom: 12 }}>
+            <div style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: '1.2rem', color: '#fff', letterSpacing: '.05em', marginBottom: 4 }}>
               SANDBOX <span style={{ color: '#EF4444' }}>GROUP</span>
+            </div>
+            <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.78rem', color: 'rgba(255,255,255,.45)', marginBottom: 4 }}>
+              沙盒企業服務
+            </div>
+            <div style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.7rem', color: '#C9A84C', letterSpacing: '.04em', marginBottom: 16 }}>
+              Tech Boss Limited &nbsp;·&nbsp; TCSP Licence: TC011116
             </div>
             <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.84rem', color: 'rgba(255,255,255,.55)', lineHeight: 1.85, marginBottom: 20 }}>
               {isEn ? 'Making compliance & growth simpler.' : isSc ? '让合规与增长更简单。' : '讓合規與增長更簡單。'}
