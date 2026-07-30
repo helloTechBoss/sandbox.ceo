@@ -36,8 +36,8 @@ export default function SiteFooter({ locale = 'zh-Hant', waNumber = '+8529231825
             <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.78rem', color: 'rgba(255,255,255,.45)', marginBottom: 4 }}>
               沙盒企業服務
             </div>
-            <div style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.7rem', color: '#C9A84C', letterSpacing: '.04em', marginBottom: 16 }}>
-              Tech Boss Limited &nbsp;·&nbsp; TCSP Licence: TC011116
+            <div style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.7rem', color: '#C9A84C', letterSpacing: '.04em', marginBottom: 16, lineHeight: 1.8 }}>
+              Tech Boss Limited<br />TCSP Licence: TC011116
             </div>
             <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.84rem', color: 'rgba(255,255,255,.55)', lineHeight: 1.85, marginBottom: 20 }}>
               {isEn ? 'Making compliance & growth simpler.' : isSc ? '让合规与增长更简单。' : '讓合規與增長更簡單。'}
