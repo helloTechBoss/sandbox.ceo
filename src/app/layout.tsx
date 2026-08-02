@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   authors: [{ name: 'Sandbox Group' }],
   creator: 'Sandbox Group',
   publisher: 'Sandbox Group',
+  verification: {
+    google: 'm6eXofzH_iaWhoWCixuGiV32NqVNn3uR8J2G0cFWYc4',
+  },
   robots: {
     index: true,
     follow: true,
