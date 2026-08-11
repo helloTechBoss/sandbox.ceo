@@ -90,7 +90,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
       <HomeAnimations />
       <main>
         {/* ══ HERO ══ */}
-        <section style={{ position: 'relative', minHeight: 640, display: 'flex', alignItems: 'center', overflow: 'hidden', backgroundColor: '#0F2557' }}>
+        <section className="hero-section" style={{ position: 'relative', minHeight: 640, display: 'flex', alignItems: 'center', overflow: 'hidden', backgroundColor: '#0F2557' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="https://images.unsplash.com/photo-1507941097613-9f2157b69235?w=1600&q=80" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 55%', zIndex: 0 }} className="hero-img" />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(105deg,rgba(9,26,62,.88) 0%,rgba(9,26,62,.75) 55%,rgba(9,26,62,.3) 100%)', zIndex: 1 }} />
@@ -101,7 +101,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
           <div aria-hidden="true" className="hero-particle p4" />
           <div aria-hidden="true" className="hero-particle p5" />
           <div style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: 1200, margin: '0 auto', padding: '80px 60px', display: 'grid', gridTemplateColumns: '1fr 340px', gap: 60, alignItems: 'center' }} className="hero-inner">
-            <div className="reveal" style={{ transitionDelay: '0.1s' }}>
+            <div className="reveal hero-parallax-text" style={{ transitionDelay: '0.1s' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
                 <div style={{ width: 32, height: 2, background: '#C9A84C' }} />
                 <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.7rem', fontWeight: 700, letterSpacing: '.2em', color: '#E8D28A', textTransform: 'uppercase' }}>
@@ -121,7 +121,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
                   : '由前金融機構合規主管及 MLRO 領導，以機構級合規標準，高效、具競爭力地提供牌照申請、持續合規及企業服務。')}
               </p>
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-                <a href={waMso} target="_blank" rel="noopener noreferrer" style={btnRed}>
+                <a href={waMso} target="_blank" rel="noopener noreferrer" style={btnRed} className="magnet-btn">
                   <WaIcon /> {isEn ? 'Free WhatsApp Consult' : isSc ? '免费 WhatsApp 咨询' : '免費 WhatsApp 諮詢'}
                 </a>
                 <a href="/about" style={btnGhost}>{isEn ? 'About Our Team' : isSc ? '认识我们的团队' : '認識我們的團隊'}</a>
@@ -333,7 +333,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         </section>
 
         {/* ══ SERVICE HIGHLIGHTS ══ */}
-        <section style={{ background: '#0F2557', padding: '80px 0' }}>
+        <section className="spotlight-section" style={{ background: '#0F2557', padding: '80px 0', '--sx': '50%', '--sy': '50%' } as React.CSSProperties}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
             <div style={{ textAlign: 'center', marginBottom: 8 }}>
               <span style={{ ...sectionLabel, color: '#C9A84C' }}>{isEn ? 'OUR SERVICES' : isSc ? '我们的服务' : '我們的服務'}</span>
@@ -607,6 +607,27 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         }
 
         body{overflow-x:hidden}
+
+        /* ── Spotlight glow on dark sections ── */
+        .spotlight-section {
+          position: relative;
+        }
+        .spotlight-section::before {
+          content: '';
+          position: absolute;
+          width: 500px; height: 500px;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(201,168,76,.08) 0%, transparent 70%);
+          transform: translate(-50%, -50%);
+          left: var(--sx, 50%); top: var(--sy, 50%);
+          pointer-events: none;
+          transition: left .1s, top .1s;
+          z-index: 0;
+        }
+        .spotlight-section > * { position: relative; z-index: 1; }
+
+        /* ── Magnetic btn transition ── */
+        .magnet-btn { transition: transform .15s ease, background .2s; }
       `}</style>
     </>
   );
