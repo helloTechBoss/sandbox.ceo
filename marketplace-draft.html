@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cplus Compliance — License Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#0A1B33; --navy-800:#142E52;
+    --gold:#B08D46; --gold-soft:#D8C08C;
+    --paper:#FFFFFF; --offwhite:#F3F5F9;
+    --ink:#101828; --slate:#5D6B82; --line:#E1E5EC; --sold:#8A93A3;
+    --wa:#22C35E;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Inter',sans-serif;color:var(--ink);background:var(--paper);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+
+  /* ===== ANIMATION LIBRARY ===== */
+  @keyframes fadeUp{ from{opacity:0;transform:translateY(22px);} to{opacity:1;transform:translateY(0);} }
+  @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+  @keyframes floatBob{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-14px);} }
+  @keyframes pulseDot{ 0%,100%{box-shadow:0 0 0 0 rgba(216,192,140,0.55);} 50%{box-shadow:0 0 0 6px rgba(216,192,140,0);} }
+  @keyframes waRing{ 0%{transform:scale(1);opacity:0.55;} 100%{transform:scale(1.9);opacity:0;} }
+  @keyframes shimmerSweep{ 0%{background-position:-140% 0;} 100%{background-position:240% 0;} }
+  @keyframes spinSlow{ from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+  @keyframes countIn{ from{opacity:0;transform:scale(0.9);} to{opacity:1;transform:scale(1);} }
+
+  .hero-anim{opacity:0;animation:fadeUp .8s cubic-bezier(.2,.7,.2,1) forwards;}
+  .hero-anim.d1{animation-delay:.05s;} .hero-anim.d2{animation-delay:.18s;}
+  .hero-anim.d3{animation-delay:.32s;} .hero-anim.d4{animation-delay:.46s;}
+  .hero-anim.d5{animation-delay:.6s;}
+
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in-view{opacity:1;transform:translateY(0);}
+
+  .shimmer-btn{position:relative;overflow:hidden;}
+  .shimmer-btn::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.45) 48%, transparent 66%);background-size:220% 100%;background-position:-140% 0;opacity:0;transition:opacity .2s ease;pointer-events:none;}
+  .shimmer-btn:hover::after{opacity:1;animation:shimmerSweep 1.1s ease forwards;}
+
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important;scroll-behavior:auto !important;}
+  }
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;letter-spacing:-0.01em;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;}
+  ul{list-style:none;}
+  .wrap{max-width:1220px;margin:0 auto;padding:0 32px;}
+  @media (max-width:640px){.wrap{padding:0 20px;}}
+
+  header{position:sticky;top:0;z-index:50;background:rgba(10,27,51,0.94);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.08);transition:box-shadow .3s ease;}
+  header.scrolled{box-shadow:0 6px 24px rgba(0,0,0,0.18);}
+  nav{display:flex;align-items:center;justify-content:space-between;height:74px;transition:height .3s ease;}
+  header.scrolled nav{height:62px;}
+  .navlinks a{position:relative;transition:color .2s ease;}
+  .navlinks a::after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:1px;background:var(--gold-soft);transition:width .25s ease;}
+  .navlinks a:hover::after{width:100%;}
+  .logo{display:flex;align-items:center;gap:10px;color:#fff;font-family:'Fraunces',serif;font-size:19px;font-weight:600;}
+  .logo .mark{width:28px;height:28px;border:1.5px solid var(--gold-soft);border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold-soft);}
+  .navlinks{display:flex;gap:30px;font-size:14px;color:rgba(255,255,255,0.75);}
+  .navlinks a:hover{color:#fff;}
+  .navright{display:flex;align-items:center;gap:14px;}
+  .lang-switch{display:flex;border:1px solid rgba(255,255,255,0.2);border-radius:16px;overflow:hidden;}
+  .lang-btn{background:transparent;border:none;color:rgba(255,255,255,0.6);font-size:12px;padding:6px 10px;cursor:pointer;transition:background .2s ease, color .2s ease;}
+  .lang-btn + .lang-btn{border-left:1px solid rgba(255,255,255,0.15);}
+  .lang-btn.active{background:var(--gold);color:var(--navy-950);font-weight:600;}
+  .lang-btn:hover:not(.active){color:#fff;background:rgba(255,255,255,0.08);}
+  @media (max-width:360px){.lang-btn{padding:6px 7px;font-size:11px;}}
+  .navcta{background:var(--gold);color:var(--navy-950);padding:9px 18px;border-radius:2px;font-size:13.5px;font-weight:600;transition:background .2s ease, transform .2s ease;}
+  .navcta:hover{background:var(--gold-soft);transform:translateY(-1px);}
+  .wa-btn{display:inline-flex;align-items:center;gap:7px;background:var(--wa);color:#fff;padding:9px 16px;border-radius:2px;font-size:13.5px;font-weight:600;border:none;cursor:pointer;transition:background .2s ease, transform .2s ease, box-shadow .2s ease;position:relative;overflow:hidden;}
+  .wa-btn:hover{background:#1EA854;transform:translateY(-2px);box-shadow:0 6px 16px rgba(34,195,94,0.35);}
+  .wa-btn svg{width:15px;height:15px;flex-shrink:0;transition:transform .3s ease;}
+  .wa-btn:hover svg{transform:rotate(-8deg) scale(1.1);}
+  @media (max-width:900px){.navlinks{display:none;}}
+  @media (max-width:480px){
+    .logo{font-size:16px;}
+    .logo .mark{width:24px;height:24px;font-size:11px;}
+    .wa-label{display:none;}
+    .wa-btn{padding:9px 11px;}
+    .wa-float-wrap{bottom:16px;right:16px;}
+  }
+
+  .hero{position:relative;background:radial-gradient(1100px 480px at 82% -10%, rgba(176,141,70,0.16), transparent 60%),linear-gradient(180deg, var(--navy-950), var(--navy-800));color:#fff;padding:72px 0 0;overflow:hidden;}
+  .hero-bg{position:absolute;inset:0;opacity:0.5;pointer-events:none;z-index:0;will-change:transform;}
+  .hero-bg svg{position:absolute;bottom:0;right:0;width:70%;min-width:640px;height:auto;animation:floatBob 9s ease-in-out infinite;}
+  .hero-top{position:relative;z-index:1;padding-bottom:44px;}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.06em;color:var(--gold-soft);border:1px solid rgba(216,192,140,0.35);padding:5px 12px;border-radius:20px;margin-bottom:22px;}
+  .eyebrow .live-dot{width:6px;height:6px;border-radius:50%;background:var(--gold-soft);display:inline-block;animation:pulseDot 2.2s ease-in-out infinite;}
+  .hero h1{font-size:44px;line-height:1.12;max-width:760px;color:#fff;}
+  .hero p.lead{font-size:16.5px;color:rgba(255,255,255,0.72);max-width:600px;margin-top:18px;}
+  .hero-ctas{display:flex;gap:14px;margin-top:28px;flex-wrap:wrap;}
+  .trust-badges{display:flex;gap:0;margin-top:30px;border-top:1px solid rgba(255,255,255,0.14);flex-wrap:wrap;}
+  .trust-badge{display:flex;align-items:center;gap:10px;padding:18px 30px 18px 0;margin-right:30px;border-right:1px solid rgba(255,255,255,0.14);font-size:13px;color:rgba(255,255,255,0.65);transition:color .2s ease, transform .2s ease;}
+  .trust-badge:last-child{border-right:none;}
+  .trust-badge:hover{color:rgba(255,255,255,0.95);transform:translateY(-2px);}
+  .trust-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--gold-soft);flex-shrink:0;animation:pulseDot 2.4s ease-in-out infinite;}
+  @media (max-width:640px){.hero h1{font-size:32px;} .trust-badge{padding-right:0;margin-right:0;border-right:none;width:100%;padding:10px 0;}}
+
+  .filterbar{background:var(--offwhite);border-bottom:1px solid var(--line);position:sticky;top:74px;z-index:40;}
+  .filterbar-inner{display:flex;gap:28px;padding:20px 0;align-items:flex-start;flex-wrap:wrap;}
+  .filter-group{display:flex;flex-direction:column;gap:8px;}
+  .filter-group .fg-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;color:var(--slate);text-transform:uppercase;}
+  .fg-pills{display:flex;gap:6px;flex-wrap:wrap;max-width:640px;}
+  .pill{font-size:12.5px;padding:7px 13px;border:1px solid var(--line);border-radius:16px;color:var(--slate);background:#fff;cursor:pointer;white-space:nowrap;transition:background .2s ease, color .2s ease, border-color .2s ease, transform .15s ease;}
+  .pill:hover{border-color:var(--navy-950);transform:translateY(-1px);}
+  .pill.active{background:var(--navy-950);color:#fff;border-color:var(--navy-950);animation:countIn .25s ease;}
+  .reset-link{align-self:flex-end;margin-left:auto;font-size:12.5px;color:var(--gold);border-bottom:1px solid var(--gold);cursor:pointer;padding-bottom:1px;height:fit-content;transition:opacity .2s ease;}
+  .reset-link:hover{opacity:0.6;}
+
+  section{padding:72px 0;}
+  .section-head{max-width:640px;margin-bottom:36px;}
+  .section-tag{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;display:block;}
+  .section-head h2{font-size:30px;color:var(--navy-950);}
+  .section-head p{color:var(--slate);margin-top:12px;font-size:15.5px;}
+  .count-note{font-size:13.5px;color:var(--slate);margin-bottom:20px;}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  @media (max-width:980px){.grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:640px){.grid{grid-template-columns:1fr;}}
+
+  .card{border:1px solid var(--line);border-radius:4px;overflow:hidden;background:#fff;display:flex;flex-direction:column;transition:box-shadow .3s ease, border-color .3s ease, transform .3s ease, opacity .5s ease;cursor:pointer;position:relative;opacity:0;transform:translateY(24px);}
+  .card.in-view{opacity:1;transform:translateY(0);}
+  .card:hover{border-color:var(--navy-950);box-shadow:0 14px 32px rgba(10,27,51,0.12);transform:translateY(-6px);}
+  .card.is-sold{opacity:0.62;}
+  .card.is-sold:hover{transform:none;}
+  .card-top{background:var(--navy-950);padding:16px 20px;display:flex;justify-content:space-between;align-items:flex-start;position:relative;overflow:hidden;}
+  .card-top::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg, transparent 30%, rgba(216,192,140,0.35) 48%, transparent 66%);background-size:220% 100%;background-position:-140% 0;opacity:0;transition:opacity .2s ease;pointer-events:none;}
+  .card:hover .card-top::after{opacity:1;animation:shimmerSweep 1s ease forwards;}
+  .card-flag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--navy-950);background:var(--gold-soft);padding:3px 8px;border-radius:2px;font-weight:600;letter-spacing:0.03em;}
+  .card-ref{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,0.5);}
+  .card-body{padding:18px 20px 4px;flex:1;display:flex;flex-direction:column;gap:8px;}
+  .card-industry{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:0.05em;}
+  .card-body h3{font-size:17px;color:var(--navy-950);font-weight:500;line-height:1.3;}
+  .card-reg{font-size:12.5px;color:var(--slate);}
+  .card-price{font-family:'Fraunces',serif;font-size:22px;color:var(--navy-950);padding:6px 20px 0;}
+  .card-price .poa{font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--slate);}
+  .card-foot{padding:14px 20px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .status-tag{font-size:11px;font-family:'IBM Plex Mono',monospace;padding:4px 10px;border-radius:14px;}
+  .status-tag.available{background:#EAF3EC;color:#2A6B3F;}
+  .status-tag.onapp{background:#FBF1E4;color:#93641F;}
+  .status-tag.sold{background:#EDEEF1;color:var(--sold);}
+  .card-link{font-size:12.5px;font-weight:600;color:var(--navy-950);display:inline-block;transition:color .2s ease, transform .2s ease;}
+  .card:hover .card-link{color:var(--gold);transform:translateX(3px);}
+  .no-results{padding:60px 0;text-align:center;color:var(--slate);font-size:15px;}
+
+  .publish{background:var(--navy-950);color:#fff;}
+  .publish-inner{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;}
+  .publish h2{color:#fff;font-size:26px;max-width:480px;}
+  .publish p{color:rgba(255,255,255,0.6);margin-top:10px;font-size:14.5px;max-width:440px;}
+  .btn-primary{background:var(--gold);color:var(--navy-950);padding:13px 24px;font-weight:600;font-size:14.5px;border-radius:2px;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;}
+  .btn-primary:hover{background:var(--gold-soft);}
+  .btn-ghost{border:1px solid rgba(255,255,255,0.3);color:#fff;padding:13px 24px;font-size:14.5px;border-radius:2px;background:transparent;}
+  .btn-ghost:hover{border-color:#fff;}
+
+  .scratch-strip{background:var(--offwhite);}
+  .scratch-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  @media (max-width:900px){.scratch-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:640px){.scratch-grid{grid-template-columns:1fr;}}
+  .scratch-card{background:#fff;border:1px solid var(--line);padding:22px;border-radius:4px;transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;}
+  .scratch-card:hover{transform:translateY(-4px);box-shadow:0 10px 24px rgba(10,27,51,0.08);border-color:var(--navy-950);}
+  .scratch-card .flag{font-family:'IBM Plex Mono',monospace;font-size:11px;background:var(--navy-950);color:var(--gold-soft);padding:3px 8px;border-radius:2px;display:inline-block;margin-bottom:12px;}
+  .scratch-card h4{font-size:15.5px;color:var(--navy-950);font-weight:600;margin-bottom:6px;}
+  .scratch-card p{font-size:13px;color:var(--slate);}
+
+  .contact{border-top:1px solid var(--line);}
+  .contact-inner{display:grid;grid-template-columns:1fr 1fr;gap:56px;}
+  @media (max-width:900px){.contact-inner{grid-template-columns:1fr;gap:32px;}}
+  .contact-form label{display:block;font-size:12.5px;color:var(--slate);margin-bottom:6px;margin-top:16px;}
+  .contact-form label:first-of-type{margin-top:0;}
+  .contact-form input,.contact-form textarea{width:100%;border:1px solid var(--line);padding:11px 13px;border-radius:3px;font-size:14px;font-family:inherit;color:var(--ink);}
+  .contact-form textarea{min-height:100px;resize:vertical;}
+  .contact-note{font-size:12px;color:var(--slate);margin-top:16px;}
+
+  footer{background:var(--navy-950);color:rgba(255,255,255,0.55);padding:52px 0 30px;}
+  .foot-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:36px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.1);}
+  .foot-brand p{max-width:320px;font-size:13.5px;line-height:1.6;margin-top:12px;}
+  .foot-cols{display:flex;gap:56px;flex-wrap:wrap;}
+  .foot-col h4{font-size:12px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.06em;font-weight:500;margin-bottom:14px;}
+  .foot-col a{display:block;font-size:13.5px;margin-bottom:10px;color:rgba(255,255,255,0.7);}
+  .foot-col a:hover{color:#fff;}
+  .foot-bottom{display:flex;justify-content:space-between;padding-top:22px;font-size:12px;flex-wrap:wrap;gap:10px;}
+
+  /* FLOATING WHATSAPP */
+  .wa-float-wrap{position:fixed;bottom:24px;right:24px;z-index:60;width:56px;height:56px;}
+  .wa-float-wrap::before,.wa-float-wrap::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--wa);animation:waRing 2.4s ease-out infinite;pointer-events:none;}
+  .wa-float-wrap::after{animation-delay:1.2s;}
+  .wa-float{position:relative;z-index:1;background:var(--wa);color:#fff;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,0.25);border:none;cursor:pointer;transition:background .2s ease, transform .2s ease;}
+  .wa-float svg{width:26px;height:26px;}
+  .wa-float:hover{background:#1EA854;transform:scale(1.08);}
+
+  /* MODAL */
+  .modal-overlay{position:fixed;inset:0;background:rgba(10,20,35,0.6);z-index:100;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:40px 20px;opacity:0;visibility:hidden;transition:opacity .28s ease;}
+  .modal-overlay.open{opacity:1;visibility:visible;}
+  .modal{background:#fff;max-width:760px;width:100%;border-radius:6px;overflow:hidden;margin-bottom:40px;transform:translateY(24px) scale(0.97);opacity:0;transition:transform .32s cubic-bezier(.2,.7,.2,1), opacity .28s ease;}
+  .modal-overlay.open .modal{transform:translateY(0) scale(1);opacity:1;}
+  .modal-head{background:var(--navy-950);color:#fff;padding:26px 30px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;}
+  .modal-head-left{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .modal-close{background:rgba(255,255,255,0.1);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;flex-shrink:0;transition:background .2s ease, transform .3s ease;}
+  .modal-close:hover{background:rgba(255,255,255,0.2);transform:rotate(90deg);}
+  .modal-head h2{color:#fff;font-size:24px;margin-top:2px;max-width:520px;}
+  .modal-meta{font-size:12.5px;color:rgba(255,255,255,0.55);margin-top:10px;}
+  .modal-body{padding:30px;}
+  .modal-price-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;padding-bottom:24px;border-bottom:1px solid var(--line);margin-bottom:24px;}
+  .modal-price{font-family:'Fraunces',serif;font-size:32px;color:var(--navy-950);}
+  .modal-price .poa{font-size:19px;color:var(--slate);font-family:'IBM Plex Mono',monospace;}
+  .cond-table{width:100%;border-collapse:collapse;margin-bottom:26px;}
+  .cond-table tr{border-bottom:1px solid var(--line);}
+  .cond-table td{padding:11px 0;font-size:14px;}
+  .cond-table td:first-child{color:var(--slate);width:44%;}
+  .cond-table td:last-child{color:var(--ink);font-weight:500;}
+  .modal-body h3{font-size:16px;color:var(--navy-950);margin:22px 0 12px;font-weight:600;}
+  .modal-body p{font-size:14.5px;color:var(--slate);margin-bottom:10px;}
+  .check-list li{font-size:14px;color:var(--ink);padding:6px 0 6px 22px;position:relative;opacity:0;animation:fadeUp .5s ease forwards;}
+  .check-list li:before{content:"✓";position:absolute;left:0;color:var(--gold);font-weight:700;}
+  .faq-item{border-bottom:1px solid var(--line);padding:14px 0;}
+  .faq-item .q{font-size:14.5px;font-weight:600;color:var(--navy-950);margin-bottom:6px;}
+  .faq-item .a{font-size:14px;color:var(--slate);}
+  .modal-cta-row{display:flex;gap:12px;margin-top:26px;flex-wrap:wrap;}
+  .asset-id{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--slate);margin-top:16px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <nav>
+      <div class="logo"><span class="mark">C+</span>Cplus Compliance</div>
+      <div class="navlinks">
+        <a href="#marketplace" data-i18n="nav_marketplace">Marketplace</a>
+        <a href="#scratch" data-i18n="nav_scratch">Apply from scratch</a>
+        <a href="#publish" data-i18n="nav_publish">Sell a licence</a>
+        <a href="#contact" data-i18n="nav_contact">Contact</a>
+      </div>
+      <div class="navright">
+        <div class="lang-switch" id="langSwitch">
+          <button class="lang-btn active" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="zh_hant">繁體</button>
+          <button class="lang-btn" data-lang="zh_hans">简体</button>
+        </div>
+        <a class="wa-btn" id="navWaBtn" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.87 9.87 0 0 0 12.04 2z"/></svg>
+          <span class="wa-label">WhatsApp</span>
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-bg" aria-hidden="true">
+    <svg viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bldgFade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#D8C08C" stop-opacity="0.55"/>
+          <stop offset="100%" stop-color="#D8C08C" stop-opacity="0.12"/>
+        </linearGradient>
+      </defs>
+      <!-- back row -->
+      <g fill="url(#bldgFade)">
+        <rect x="40" y="220" width="70" height="280"/>
+        <rect x="130" y="160" width="55" height="340"/>
+        <rect x="720" y="180" width="60" height="320"/>
+        <rect x="800" y="230" width="70" height="270"/>
+      </g>
+      <!-- mid row -->
+      <g fill="url(#bldgFade)">
+        <rect x="200" y="120" width="90" height="380"/>
+        <rect x="610" y="100" width="80" height="400"/>
+      </g>
+      <!-- hero tower: classical bank building with columns and pediment -->
+      <g fill="url(#bldgFade)">
+        <rect x="330" y="60" width="230" height="440"/>
+        <polygon points="330,60 445,10 560,60"/>
+        <rect x="355" y="90" width="18" height="330"/>
+        <rect x="395" y="90" width="18" height="330"/>
+        <rect x="435" y="90" width="18" height="330"/>
+        <rect x="475" y="90" width="18" height="330"/>
+        <rect x="515" y="90" width="18" height="330"/>
+        <rect x="410" y="440" width="70" height="60"/>
+      </g>
+      <!-- windows grid on side towers -->
+      <g fill="#0A1B33" opacity="0.35">
+        <rect x="210" y="140" width="14" height="18"/><rect x="235" y="140" width="14" height="18"/><rect x="260" y="140" width="14" height="18"/>
+        <rect x="210" y="175" width="14" height="18"/><rect x="235" y="175" width="14" height="18"/><rect x="260" y="175" width="14" height="18"/>
+        <rect x="210" y="210" width="14" height="18"/><rect x="235" y="210" width="14" height="18"/><rect x="260" y="210" width="14" height="18"/>
+        <rect x="620" y="120" width="14" height="18"/><rect x="645" y="120" width="14" height="18"/><rect x="670" y="120" width="14" height="18"/>
+        <rect x="620" y="155" width="14" height="18"/><rect x="645" y="155" width="14" height="18"/><rect x="670" y="155" width="14" height="18"/>
+        <rect x="620" y="190" width="14" height="18"/><rect x="645" y="190" width="14" height="18"/><rect x="670" y="190" width="14" height="18"/>
+      </g>
+    </svg>
+  </div>
+  <div class="wrap hero-top">
+    <span class="eyebrow hero-anim d1"><span class="live-dot"></span><span data-i18n="hero_eyebrow">BUY &amp; SELL LICENSED COMPANIES</span></span>
+    <h1 class="hero-anim d2" data-i18n="hero_h1">The marketplace for licensed financial &amp; virtual-asset entities</h1>
+    <p class="lead hero-anim d3" data-i18n="hero_lead">Browse licensed companies across Hong Kong, the US, Canada, and Australia — each listing priced with full condition detail. Reserve on WhatsApp and our team takes it from there.</p>
+    <div class="hero-ctas hero-anim d4">
+      <a href="#marketplace" class="btn-primary shimmer-btn" data-i18n="hero_cta_browse">Browse the marketplace</a>
+      <a href="#" id="heroWaBtn" target="_blank" rel="noopener" class="btn-ghost shimmer-btn" data-i18n="hero_cta_wa">Chat on WhatsApp</a>
+    </div>
+    <div class="trust-badges hero-anim d5">
+      <div class="trust-badge"><span class="dot"></span><span data-i18n="trust1">REGULATOR-VALIDATED</span></div>
+      <div class="trust-badge"><span class="dot"></span><span data-i18n="trust2">LOCAL COUNSEL, EACH JURISDICTION</span></div>
+      <div class="trust-badge"><span class="dot"></span><span data-i18n="trust3">END-TO-END TRANSFER SUPPORT</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="filterbar" id="marketplace">
+  <div class="wrap filterbar-inner">
+    <div class="filter-group">
+      <span class="fg-label" data-i18n="filter_licence_type">Licence type</span>
+      <div class="fg-pills" id="industryPills">
+        <button class="pill active" data-industry="all" data-i18n="filter_all_types">All types</button>
+        <button class="pill" data-industry="mso">MSO</button>
+        <button class="pill" data-industry="msb">MSB</button>
+        <button class="pill" data-industry="dce">DCE / VASP</button>
+        <button class="pill" data-industry="tcsp">TCSP</button>
+        <button class="pill" data-industry="sfc">SFC</button>
+        <button class="pill" data-industry="lender" data-i18n="filter_lender">Money Lender</button>
+      </div>
+    </div>
+    <div class="filter-group">
+      <span class="fg-label" data-i18n="filter_country">Country</span>
+      <div class="fg-pills" id="countryPills">
+        <button class="pill active" data-country="all" data-i18n="filter_all_countries">All countries</button>
+        <button class="pill" data-country="hk" data-i18n="filter_hk">Hong Kong</button>
+        <button class="pill" data-country="us" data-i18n="filter_us">USA</button>
+        <button class="pill" data-country="ca" data-i18n="filter_ca">Canada</button>
+        <button class="pill" data-country="au" data-i18n="filter_au">Australia</button>
+      </div>
+    </div>
+    <span class="reset-link" id="resetFilters" data-i18n="reset_filters">Reset filters</span>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <p class="count-note" id="countNote"></p>
+    <p style="font-size:12.5px;color:var(--slate);margin:-8px 0 20px;" data-i18n="pricing_note">Prices are indicative, benchmarked against current resale listings for comparable licences — confirm final terms before transacting.</p>
+    <div class="grid" id="productGrid"></div>
+  </div>
+</section>
+
+<section class="scratch-strip" id="scratch">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="section-tag" data-i18n="scratch_tag">No listing fits?</span>
+      <h2 data-i18n="scratch_h2">Apply for a licence from scratch</h2>
+      <p data-i18n="scratch_p">New application rather than an existing entity — we file directly with the regulator on your behalf.</p>
+    </div>
+    <div class="scratch-grid">
+      <div class="scratch-card reveal"><span class="flag">HK</span><h4 data-i18n="scratch1_title">MSO application</h4><p data-i18n="scratch1_p">New Money Service Operator filing with Customs &amp; Excise.</p></div>
+      <div class="scratch-card reveal"><span class="flag">HK</span><h4 data-i18n="scratch2_title">SFC licence application</h4><p data-i18n="scratch2_p">Type 1, 4, 9 — single or combined applications.</p></div>
+      <div class="scratch-card reveal"><span class="flag">AU</span><h4 data-i18n="scratch3_title">DCE / VASP registration</h4><p data-i18n="scratch3_p">New AUSTRAC digital currency exchange registration.</p></div>
+      <div class="scratch-card reveal"><span class="flag">US / CA</span><h4 data-i18n="scratch4_title">MSB registration</h4><p data-i18n="scratch4_p">FinCEN or FINTRAC registration built from the ground up.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="publish" id="publish">
+  <div class="wrap publish-inner">
+    <div>
+      <h2 data-i18n="publish_h2">Hold a licence you no longer need?</h2>
+      <p data-i18n="publish_p">List it with Cplus Compliance. We handle valuation, buyer due diligence, and the regulatory transfer.</p>
+    </div>
+    <a href="#" id="publishWaBtn" target="_blank" rel="noopener" class="btn-primary shimmer-btn" data-i18n="publish_cta">Publish your listing on WhatsApp</a>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap contact-inner">
+    <div>
+      <div class="section-head reveal" style="margin-bottom:0;">
+        <span class="section-tag" data-i18n="contact_tag">Get in touch</span>
+        <h2 data-i18n="contact_h2">Don't see what you need?</h2>
+        <p data-i18n="contact_p">Tell us the jurisdiction and licence class you're after, or the licence you'd like to sell — or message us directly on WhatsApp.</p>
+      </div>
+      <a href="#" id="contactWaBtn" target="_blank" rel="noopener" class="wa-btn" style="margin-top:8px;padding:12px 20px;font-size:14.5px;">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.87 9.87 0 0 0 12.04 2z"/></svg>
+        +852 9488 4416
+      </a>
+    </div>
+    <div class="contact-form">
+      <label data-i18n="form_name">Your name</label>
+      <input type="text" placeholder="Full name" data-i18n-placeholder="form_name_ph">
+      <label data-i18n="form_email">Business email</label>
+      <input type="email" placeholder="name@company.com">
+      <label data-i18n="form_company">Your company</label>
+      <input type="text" placeholder="Company name" data-i18n-placeholder="form_company_ph">
+      <label data-i18n="form_message">Message</label>
+      <textarea placeholder="Jurisdiction, licence class, and any detail that helps us scope this" data-i18n-placeholder="form_message_ph"></textarea>
+      <div style="margin-top:20px;"><button class="btn-primary" type="button" id="submitEnquiryBtn" data-i18n="form_submit">Submit enquiry</button></div>
+      <p class="contact-note" data-i18n="form_note">By submitting, you agree to our privacy policy and the handling of your data for this enquiry only.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <div class="logo" style="color:#fff;">Cplus Compliance</div>
+        <p data-i18n="footer_brand_desc">A license marketplace and transfer advisory affiliated with Cplus Group (HK) Limited 協加集團(香港)有限公司 (TCSP Licence No. TC009188), Hong Kong.</p>
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h4 data-i18n="footer_platform">Platform</h4>
+          <a href="#marketplace" data-i18n="nav_marketplace">Marketplace</a>
+          <a href="#scratch" data-i18n="nav_scratch">Apply from scratch</a>
+          <a href="#publish" data-i18n="nav_publish">Sell a licence</a>
+        </div>
+        <div class="foot-col">
+          <h4 data-i18n="footer_group">Group</h4>
+          <a href="#">Cplus Group (HK) Limited 協加集團(香港)有限公司</a>
+        </div>
+        <div class="foot-col">
+          <h4 data-i18n="footer_contact">Contact</h4>
+          <a href="mailto:enquiries@cplus-compliance.com">enquiries@cplus-compliance.com</a>
+          <a href="#" id="footWaBtn" target="_blank" rel="noopener">WhatsApp: +852 9488 4416</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span data-i18n="footer_copyright">Copyright 2026 © Cplus Compliance</span>
+      <span data-i18n="footer_licence_note">TCSP Licence No. TC009188 — indicative pricing, subject to confirmation</span>
+    </div>
+  </div>
+</footer>
+
+<!-- FLOATING WHATSAPP -->
+<div class="wa-float-wrap">
+  <a href="#" id="floatWaBtn" target="_blank" rel="noopener" class="wa-float" aria-label="Chat on WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.87 9.87 0 0 0 12.04 2z"/></svg>
+  </a>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<script>
+const WHATSAPP_NUMBER = "85294884416";
+const WHATSAPP_URL = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent("Say Hi");
+document.querySelectorAll('#navWaBtn,#heroWaBtn,#publishWaBtn,#contactWaBtn,#footWaBtn,#floatWaBtn').forEach(el => el.href = WHATSAPP_URL);
+
+let LANG = 'en';
+
+// ===== STATIC UI STRINGS =====
+const UI = {
+  en: {
+    nav_marketplace:"Marketplace", nav_scratch:"Apply from scratch", nav_publish:"Sell a licence", nav_contact:"Contact",
+    hero_eyebrow:"BUY & SELL LICENSED COMPANIES",
+    hero_h1:"The marketplace for licensed financial & virtual-asset entities",
+    hero_lead:"Browse licensed companies across Hong Kong, the US, Canada, and Australia — each listing priced with full condition detail. Reserve on WhatsApp and our team takes it from there.",
+    hero_cta_browse:"Browse the marketplace", hero_cta_wa:"Chat on WhatsApp",
+    trust1:"REGULATOR-VALIDATED", trust2:"LOCAL COUNSEL, EACH JURISDICTION", trust3:"END-TO-END TRANSFER SUPPORT",
+    filter_licence_type:"Licence type", filter_all_types:"All types", filter_lender:"Money Lender",
+    filter_country:"Country", filter_all_countries:"All countries", filter_hk:"Hong Kong", filter_us:"USA", filter_ca:"Canada", filter_au:"Australia",
+    reset_filters:"Reset filters",
+    pricing_note:"Prices are indicative, benchmarked against current resale listings for comparable licences — confirm final terms before transacting.",
+    scratch_tag:"No listing fits?", scratch_h2:"Apply for a licence from scratch",
+    scratch_p:"New application rather than an existing entity — we file directly with the regulator on your behalf.",
+    scratch1_title:"MSO application", scratch1_p:"New Money Service Operator filing with Customs & Excise.",
+    scratch2_title:"SFC licence application", scratch2_p:"Type 1, 4, 9 — single or combined applications.",
+    scratch3_title:"DCE / VASP registration", scratch3_p:"New AUSTRAC digital currency exchange registration.",
+    scratch4_title:"MSB registration", scratch4_p:"FinCEN or FINTRAC registration built from the ground up.",
+    publish_h2:"Hold a licence you no longer need?",
+    publish_p:"List it with Cplus Compliance. We handle valuation, buyer due diligence, and the regulatory transfer.",
+    publish_cta:"Publish your listing on WhatsApp",
+    contact_tag:"Get in touch", contact_h2:"Don't see what you need?",
+    contact_p:"Tell us the jurisdiction and licence class you're after, or the licence you'd like to sell — or message us directly on WhatsApp.",
+    form_name:"Your name", form_name_ph:"Full name", form_email:"Business email", form_company:"Your company", form_company_ph:"Company name",
+    form_message:"Message", form_message_ph:"Jurisdiction, licence class, and any detail that helps us scope this",
+    form_submit:"Submit enquiry",
+    form_note:"By submitting, you agree to our privacy policy and the handling of your data for this enquiry only.",
+    form_preview_alert:"This is a design preview — connect this form to your enquiry inbox before going live.",
+    footer_brand_desc:"A license marketplace and transfer advisory affiliated with Cplus Group (HK) Limited 協加集團(香港)有限公司 (TCSP Licence No. TC009188), Hong Kong.",
+    footer_platform:"Platform", footer_group:"Group", footer_contact:"Contact",
+    footer_copyright:"Copyright 2026 © Cplus Compliance",
+    footer_licence_note:"TCSP Licence No. TC009188 — indicative pricing, subject to confirmation",
+    view_details:"View details →", ref_label:"Ref",
+    included_title:"Included in the Sale", faq_title:"Frequently Asked Questions",
+    reserve_wa:"Reserve on WhatsApp", ask_similar:"Ask about similar listings", enquire_email:"Enquire by email",
+    asset_label:"Asset #", price_on_app:"Price on application", sold_label:"Sold",
+    no_results:"No listings match those filters yet — ", no_results_link:"tell us what you need on WhatsApp",
+    count_note: n => n + ' listing' + (n===1?'':'s') + ' on register'
+  },
+  zh_hant: {
+    nav_marketplace:"市場", nav_scratch:"從頭申請牌照", nav_publish:"出售牌照", nav_contact:"聯絡我們",
+    hero_eyebrow:"買賣持牌公司",
+    hero_h1:"持牌金融與虛擬資產實體交易平台",
+    hero_lead:"瀏覽香港、美國、加拿大及澳洲的持牌公司 — 每個項目均附完整定價及條件詳情。透過 WhatsApp 預留，其餘交由我們團隊跟進。",
+    hero_cta_browse:"瀏覽市場", hero_cta_wa:"透過 WhatsApp 聯絡",
+    trust1:"監管機構認可", trust2:"各司法管轄區均設本地法律顧問", trust3:"全程過戶支援",
+    filter_licence_type:"牌照類型", filter_all_types:"所有類型", filter_lender:"放債人",
+    filter_country:"國家/地區", filter_all_countries:"所有國家/地區", filter_hk:"香港", filter_us:"美國", filter_ca:"加拿大", filter_au:"澳洲",
+    reset_filters:"重設篩選",
+    pricing_note:"價格僅供參考，乃根據同類牌照現時轉售市場行情估算 — 交易前請與我們確認最終條款。",
+    scratch_tag:"沒有合適項目？", scratch_h2:"從頭申請牌照",
+    scratch_p:"全新申請而非收購現有實體 — 我們代您直接向監管機構遞交申請。",
+    scratch1_title:"MSO 牌照申請", scratch1_p:"向香港海關遞交全新貨幣兌換及匯款服務經營者申請。",
+    scratch2_title:"證監會牌照申請", scratch2_p:"第1、4、9類 — 可單獨或合併申請。",
+    scratch3_title:"DCE／VASP 註冊", scratch3_p:"全新 AUSTRAC 數碼貨幣交易平台註冊。",
+    scratch4_title:"MSB 註冊", scratch4_p:"從零開始辦理 FinCEN 或 FINTRAC 註冊。",
+    publish_h2:"持有不再需要的牌照？",
+    publish_p:"透過 Cplus Compliance 刊登出售。我們負責估值、買方盡職審查及監管過戶手續。",
+    publish_cta:"透過 WhatsApp 刊登您的牌照",
+    contact_tag:"聯絡我們", contact_h2:"未找到合適項目？",
+    contact_p:"請告訴我們您所需的司法管轄區及牌照類別，或您想出售的牌照 — 亦可直接透過 WhatsApp 與我們聯絡。",
+    form_name:"姓名", form_name_ph:"全名", form_email:"商務電郵", form_company:"公司名稱", form_company_ph:"公司名稱",
+    form_message:"訊息", form_message_ph:"司法管轄區、牌照類別及任何有助我們了解需求的詳情",
+    form_submit:"提交查詢",
+    form_note:"提交即表示您同意我們的私隱政策，並僅為此查詢用途處理您的資料。",
+    form_preview_alert:"此為設計預覽 — 上線前請將此表格連接至您的查詢收件箱。",
+    footer_brand_desc:"牌照買賣及過戶顧問平台，隸屬協加集團（香港）有限公司 Cplus Group (HK) Limited（TCSP 牌照編號：TC009188），香港。",
+    footer_platform:"平台", footer_group:"集團", footer_contact:"聯絡方式",
+    footer_copyright:"版權所有 2026 © Cplus Compliance",
+    footer_licence_note:"TCSP 牌照編號 TC009188 — 價格僅供參考，以最終確認為準",
+    view_details:"查看詳情 →", ref_label:"編號",
+    included_title:"出售範圍包括", faq_title:"常見問題",
+    reserve_wa:"透過 WhatsApp 預留", ask_similar:"查詢同類項目", enquire_email:"電郵查詢",
+    asset_label:"資產編號", price_on_app:"價格面議", sold_label:"已售出",
+    no_results:"暫無符合篩選條件的項目 — ", no_results_link:"透過 WhatsApp 告訴我們您的需求",
+    count_note: n => '登記中項目：' + n + ' 項'
+  },
+  zh_hans: {
+    nav_marketplace:"市场", nav_scratch:"从头申请牌照", nav_publish:"出售牌照", nav_contact:"联系我们",
+    hero_eyebrow:"买卖持牌公司",
+    hero_h1:"持牌金融与虚拟资产实体交易平台",
+    hero_lead:"浏览香港、美国、加拿大及澳大利亚的持牌公司 — 每个项目均附完整定价及条件详情。通过 WhatsApp 预留，其余交由我们团队跟进。",
+    hero_cta_browse:"浏览市场", hero_cta_wa:"通过 WhatsApp 联系",
+    trust1:"监管机构认可", trust2:"各司法管辖区均设本地法律顾问", trust3:"全程过户支持",
+    filter_licence_type:"牌照类型", filter_all_types:"所有类型", filter_lender:"放债人",
+    filter_country:"国家/地区", filter_all_countries:"所有国家/地区", filter_hk:"香港", filter_us:"美国", filter_ca:"加拿大", filter_au:"澳大利亚",
+    reset_filters:"重置筛选",
+    pricing_note:"价格仅供参考，乃根据同类牌照现时转售市场行情估算 — 交易前请与我们确认最终条款。",
+    scratch_tag:"没有合适项目？", scratch_h2:"从头申请牌照",
+    scratch_p:"全新申请而非收购现有实体 — 我们代您直接向监管机构递交申请。",
+    scratch1_title:"MSO 牌照申请", scratch1_p:"向香港海关递交全新货币兑换及汇款服务经营者申请。",
+    scratch2_title:"证监会牌照申请", scratch2_p:"第1、4、9类 — 可单独或合并申请。",
+    scratch3_title:"DCE／VASP 注册", scratch3_p:"全新 AUSTRAC 数字货币交易平台注册。",
+    scratch4_title:"MSB 注册", scratch4_p:"从零开始办理 FinCEN 或 FINTRAC 注册。",
+    publish_h2:"持有不再需要的牌照？",
+    publish_p:"通过 Cplus Compliance 刊登出售。我们负责估值、买方尽职调查及监管过户手续。",
+    publish_cta:"通过 WhatsApp 刊登您的牌照",
+    contact_tag:"联系我们", contact_h2:"未找到合适项目？",
+    contact_p:"请告诉我们您所需的司法管辖区及牌照类别，或您想出售的牌照 — 也可直接通过 WhatsApp 与我们联系。",
+    form_name:"姓名", form_name_ph:"全名", form_email:"商务邮箱", form_company:"公司名称", form_company_ph:"公司名称",
+    form_message:"留言", form_message_ph:"司法管辖区、牌照类别及任何有助我们了解需求的详情",
+    form_submit:"提交查询",
+    form_note:"提交即表示您同意我们的隐私政策，并仅为此查询用途处理您的资料。",
+    form_preview_alert:"此为设计预览 — 上线前请将此表单连接至您的查询收件箱。",
+    footer_brand_desc:"牌照买卖及过户顾问平台，隶属协加集团（香港）有限公司 Cplus Group (HK) Limited（TCSP 牌照编号：TC009188），香港。",
+    footer_platform:"平台", footer_group:"集团", footer_contact:"联系方式",
+    footer_copyright:"版权所有 2026 © Cplus Compliance",
+    footer_licence_note:"TCSP 牌照编号 TC009188 — 价格仅供参考，以最终确认为准",
+    view_details:"查看详情 →", ref_label:"编号",
+    included_title:"出售范围包括", faq_title:"常见问题",
+    reserve_wa:"通过 WhatsApp 预留", ask_similar:"查询同类项目", enquire_email:"邮件查询",
+    asset_label:"资产编号", price_on_app:"价格面议", sold_label:"已售出",
+    no_results:"暂无符合筛选条件的项目 — ", no_results_link:"通过 WhatsApp 告诉我们您的需求",
+    count_note: n => '登记中项目：' + n + ' 项'
+  }
+};
+
+const industryLabel = {
+  en:{ mso:"MSO", msb:"MSB", dce:"DCE / VASP", tcsp:"TCSP", sfc:"SFC", lender:"Money Lender" },
+  zh_hant:{ mso:"MSO", msb:"MSB", dce:"DCE／VASP", tcsp:"TCSP", sfc:"SFC（證監會）", lender:"放債人牌照" },
+  zh_hans:{ mso:"MSO", msb:"MSB", dce:"DCE／VASP", tcsp:"TCSP", sfc:"SFC（证监会）", lender:"放债人牌照" }
+};
+const statusLabel = {
+  en:{ available:"Available", onapp:"On application", sold:"Sold" },
+  zh_hant:{ available:"可供出售", onapp:"申請中", sold:"已售出" },
+  zh_hans:{ available:"可供出售", onapp:"申请中", sold:"已售出" }
+};
+const condLabels = {
+  en:{ Jurisdiction:"Jurisdiction", Regulator:"Regulator", "Licensed Since":"Licensed Since", "Renewal Status":"Renewal Status", "Company History":"Company History", Banking:"Banking" },
+  zh_hant:{ Jurisdiction:"司法管轄區", Regulator:"監管機構", "Licensed Since":"發牌年份", "Renewal Status":"續期狀態", "Company History":"公司背景", Banking:"銀行户口" },
+  zh_hans:{ Jurisdiction:"司法管辖区", Regulator:"监管机构", "Licensed Since":"发牌年份", "Renewal Status":"续期状态", "Company History":"公司背景", Banking:"银行账户" }
+};
+
+// ===== INCLUDED CHECKLISTS =====
+const included = {
+  en:{
+    mso:["Active Money Service Operator licence","Licence certificate and C&ED filings","Clean corporate structure, no trading history","HK corporate bank account","Registered office & company secretary (first year)","Full regulatory handover support"],
+    tcsp:["Active TCSP licence","Licence certificate and filings in good standing","Existing compliance manuals and onboarding templates","HK corporate bank account","Registered office & company secretary (first year)","Full regulatory handover support"],
+    sfc:["Active SFC licence(s) as specified","Licence certificate and filings in good standing","Segregated client account arrangement","Compliance manual and RO/LR documentation","Clean corporate structure, no trading history","Full regulatory handover support"],
+    lender:["Active Money Lender's Licence","Certificate under the Money Lenders Ordinance","Registered office & company secretary (first year)","Clean corporate structure, no trading history","Full regulatory handover support"],
+    msb:["Active MSB registration","Registration certificate and filings in good standing","AML/CTF program documentation","Corporate bank account (where applicable)","Full regulatory handover support"],
+    dce:["Active DCE / VASP registration","Registration certificate and AUSTRAC filings","AML/CTF program included","Clean corporate structure, no trading history","Full regulatory handover support"]
+  },
+  zh_hant:{
+    mso:["有效的貨幣服務經營者牌照","牌照證書及香港海關存檔文件","乾淨的公司架構，無交易記錄","香港公司銀行户口","註冊辦事處及公司秘書服務（首年）","全程監管過戶支援"],
+    tcsp:["有效的 TCSP 牌照","牌照證書及狀況良好的存檔文件","現有的合規手冊及客戶開户範本","香港公司銀行户口","註冊辦事處及公司秘書服務（首年）","全程監管過戶支援"],
+    sfc:["如所述的有效證監會牌照","牌照證書及狀況良好的存檔文件","獨立客戶帳戶安排","合規手冊及負責人員／持牌代表文件","乾淨的公司架構，無交易記錄","全程監管過戶支援"],
+    lender:["有效的放債人牌照","根據《放債人條例》發出的證書","註冊辦事處及公司秘書服務（首年）","乾淨的公司架構，無交易記錄","全程監管過戶支援"],
+    msb:["有效的 MSB 註冊","註冊證書及狀況良好的存檔文件","反洗錢／反恐怖分子資金籌集計劃文件","公司銀行户口（如適用）","全程監管過戶支援"],
+    dce:["有效的 DCE／VASP 註冊","註冊證書及 AUSTRAC 存檔文件","已包括反洗錢／反恐怖分子資金籌集計劃","乾淨的公司架構，無交易記錄","全程監管過戶支援"]
+  },
+  zh_hans:{
+    mso:["有效的货币服务经营者牌照","牌照证书及香港海关存档文件","干净的公司架构，无交易记录","香港公司银行账户","注册办事处及公司秘书服务（首年）","全程监管过户支持"],
+    tcsp:["有效的 TCSP 牌照","牌照证书及状况良好的存档文件","现有的合规手册及客户开户模板","香港公司银行账户","注册办事处及公司秘书服务（首年）","全程监管过户支持"],
+    sfc:["如所述的有效证监会牌照","牌照证书及状况良好的存档文件","独立客户账户安排","合规手册及负责人员／持牌代表文件","干净的公司架构，无交易记录","全程监管过户支持"],
+    lender:["有效的放债人牌照","根据《放债人条例》发出的证书","注册办事处及公司秘书服务（首年）","干净的公司架构，无交易记录","全程监管过户支持"],
+    msb:["有效的 MSB 注册","注册证书及状况良好的存档文件","反洗钱／反恐怖融资计划文件","公司银行账户（如适用）","全程监管过户支持"],
+    dce:["有效的 DCE／VASP 注册","注册证书及 AUSTRAC 存档文件","已包括反洗钱／反恐怖融资计划","干净的公司架构，无交易记录","全程监管过户支持"]
+  }
+};
+
+// ===== FAQ =====
+const faqDefault = {
+  en:[
+    {q:"Is the licence currently active?", a:"Yes — the licence is active and all fees are paid to date unless otherwise noted."},
+    {q:"Does the company have trading history?", a:"Most listings are clean shells with no trading history, reducing legacy risk. Any exceptions are noted in the condition table above."},
+    {q:"Is banking included?", a:"Where noted \"Yes\" in the condition table, an operational corporate bank account is included in the sale."},
+    {q:"Can ownership be transferred?", a:"Yes — structured as a share transfer subject to the relevant regulator's approval and notification requirements."}
+  ],
+  zh_hant:[
+    {q:"此牌照目前是否有效？", a:"是 — 牌照現時有效，除另有註明外，所有費用已繳清至今。"},
+    {q:"該公司是否有交易記錄？", a:"大部分項目均為乾淨的空殼公司，沒有交易記錄，可減低歷史遺留風險。任何例外情況已於上方條件表列明。"},
+    {q:"是否包括銀行户口？", a:"凡於條件表中標示「有」，出售範圍即包括可運作的公司銀行户口。"},
+    {q:"股權是否可以過戶？", a:"可以 — 交易以股份轉讓形式進行，須符合相關監管機構的批核及通知規定。"}
+  ],
+  zh_hans:[
+    {q:"此牌照目前是否有效？", a:"是 — 牌照现时有效，除另有注明外，所有费用已缴清至今。"},
+    {q:"该公司是否有交易记录？", a:"大部分项目均为干净的空壳公司，没有交易记录，可降低历史遗留风险。任何例外情况已于上方条件表列明。"},
+    {q:"是否包括银行账户？", a:"凡于条件表中标示「有」，出售范围即包括可运作的公司银行账户。"},
+    {q:"股权是否可以过户？", a:"可以 — 交易以股权转让形式进行，须符合相关监管机构的批核及通知规定。"}
+  ]
+};
+
+// ===== LISTINGS (base data + per-language name/desc/cond) =====
+const listings = [
+  {ref:"HK-0142", flag:"HK", country:"hk", industry:"mso", status:"available", price:35000,
+   i18n:{
+     en:{name:"Money Service Operator Licence", reg:"C&ED, Hong Kong", desc:"An active Money Service Operator licence held by a clean Hong Kong shell company, structured for straightforward acquisition.",
+       cond:{Jurisdiction:"Hong Kong", Regulator:"Customs & Excise Department", "Licensed Since":"2019", "Renewal Status":"Current, 2-year renewal cycle", "Company History":"No trading history", "Banking":"Yes — HK corporate account included"}},
+     zh_hant:{name:"貨幣服務經營者牌照 (MSO)", reg:"香港海關", desc:"由一家乾淨的香港空殼公司持有的有效貨幣服務經營者牌照，結構簡單，便於收購。",
+       cond:{Jurisdiction:"香港", Regulator:"香港海關", "Licensed Since":"2019年", "Renewal Status":"有效，兩年續期一次", "Company History":"無交易記錄", "Banking":"有 — 包括香港公司銀行户口"}},
+     zh_hans:{name:"货币服务经营者牌照 (MSO)", reg:"香港海关", desc:"由一家干净的香港空壳公司持有的有效货币服务经营者牌照，结构简单，便于收购。",
+       cond:{Jurisdiction:"香港", Regulator:"香港海关", "Licensed Since":"2019年", "Renewal Status":"有效，两年续期一次", "Company History":"无交易记录", "Banking":"有 — 包括香港公司银行账户"}}
+   }},
+
+  {ref:"HK-0198", flag:"HK", country:"hk", industry:"tcsp", status:"available", price:230000,
+   i18n:{
+     en:{name:"TCSP Licence — Trust Business", reg:"Companies Registry, Hong Kong", desc:"A TCSP licence with trust business scope, including established case files and onboarding documentation.",
+       cond:{Jurisdiction:"Hong Kong", Regulator:"Companies Registry", "Licensed Since":"2020", "Renewal Status":"Current, 3-year renewal cycle", "Company History":"Active, existing trust case files", "Banking":"Yes"}},
+     zh_hant:{name:"TCSP 牌照 — 信託業務", reg:"公司註冊處", desc:"具信託業務範圍的 TCSP 牌照，包括已建立的個案檔案及客戶開户文件。",
+       cond:{Jurisdiction:"香港", Regulator:"公司註冊處", "Licensed Since":"2020年", "Renewal Status":"有效，三年續期一次", "Company History":"運作中，已有信託個案檔案", "Banking":"有"}},
+     zh_hans:{name:"TCSP 牌照 — 信托业务", reg:"公司注册处", desc:"具信托业务范围的 TCSP 牌照，包括已建立的案例档案及客户开户文件。",
+       cond:{Jurisdiction:"香港", Regulator:"公司注册处", "Licensed Since":"2020年", "Renewal Status":"有效，三年续期一次", "Company History":"运作中，已有信托案例档案", "Banking":"有"}}
+   }},
+
+  {ref:"HK-0203", flag:"HK", country:"hk", industry:"tcsp", status:"available", price:130000,
+   i18n:{
+     en:{name:"TCSP Licence — Company Secretarial Scope", reg:"Companies Registry, Hong Kong", desc:"A TCSP licence used for corporate/company secretarial services rather than trust business, suited to firms building that practice.",
+       cond:{Jurisdiction:"Hong Kong", Regulator:"Companies Registry", "Licensed Since":"2021", "Renewal Status":"Current, 3-year renewal cycle", "Company History":"No trading history", "Banking":"Yes"}},
+     zh_hant:{name:"TCSP 牌照 — 公司秘書業務範圍", reg:"公司註冊處", desc:"用於公司秘書及企業服務而非信託業務的 TCSP 牌照，適合正建立相關業務的公司。",
+       cond:{Jurisdiction:"香港", Regulator:"公司註冊處", "Licensed Since":"2021年", "Renewal Status":"有效，三年續期一次", "Company History":"無交易記錄", "Banking":"有"}},
+     zh_hans:{name:"TCSP 牌照 — 公司秘书业务范围", reg:"公司注册处", desc:"用于公司秘书及企业服务而非信托业务的 TCSP 牌照，适合正建立相关业务的公司。",
+       cond:{Jurisdiction:"香港", Regulator:"公司注册处", "Licensed Since":"2021年", "Renewal Status":"有效，三年续期一次", "Company History":"无交易记录", "Banking":"有"}}
+   }},
+
+  {ref:"HK-0071", flag:"HK", country:"hk", industry:"sfc", status:"onapp", price:null,
+   i18n:{
+     en:{name:"SFC Type 1 — Dealing in Securities", reg:"SFC, Hong Kong", desc:"A standalone Type 1 licence, suited to firms building a dealing or brokerage operation in Hong Kong. Priced on application — Type 1 resale values vary widely (roughly USD 0.6M–3.8M) depending on client base and history.",
+       cond:{Jurisdiction:"Hong Kong", Regulator:"Securities and Futures Commission", "Licensed Since":"2016", "Renewal Status":"Current, no fixed expiry", "Company History":"No trading history", "Banking":"Yes — segregated client account"}},
+     zh_hant:{name:"證監會第1類牌照 — 證券交易", reg:"香港證監會", desc:"獨立第1類牌照，適合於香港建立證券交易或經紀業務的公司。價格面議 — 第1類牌照轉售價視乎客戶基礎及往績而定，差異頗大（約60萬至380萬美元）。",
+       cond:{Jurisdiction:"香港", Regulator:"證券及期貨事務監察委員會（證監會）", "Licensed Since":"2016年", "Renewal Status":"有效，無固定到期日", "Company History":"無交易記錄", "Banking":"有 — 設有獨立客戶帳戶"}},
+     zh_hans:{name:"证监会第1类牌照 — 证券交易", reg:"香港证监会", desc:"独立第1类牌照，适合于香港建立证券交易或经纪业务的公司。价格面议 — 第1类牌照转售价视客户基础及往绩而定，差异较大（约60万至380万美元）。",
+       cond:{Jurisdiction:"香港", Regulator:"证券及期货事务监察委员会（证监会）", "Licensed Since":"2016年", "Renewal Status":"有效，无固定到期日", "Company History":"无交易记录", "Banking":"有 — 设有独立客户账户"}}
+   }},
+
+  {ref:"HK-0088", flag:"HK", country:"hk", industry:"sfc", status:"available", price:1800000,
+   i18n:{
+     en:{name:"SFC Type 4 & 9 — Advising + Asset Management", reg:"SFC, Hong Kong", desc:"A combined Type 4 and Type 9 licence, the standard combination sought by fund managers entering Hong Kong.",
+       cond:{Jurisdiction:"Hong Kong", Regulator:"Securities and Futures Commission", "Licensed Since":"2017", "Renewal Status":"Current, no fixed expiry", "Company History":"No trading history", "Banking":"Yes — segregated client account"}},
+     zh_hant:{name:"證監會第4類及第9類牌照 — 提供意見及資產管理", reg:"香港證監會", desc:"第4類及第9類合併牌照，為進駐香港的基金經理最常尋求的牌照組合。",
+       cond:{Jurisdiction:"香港", Regulator:"證券及期貨事務監察委員會（證監會）", "Licensed Since":"2017年", "Renewal Status":"有效，無固定到期日", "Company History":"無交易記錄", "Banking":"有 — 設有獨立客戶帳戶"}},
+     zh_hans:{name:"证监会第4类及第9类牌照 — 提供意见及资产管理", reg:"香港证监会", desc:"第4类及第9类合并牌照，为进驻香港的基金经理最常寻求的牌照组合。",
+       cond:{Jurisdiction:"香港", Regulator:"证券及期货事务监察委员会（证监会）", "Licensed Since":"2017年", "Renewal Status":"有效，无固定到期日", "Company History":"无交易记录", "Banking":"有 — 设有独立客户账户"}}
+   }},
+
+  {ref:"HK-0091", flag:"HK", country:"hk", industry:"sfc", status:"sold", price:2800000,
+   i18n:{
+     en:{name:"SFC Type 1, 4 & 9 — Full Scope", reg:"SFC, Hong Kong", desc:"Full-scope dealing, advising, and asset management licence. This listing has been sold — enquire for similar availability.",
+       cond:{Jurisdiction:"Hong Kong", Regulator:"Securities and Futures Commission", "Licensed Since":"2015", "Renewal Status":"Current, no fixed expiry", "Company History":"No trading history", "Banking":"Yes — segregated client account"}},
+     zh_hant:{name:"證監會第1、4、9類牌照 — 全面業務範圍", reg:"香港證監會", desc:"涵蓋證券交易、提供意見及資產管理的全面牌照。此項目已售出 — 如需同類項目歡迎查詢。",
+       cond:{Jurisdiction:"香港", Regulator:"證券及期貨事務監察委員會（證監會）", "Licensed Since":"2015年", "Renewal Status":"有效，無固定到期日", "Company History":"無交易記錄", "Banking":"有 — 設有獨立客戶帳戶"}},
+     zh_hans:{name:"证监会第1、4、9类牌照 — 全面业务范围", reg:"香港证监会", desc:"涵盖证券交易、提供意见及资产管理的全面牌照。此项目已售出 — 如需同类项目欢迎咨询。",
+       cond:{Jurisdiction:"香港", Regulator:"证券及期货事务监察委员会（证监会）", "Licensed Since":"2015年", "Renewal Status":"有效，无固定到期日", "Company History":"无交易记录", "Banking":"有 — 设有独立客户账户"}}
+   }},
+
+  {ref:"HK-0155", flag:"HK", country:"hk", industry:"lender", status:"available", price:55000,
+   i18n:{
+     en:{name:"Money Lender's Licence", reg:"Registrar of Money Lenders, HK", desc:"A licence under the Money Lenders Ordinance, held by a clean shell with no existing loan book.",
+       cond:{Jurisdiction:"Hong Kong", Regulator:"Registrar of Money Lenders (Companies Registry)", "Licensed Since":"2022", "Renewal Status":"Current, renewed annually", "Company History":"No trading history", "Banking":"Yes"}},
+     zh_hant:{name:"放債人牌照", reg:"放債人註冊處，香港", desc:"根據《放債人條例》發出的牌照，由一家沒有現存貸款賬簿的乾淨空殼公司持有。",
+       cond:{Jurisdiction:"香港", Regulator:"放債人註冊處（公司註冊處）", "Licensed Since":"2022年", "Renewal Status":"有效，每年續期", "Company History":"無交易記錄", "Banking":"有"}},
+     zh_hans:{name:"放债人牌照", reg:"放债人注册处，香港", desc:"根据《放债人条例》发出的牌照，由一家没有现存贷款账簿的干净空壳公司持有。",
+       cond:{Jurisdiction:"香港", Regulator:"放债人注册处（公司注册处）", "Licensed Since":"2022年", "Renewal Status":"有效，每年续期", "Company History":"无交易记录", "Banking":"有"}}
+   }},
+
+  {ref:"US-0034", flag:"US", country:"us", industry:"msb", status:"available", price:28000,
+   i18n:{
+     en:{name:"Money Services Business", reg:"FinCEN, United States", desc:"A federal MSB registration; state-level money transmitter status varies by entity and is confirmed on enquiry.",
+       cond:{Jurisdiction:"United States (federal)", Regulator:"FinCEN", "Licensed Since":"2021", "Renewal Status":"Current, biennial renewal", "Company History":"No trading history", "Banking":"Varies by state — confirmed on enquiry"}},
+     zh_hant:{name:"貨幣服務業務 (MSB)", reg:"美國 FinCEN", desc:"聯邦級 MSB 註冊；各州份的貨幣匯兌牌照狀況因實體而異，查詢時確認。",
+       cond:{Jurisdiction:"美國（聯邦）", Regulator:"FinCEN", "Licensed Since":"2021年", "Renewal Status":"有效，兩年續期一次", "Company History":"無交易記錄", "Banking":"視乎州份而定 — 查詢時確認"}},
+     zh_hans:{name:"货币服务业务 (MSB)", reg:"美国 FinCEN", desc:"联邦级 MSB 注册；各州的货币转账牌照状况因实体而异，咨询时确认。",
+       cond:{Jurisdiction:"美国（联邦）", Regulator:"FinCEN", "Licensed Since":"2021年", "Renewal Status":"有效，两年续期一次", "Company History":"无交易记录", "Banking":"视州而定 — 咨询时确认"}}
+   }},
+
+  {ref:"CA-0021", flag:"CA", country:"ca", industry:"msb", status:"available", price:32000,
+   i18n:{
+     en:{name:"Money Services Business", reg:"FINTRAC, Canada", desc:"A federal FINTRAC MSB registration with provincial scope available on request.",
+       cond:{Jurisdiction:"Canada (federal)", Regulator:"FINTRAC", "Licensed Since":"2020", "Renewal Status":"Current, biennial renewal", "Company History":"No trading history", "Banking":"Yes"}},
+     zh_hant:{name:"貨幣服務業務 (MSB)", reg:"加拿大 FINTRAC", desc:"聯邦級 FINTRAC MSB 註冊，如有需要可提供省級業務範圍。",
+       cond:{Jurisdiction:"加拿大（聯邦）", Regulator:"FINTRAC", "Licensed Since":"2020年", "Renewal Status":"有效，兩年續期一次", "Company History":"無交易記錄", "Banking":"有"}},
+     zh_hans:{name:"货币服务业务 (MSB)", reg:"加拿大 FINTRAC", desc:"联邦级 FINTRAC MSB 注册，如有需要可提供省级业务范围。",
+       cond:{Jurisdiction:"加拿大（联邦）", Regulator:"FINTRAC", "Licensed Since":"2020年", "Renewal Status":"有效，两年续期一次", "Company History":"无交易记录", "Banking":"有"}}
+   }},
+
+  {ref:"AU-0019", flag:"AU", country:"au", industry:"msb", status:"onapp", price:null,
+   i18n:{
+     en:{name:"Money Services Business (Remittance)", reg:"AUSTRAC, Australia", desc:"An AUSTRAC-registered remittance business with existing reporting entity status.",
+       cond:{Jurisdiction:"Australia", Regulator:"AUSTRAC", "Licensed Since":"2022", "Renewal Status":"Current, 3-year renewal cycle", "Company History":"Existing reporting entity status", "Banking":"Yes"}},
+     zh_hant:{name:"貨幣服務業務（匯款）", reg:"澳洲 AUSTRAC", desc:"已於 AUSTRAC 註冊的匯款業務，並已具備申報實體身份。",
+       cond:{Jurisdiction:"澳洲", Regulator:"AUSTRAC", "Licensed Since":"2022年", "Renewal Status":"有效，三年續期一次", "Company History":"已具備申報實體身份", "Banking":"有"}},
+     zh_hans:{name:"货币服务业务（汇款）", reg:"澳大利亚 AUSTRAC", desc:"已于 AUSTRAC 注册的汇款业务，并已具备申报实体身份。",
+       cond:{Jurisdiction:"澳大利亚", Regulator:"AUSTRAC", "Licensed Since":"2022年", "Renewal Status":"有效，三年续期一次", "Company History":"已具备申报实体身份", "Banking":"有"}}
+   }},
+
+  {ref:"AU-0027", flag:"AU", country:"au", industry:"dce", status:"available", price:140000,
+   i18n:{
+     en:{name:"DCE / VASP Registration", reg:"AUSTRAC, Australia", desc:"A Digital Currency Exchange / Virtual Asset Service Provider registration with AML/CTF program in place.",
+       cond:{Jurisdiction:"Australia", Regulator:"AUSTRAC", "Licensed Since":"2023", "Renewal Status":"Current, 3-year renewal cycle", "Company History":"No trading history", "Banking":"Yes"}},
+     zh_hant:{name:"DCE／VASP 註冊", reg:"澳洲 AUSTRAC", desc:"數碼貨幣交易平台／虛擬資產服務提供者註冊，並已設有反洗錢及反恐怖分子資金籌集計劃。",
+       cond:{Jurisdiction:"澳洲", Regulator:"AUSTRAC", "Licensed Since":"2023年", "Renewal Status":"有效，三年續期一次", "Company History":"無交易記錄", "Banking":"有"}},
+     zh_hans:{name:"DCE／VASP 注册", reg:"澳大利亚 AUSTRAC", desc:"数字货币交易平台／虚拟资产服务提供者注册，并已设有反洗钱及反恐怖融资计划。",
+       cond:{Jurisdiction:"澳大利亚", Regulator:"AUSTRAC", "Licensed Since":"2023年", "Renewal Status":"有效，三年续期一次", "Company History":"无交易记录", "Banking":"有"}}
+   }},
+
+  {ref:"HK-0064", flag:"HK", country:"hk", industry:"mso", status:"sold", price:29000,
+   i18n:{
+     en:{name:"Money Service Operator Licence", reg:"C&ED, Hong Kong", desc:"An MSO licence held by a clean Hong Kong shell company. This listing has been sold — enquire for similar availability.",
+       cond:{Jurisdiction:"Hong Kong", Regulator:"Customs & Excise Department", "Licensed Since":"2018", "Renewal Status":"Current, 2-year renewal cycle", "Company History":"No trading history", "Banking":"Yes"}},
+     zh_hant:{name:"貨幣服務經營者牌照 (MSO)", reg:"香港海關", desc:"由一家乾淨的香港空殼公司持有的 MSO 牌照。此項目已售出 — 如需同類項目歡迎查詢。",
+       cond:{Jurisdiction:"香港", Regulator:"香港海關", "Licensed Since":"2018年", "Renewal Status":"有效，兩年續期一次", "Company History":"無交易記錄", "Banking":"有"}},
+     zh_hans:{name:"货币服务经营者牌照 (MSO)", reg:"香港海关", desc:"由一家干净的香港空壳公司持有的 MSO 牌照。此项目已售出 — 如需同类项目欢迎咨询。",
+       cond:{Jurisdiction:"香港", Regulator:"香港海关", "Licensed Since":"2018年", "Renewal Status":"有效，两年续期一次", "Company History":"无交易记录", "Banking":"有"}}
+   }}
+];
+
+let activeIndustry = "all", activeCountry = "all";
+
+function t(key){ return UI[LANG][key]; }
+
+function fmtPrice(p, status){
+  if(status === 'sold') return t('sold_label');
+  if(p === null) return '<span class="poa">' + t('price_on_app') + '</span>';
+  return 'USD ' + p.toLocaleString('en-US');
+}
+
+function applyStaticI18n(){
+  document.documentElement.lang = LANG === 'en' ? 'en' : (LANG === 'zh_hant' ? 'zh-Hant' : 'zh-Hans');
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if(UI[LANG][key] !== undefined) el.textContent = UI[LANG][key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if(UI[LANG][key] !== undefined) el.placeholder = UI[LANG][key];
+  });
+}
+
+function switchLang(lang){
+  LANG = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+  applyStaticI18n();
+  render();
+}
+
+document.getElementById('langSwitch').addEventListener('click', e => {
+  const btn = e.target.closest('.lang-btn');
+  if(!btn) return;
+  switchLang(btn.dataset.lang);
+});
+
+document.getElementById('submitEnquiryBtn').addEventListener('click', () => {
+  alert(t('form_preview_alert'));
+});
+
+function render(){
+  const grid = document.getElementById('productGrid');
+  const filtered = listings.filter(l =>
+    (activeIndustry === 'all' || l.industry === activeIndustry) &&
+    (activeCountry === 'all' || l.country === activeCountry)
+  );
+  document.getElementById('countNote').textContent = t('count_note')(filtered.length);
+
+  if(filtered.length === 0){
+    grid.innerHTML = '<div class="no-results">' + t('no_results') + '<a href="' + WHATSAPP_URL + '" target="_blank" style="color:var(--gold);border-bottom:1px solid var(--gold);">' + t('no_results_link') + '</a>.</div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map((l, i) => {
+    const tr = l.i18n[LANG];
+    return `
+    <div class="card ${l.status === 'sold' ? 'is-sold' : ''}" onclick="openModal('${l.ref}')" style="transition-delay:${Math.min(i,8)*0.06}s">
+      <div class="card-top">
+        <span class="card-flag">${l.flag}</span>
+        <span class="card-ref">${l.ref}</span>
+      </div>
+      <div class="card-body">
+        <span class="card-industry">${industryLabel[LANG][l.industry]}</span>
+        <h3>${tr.name}</h3>
+        <p class="card-reg">${tr.reg}</p>
+      </div>
+      <div class="card-price" data-price="${l.price ?? ''}" data-status="${l.status}">${l.status === 'sold' || l.price === null ? fmtPrice(l.price, l.status) : 'USD 0'}</div>
+      <div class="card-foot">
+        <span class="status-tag ${l.status}">${statusLabel[LANG][l.status]}</span>
+        <span class="card-link">${t('view_details')}</span>
+      </div>
+    </div>
+  `;
+  }).join('');
+  observeCards();
+}
+
+function observeCards(){
+  const cards = document.querySelectorAll('#productGrid .card');
+  cards.forEach(card => cardObserver.observe(card));
+}
+
+const cardObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add('in-view');
+      const priceEl = entry.target.querySelector('.card-price');
+      if(priceEl && priceEl.dataset.status !== 'sold' && priceEl.dataset.price){
+        animatePrice(priceEl, parseInt(priceEl.dataset.price, 10));
+      }
+      cardObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+
+function animatePrice(el, target){
+  const duration = 900;
+  const start = performance.now();
+  function tick(now){
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const value = Math.round(target * eased);
+    el.textContent = 'USD ' + value.toLocaleString('en-US');
+    if(progress < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function openModal(ref){
+  const l = listings.find(x => x.ref === ref);
+  if(!l) return;
+  const tr = l.i18n[LANG];
+  const rows = Object.entries(tr.cond).map(([k,v]) => `<tr><td>${condLabels[LANG][k]}</td><td>${v}</td></tr>`).join('');
+  const inc = (included[LANG][l.industry] || []).map((i, idx) => `<li style="animation-delay:${idx*0.06}s">${i}</li>`).join('');
+  const faq = faqDefault[LANG].map(f => `<div class="faq-item"><div class="q">${f.q}</div><div class="a">${f.a}</div></div>`).join('');
+  const waListingUrl = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent("Say Hi");
+
+  document.getElementById('modalContent').innerHTML = `
+    <div class="modal-head">
+      <div>
+        <div class="modal-head-left">
+          <span class="card-flag">${l.flag}</span>
+          <span class="status-tag ${l.status}" style="background:rgba(255,255,255,0.15);color:#fff;">${statusLabel[LANG][l.status]}</span>
+        </div>
+        <h2>${tr.name}</h2>
+        <div class="modal-meta">${industryLabel[LANG][l.industry]} · ${tr.reg} · ${t('ref_label')} ${l.ref}</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-price-row">
+        <div class="modal-price">${fmtPrice(l.price, l.status)}</div>
+      </div>
+      <table class="cond-table">${rows}</table>
+      <p>${tr.desc}</p>
+      <h3>${t('included_title')}</h3>
+      <ul class="check-list">${inc}</ul>
+      <h3>${t('faq_title')}</h3>
+      ${faq}
+      <div class="modal-cta-row">
+        <a href="${waListingUrl}" target="_blank" rel="noopener" class="wa-btn" style="padding:13px 22px;font-size:14.5px;">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.87 9.87 0 0 0 12.04 2z"/></svg>
+          ${l.status === 'sold' ? t('ask_similar') : t('reserve_wa')}
+        </a>
+        <a href="#contact" onclick="closeModal()" class="btn-ghost" style="color:var(--navy-950);border-color:var(--line);">${t('enquire_email')}</a>
+      </div>
+      <div class="asset-id">${t('asset_label')} ${l.ref}</div>
+    </div>
+  `;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+document.getElementById('modalOverlay').addEventListener('click', (e) => {
+  if(e.target.id === 'modalOverlay') closeModal();
+});
+
+document.getElementById('industryPills').addEventListener('click', e => {
+  if(!e.target.classList.contains('pill')) return;
+  activeIndustry = e.target.dataset.industry;
+  document.querySelectorAll('#industryPills .pill').forEach(p=>p.classList.remove('active'));
+  e.target.classList.add('active');
+  render();
+});
+document.getElementById('countryPills').addEventListener('click', e => {
+  if(!e.target.classList.contains('pill')) return;
+  activeCountry = e.target.dataset.country;
+  document.querySelectorAll('#countryPills .pill').forEach(p=>p.classList.remove('active'));
+  e.target.classList.add('active');
+  render();
+});
+document.getElementById('resetFilters').addEventListener('click', () => {
+  activeIndustry = 'all'; activeCountry = 'all';
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  document.querySelector('#industryPills .pill[data-industry="all"]').classList.add('active');
+  document.querySelector('#countryPills .pill[data-country="all"]').classList.add('active');
+  render();
+});
+
+// generic reveal-on-scroll for section heads and scratch cards
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add('in-view');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach((el, i) => {
+  el.style.transitionDelay = (i % 4) * 0.08 + 's';
+  revealObserver.observe(el);
+});
+
+// header shrink on scroll
+const headerEl = document.querySelector('header');
+window.addEventListener('scroll', () => {
+  headerEl.classList.toggle('scrolled', window.scrollY > 24);
+}, { passive: true });
+
+// subtle parallax on the hero skyline
+const heroBg = document.querySelector('.hero-bg');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  if(y < 700 && heroBg) heroBg.style.transform = 'translateY(' + (y * 0.18) + 'px)';
+}, { passive: true });
+
+applyStaticI18n();
+render();
+</script>
+
+</body>
+</html>

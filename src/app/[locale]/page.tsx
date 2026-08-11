@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import InquiryForm from '@/components/InquiryForm';
+import HomeAnimations from '@/components/HomeAnimations';
 import { prisma } from '@/lib/prisma';
 import { OrgJsonLd } from '@/components/JsonLd';
 
@@ -86,14 +87,21 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
     <>
       <OrgJsonLd />
       <SiteHeader locale={locale} waNumber={waNumber} />
+      <HomeAnimations />
       <main>
         {/* ══ HERO ══ */}
         <section style={{ position: 'relative', minHeight: 640, display: 'flex', alignItems: 'center', overflow: 'hidden', backgroundColor: '#0F2557' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="https://images.unsplash.com/photo-1507941097613-9f2157b69235?w=1600&q=80" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 55%', zIndex: 0 }} />
+          <img src="https://images.unsplash.com/photo-1507941097613-9f2157b69235?w=1600&q=80" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 55%', zIndex: 0 }} className="hero-img" />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(105deg,rgba(9,26,62,.88) 0%,rgba(9,26,62,.75) 55%,rgba(9,26,62,.3) 100%)', zIndex: 1 }} />
+          {/* Floating particles */}
+          <div aria-hidden="true" className="hero-particle p1" />
+          <div aria-hidden="true" className="hero-particle p2" />
+          <div aria-hidden="true" className="hero-particle p3" />
+          <div aria-hidden="true" className="hero-particle p4" />
+          <div aria-hidden="true" className="hero-particle p5" />
           <div style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: 1200, margin: '0 auto', padding: '80px 60px', display: 'grid', gridTemplateColumns: '1fr 340px', gap: 60, alignItems: 'center' }} className="hero-inner">
-            <div>
+            <div className="reveal" style={{ transitionDelay: '0.1s' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
                 <div style={{ width: 32, height: 2, background: '#C9A84C' }} />
                 <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.7rem', fontWeight: 700, letterSpacing: '.2em', color: '#E8D28A', textTransform: 'uppercase' }}>
@@ -121,13 +129,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
               {/* Stats */}
               <div className="hero-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 1, background: 'rgba(255,255,255,.15)', border: '1px solid rgba(255,255,255,.15)', marginTop: 40 }}>
                 {[
-                  { num: '4', label: isEn ? 'Core Divisions' : isSc ? '核心业务' : '核心業務' },
-                  { num: '10+', label: isEn ? 'Years Experience' : isSc ? '年行业经验' : '年行業經驗' },
-                  { num: 'HK+GBA', label: isEn ? 'Coverage' : isSc ? '服务范围' : '服務範圍' },
+                  { num: '4', label: isEn ? 'Core Divisions' : isSc ? '核心业务' : '核心業務', count: 4, suffix: '' },
+                  { num: '10+', label: isEn ? 'Years Experience' : isSc ? '年行业经验' : '年行業經驗', count: 10, suffix: '+' },
+                  { num: 'HK+GBA', label: isEn ? 'Coverage' : isSc ? '服务范围' : '服務範圍', count: null, suffix: '' },
                 ].map(s => (
                   <div key={s.num} style={{ background: 'rgba(9,26,62,.6)', padding: '18px 16px', textAlign: 'center' }}>
                     <div style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: '1.8rem', color: '#fff', lineHeight: 1 }}>
-                      {s.num.includes('+') ? <>{s.num.replace('+', '')}<em style={{ color: '#EF4444', fontStyle: 'normal' }}>+</em></> : s.num}
+                      {s.count !== null
+                        ? <span data-count={s.count} data-suffix={s.suffix}>{s.num}</span>
+                        : <>{s.num.split('+').map((part, i, arr) => i < arr.length - 1 ? <span key={i}>{part}<em style={{ color: '#EF4444', fontStyle: 'normal' }}>+</em></span> : <span key={i}>{part}</span>)}</>
+                      }
                     </div>
                     <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.75rem', color: '#94A3B8', marginTop: 4 }}>{s.label}</div>
                   </div>
@@ -136,7 +147,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
             </div>
 
             {/* Quick nav card */}
-            <div style={{ background: 'rgba(255,255,255,.06)', border: '1px solid rgba(255,255,255,.15)', padding: '28px 24px', backdropFilter: 'blur(8px)' }} className="hero-card">
+            <div style={{ background: 'rgba(255,255,255,.06)', border: '1px solid rgba(255,255,255,.15)', padding: '28px 24px', backdropFilter: 'blur(8px)', transitionDelay: '0.3s' }} className="hero-card reveal">
               <div style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.7rem', fontWeight: 700, letterSpacing: '.15em', color: '#C9A84C', textTransform: 'uppercase', marginBottom: 16, paddingBottom: 12, borderBottom: '1px solid rgba(255,255,255,.15)' }}>
                 {isEn ? 'Quick Service Navigator' : isSc ? '快速服务导航' : '快速服務導航'}
               </div>
@@ -196,7 +207,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
               isEn ? '10+ Years Industry Experience' : isSc ? '10+ 年行业经验' : '10+ 年行業經驗',
             ].map((label, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.83rem', color: '#64748B' }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" strokeWidth="2">
+                <svg className="trust-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" strokeWidth="2">
                   <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
                 {label}
@@ -208,7 +219,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         {/* ══ FOUR DIVISIONS ══ */}
         <section style={{ padding: '80px 0' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
-            <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <div style={{ textAlign: 'center', marginBottom: 48 }} className="reveal">
               <span style={sectionLabel}>{isEn ? 'WHAT WE DO' : isSc ? '我们的业务' : '我們的業務'}</span>
               <h2 style={sectionTitle}>{isEn ? 'Four Core Divisions' : isSc ? '四大核心业务' : '四大核心業務'}</h2>
               <div style={goldBar} />
@@ -244,11 +255,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
                   href: '/tech',
                 },
               ].map((div, i) => (
-                <a key={i} href={div.href} style={{
+                <a key={i} href={div.href} className={`div-card reveal`} style={{
                   padding: '36px 28px', borderRight: i < 3 ? '1px solid #E2E8F0' : 'none',
-                  borderBottom: '1px solid #E2E8F0', position: 'relative',
-                  transition: 'background .2s', cursor: 'pointer', textDecoration: 'none',
-                  display: 'block', background: '#fff',
+                  borderBottom: '3px solid transparent', position: 'relative',
+                  transition: 'all .3s ease', cursor: 'pointer', textDecoration: 'none',
+                  display: 'block', background: '#fff', transitionDelay: `${i * 0.1}s`,
                 }}>
                   <div style={{ width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18, color: '#EF4444' }}>
                     {div.icon}
@@ -286,7 +297,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         <section style={{ padding: '80px 0' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
             <div className="why-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 60, alignItems: 'start' }}>
-              <div>
+              <div className="reveal">
                 <span style={sectionLabel}>{isEn ? 'OUR ADVANTAGE' : isSc ? '我们的优势' : '我們的優勢'}</span>
                 <h2 style={{ ...sectionTitle, marginBottom: 6 }} dangerouslySetInnerHTML={{ __html: isEn ? 'Why Choose<br/>Sandbox Group?' : isSc ? '为什么选择<br/>Sandbox Group？' : '為什麼選擇<br/>Sandbox Group？' }} />
                 <div style={goldBar} />
@@ -309,8 +320,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
                   { num: '02', title: isEn ? 'One-stop Service' : isSc ? '一站式服务' : '一站式服務', desc: isEn ? 'Licensing, ongoing compliance, corporate services and technology — all under one roof.' : isSc ? '牌照、持续合规、企业服务及科技——尽在一处。' : '牌照、持續合規、企業服務及科技——盡在一處。' },
                   { num: '03', title: isEn ? 'Practical & Efficient' : isSc ? '务实高效' : '務實高效', desc: isEn ? 'Actionable solutions tailored to real business operations, not abstract frameworks.' : isSc ? '针对实际业务运作提供可执行方案，而非抽象框架。' : '針對實際業務運作提供可執行方案，而非抽象框架。' },
                   { num: '04', title: isEn ? 'Cost-effective' : isSc ? '具成本效益' : '具成本效益', desc: isEn ? 'Leveraging compliance technology to deliver above-market standards at competitive fees.' : isSc ? '借助合规科技以具竞争力的费用提供超越市场水准的服务。' : '借助合規科技以具競爭力的費用提供超越市場水準的服務。' },
-                ].map(adv => (
-                  <div key={adv.num} style={{ background: '#fff', padding: '28px 24px' }}>
+                ].map((adv, i) => (
+                  <div key={adv.num} className="reveal" style={{ background: '#fff', padding: '28px 24px', transitionDelay: `${i * 0.1}s` }}>
                     <div style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: '2rem', color: '#C9A84C', lineHeight: 1, marginBottom: 10 }}>{adv.num}</div>
                     <h4 style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.93rem', color: '#0F2557', marginBottom: 8 }}>{adv.title}</h4>
                     <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.82rem', color: '#64748B', lineHeight: 1.8 }}>{adv.desc}</p>
@@ -339,10 +350,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
                 { href: '/corporate', icon: <CorporateIcon />, en: 'One-stop Corporate', zh: isSc ? '一站式企业服务' : '一站式企業服務', desc: isEn ? 'Company incorporation, company secretary, accounting, TCSP licence and fund setup.' : isSc ? '公司注册、公司秘书、会计、TCSP 牌照及基金设立。' : '公司註冊、公司秘書、會計、TCSP 牌照及基金設立。' },
                 { href: '/tech', icon: <TechIcon />, en: 'Compliance Technology', zh: isSc ? '合规科技' : '合規科技', desc: isEn ? 'AML transaction monitoring, KYC/CDD client management and automated STR reports.' : isSc ? 'AML 交易监察、KYC/CDD 客户管理及 STR 自动报告。' : 'AML 交易監察、KYC/CDD 客戶管理及 STR 自動報告。' },
                 { href: '/corporate/hr', icon: <HrIcon />, en: 'HR & Visa', zh: isSc ? '人才及签证' : '人才及簽證', desc: isEn ? 'Compliance talent recruitment, executive search and HK work visa applications.' : isSc ? '合规人才招聘、高管搜寻及香港工作签证申请。' : '合規人才招聘、高管搜尋及香港工作簽證申請。' },
-              ].map(svc => (
-                <a key={svc.href} href={svc.href} style={{
-                  background: '#091A3E', padding: '32px 28px', transition: 'background .2s',
-                  cursor: 'pointer', textDecoration: 'none', display: 'block',
+              ].map((svc, i) => (
+                <a key={svc.href} href={svc.href} className="svc-card reveal" style={{
+                  background: '#091A3E', padding: '32px 28px', transition: 'all .3s ease',
+                  cursor: 'pointer', textDecoration: 'none', display: 'block', transitionDelay: `${i * 0.08}s`,
                 }}>
                   <div style={{ width: 36, height: 36, color: '#C9A84C', marginBottom: 16 }}>{svc.icon}</div>
                   <h3 style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 700, fontSize: '.95rem', color: '#fff', marginBottom: 6, letterSpacing: '.02em' }}>{svc.en}</h3>
@@ -373,7 +384,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
                 { title: isEn ? 'Regulatory Follow-up' : isSc ? '监管跟进' : '監管跟進', desc: isEn ? 'We liaise with HKCED, SFC and other regulators on your behalf.' : isSc ? '代表您与 HKCED、SFC 及其他监管机构沟通。' : '代表您與 HKCED、SFC 及其他監管機構溝通。' },
                 { title: isEn ? 'Post-approval Support' : isSc ? '批准后支援' : '批准後支援', desc: isEn ? 'Ongoing compliance, AML audits, annual filings and staff training.' : isSc ? '持续合规、AML 审计、年度申报及员工培训。' : '持續合規、AML 審計、年度申報及員工培訓。' },
               ].map((step, i) => (
-                <div key={i} style={{ position: 'relative', padding: '32px 24px', border: '1px solid #E2E8F0', background: '#fff', marginRight: -1, marginBottom: -1 }}>
+                <div key={i} className="reveal" style={{ position: 'relative', padding: '32px 24px', border: '1px solid #E2E8F0', background: '#fff', marginRight: -1, marginBottom: -1, transitionDelay: `${i * 0.1}s` }}>
                   <div style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: '2.5rem', color: '#E2E8F0', lineHeight: 1, marginBottom: 12 }}>
                     {String(i + 1).padStart(2, '0')}
                   </div>
@@ -451,7 +462,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         )}
 
         {/* ══ CTA BANNER ══ */}
-        <section style={{ background: '#EF4444', padding: '60px 0' }}>
+        <section className="cta-banner" style={{ background: '#EF4444', padding: '60px 0' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 32, flexWrap: 'wrap' }}>
             <div>
               <h2 style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: 'clamp(1.2rem,2.5vw,1.7rem)', color: '#fff' }}>
@@ -499,42 +510,95 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
       <SiteFooter locale={locale} waNumber={waNumber} />
 
       <style>{`
+        /* ── Ticker ── */
         @keyframes ticker-scroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
-        /* Hero */
+        /* ── Scroll reveal ── */
+        .reveal {
+          opacity: 0;
+          transform: translateY(28px);
+          transition: opacity 0.65s ease, transform 0.65s ease;
+        }
+        .reveal.revealed {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        /* ── Hero image subtle zoom ── */
+        @keyframes hero-zoom { from{transform:scale(1)} to{transform:scale(1.06)} }
+        .hero-img { animation: hero-zoom 14s ease-in-out infinite alternate; }
+
+        /* ── Floating particles ── */
+        @keyframes float-up {
+          0%   { transform: translateY(0) rotate(0deg); opacity: 0.15; }
+          50%  { opacity: 0.35; }
+          100% { transform: translateY(-120px) rotate(180deg); opacity: 0; }
+        }
+        .hero-particle {
+          position: absolute;
+          border-radius: 50%;
+          pointer-events: none;
+          z-index: 1;
+          animation: float-up linear infinite;
+        }
+        .hero-particle.p1 { width: 60px; height: 60px; background: rgba(201,168,76,.2); bottom: 20%; left: 12%; animation-duration: 9s; animation-delay: 0s; }
+        .hero-particle.p2 { width: 90px; height: 90px; background: rgba(239,68,68,.12); bottom: 10%; left: 30%; animation-duration: 13s; animation-delay: -4s; }
+        .hero-particle.p3 { width: 40px; height: 40px; background: rgba(255,255,255,.1); bottom: 30%; left: 55%; animation-duration: 7s; animation-delay: -2s; }
+        .hero-particle.p4 { width: 70px; height: 70px; background: rgba(201,168,76,.15); bottom: 5%; left: 70%; animation-duration: 11s; animation-delay: -6s; }
+        .hero-particle.p5 { width: 50px; height: 50px; background: rgba(239,68,68,.1); bottom: 40%; left: 85%; animation-duration: 8s; animation-delay: -1s; }
+
+        /* ── Division cards hover glow (CSS fallback) ── */
+        .div-card { transition: all .3s ease; }
+
+        /* ── Service cards hover (CSS fallback) ── */
+        .svc-card { transition: all .3s ease; }
+
+        /* ── CTA banner shimmer ── */
+        @keyframes shimmer-slide {
+          0%   { transform: translateX(-100%) skewX(-15deg); }
+          100% { transform: translateX(300%) skewX(-15deg); }
+        }
+        .cta-banner { position: relative; overflow: hidden; }
+        .cta-banner::after {
+          content: '';
+          position: absolute;
+          top: 0; left: 0;
+          width: 40%; height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+          animation: shimmer-slide 3.5s ease-in-out infinite;
+          pointer-events: none;
+        }
+
+        /* ── Trust bar pulse icons ── */
+        @keyframes pulse-dot {
+          0%, 100% { transform: scale(1); }
+          50%       { transform: scale(1.2); }
+        }
+        .trust-icon { animation: pulse-dot 2.5s ease-in-out infinite; }
+
+        /* ── Section heading underline grow ── */
+        @keyframes bar-grow { from{width:0} to{width:44px} }
+        .gold-bar-anim { animation: bar-grow .8s ease forwards; animation-play-state: paused; }
+        .reveal.revealed .gold-bar-anim { animation-play-state: running; }
+
+        /* ── Responsive ── */
         @media(max-width:768px){
           .hero-inner{grid-template-columns:1fr!important;padding:56px 20px 48px!important}
           .hero-card{display:none!important}
           .hero-stats{grid-template-columns:repeat(3,1fr)!important}
-        }
-
-        /* Four divisions */
-        @media(max-width:768px){
           .divisions-grid{grid-template-columns:1fr 1fr!important}
           .divisions-grid a{border-right:1px solid #E2E8F0!important}
+          .why-grid{grid-template-columns:1fr!important;gap:40px!important}
+          .why-cards{grid-template-columns:1fr 1fr!important}
+          .services-grid{grid-template-columns:1fr 1fr!important}
+          .articles-grid{grid-template-columns:1fr!important}
         }
         @media(max-width:480px){
           .divisions-grid{grid-template-columns:1fr!important}
-        }
-
-        /* Why choose us */
-        @media(max-width:768px){
-          .why-grid{grid-template-columns:1fr!important;gap:40px!important}
-          .why-cards{grid-template-columns:1fr 1fr!important}
-        }
-        @media(max-width:480px){
           .why-cards{grid-template-columns:1fr!important}
-        }
-
-        /* Services grid */
-        @media(max-width:768px){
-          .services-grid{grid-template-columns:1fr 1fr!important}
-        }
-        @media(max-width:480px){
           .services-grid{grid-template-columns:1fr!important}
+          .hero-particle{display:none}
         }
-
-        /* 5-step process */
         @media(max-width:900px){
           .steps-grid{grid-template-columns:1fr 1fr!important}
         }
@@ -542,12 +606,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
           .steps-grid{grid-template-columns:1fr!important}
         }
 
-        /* Articles */
-        @media(max-width:768px){
-          .articles-grid{grid-template-columns:1fr!important}
-        }
-
-        /* Prevent horizontal scroll site-wide */
         body{overflow-x:hidden}
       `}</style>
     </>
