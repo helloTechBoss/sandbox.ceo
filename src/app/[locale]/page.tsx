@@ -86,6 +86,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
   return (
     <>
       <OrgJsonLd />
+      {/* Scroll progress bar */}
+      <div id="sb-progress" aria-hidden="true" style={{ position:'fixed', top:0, left:0, height:3, width:0, background:'linear-gradient(90deg,#EF4444,#C9A84C)', zIndex:9999, transition:'width .1s linear', pointerEvents:'none' }} />
       <SiteHeader locale={locale} waNumber={waNumber} />
       <HomeAnimations />
       <main>
@@ -94,6 +96,12 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="https://images.unsplash.com/photo-1507941097613-9f2157b69235?w=1600&q=80" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 55%', zIndex: 0 }} className="hero-img" />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(105deg,rgba(9,26,62,.88) 0%,rgba(9,26,62,.75) 55%,rgba(9,26,62,.3) 100%)', zIndex: 1 }} />
+          {/* Animated gradient blobs */}
+          <div className="hero-glow" aria-hidden="true">
+            <i /><i /><i />
+          </div>
+          {/* Floating dust */}
+          <div className="hero-dust" aria-hidden="true" />
           {/* Floating particles */}
           <div aria-hidden="true" className="hero-particle p1" />
           <div aria-hidden="true" className="hero-particle p2" />
@@ -514,72 +522,69 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         @keyframes ticker-scroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
         /* ── Scroll reveal ── */
-        .reveal {
-          opacity: 0;
-          transform: translateY(28px);
-          transition: opacity 0.65s ease, transform 0.65s ease;
-        }
-        .reveal.revealed {
-          opacity: 1;
-          transform: translateY(0);
-        }
+        .reveal { opacity:0; transform:translateY(28px); transition:opacity .65s ease,transform .65s ease; }
+        .reveal.revealed { opacity:1; transform:translateY(0); }
 
         /* ── Hero image subtle zoom ── */
         @keyframes hero-zoom { from{transform:scale(1)} to{transform:scale(1.06)} }
         .hero-img { animation: hero-zoom 14s ease-in-out infinite alternate; }
 
+        /* ── Hero gradient blobs ── */
+        .hero-glow { position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1;will-change:transform;transition:transform .1s ease-out; }
+        .hero-glow i { position:absolute;border-radius:50%;filter:blur(70px);opacity:.45; }
+        .hero-glow i:nth-child(1) { width:520px;height:520px;left:-140px;top:-160px;background:radial-gradient(circle,rgba(239,68,68,.4),transparent 65%);animation:blob1 18s ease-in-out infinite alternate; }
+        .hero-glow i:nth-child(2) { width:640px;height:640px;right:-180px;bottom:-260px;background:radial-gradient(circle,rgba(15,37,87,.6),transparent 65%);animation:blob2 22s ease-in-out infinite alternate; }
+        .hero-glow i:nth-child(3) { width:380px;height:380px;left:38%;top:30%;background:radial-gradient(circle,rgba(201,168,76,.28),transparent 60%);animation:blob3 16s ease-in-out infinite alternate; }
+        @keyframes blob1 { from{transform:translate(0,0) scale(1)} to{transform:translate(90px,60px) scale(1.15)} }
+        @keyframes blob2 { from{transform:translate(0,0) scale(1)} to{transform:translate(-110px,-70px) scale(1.12)} }
+        @keyframes blob3 { from{transform:translate(0,0)} to{transform:translate(-70px,50px)} }
+
+        /* ── Hero dust particles ── */
+        .hero-dust { position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden; }
+        .hero-dust i { position:absolute;bottom:-10px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.9),rgba(201,168,76,0) 70%);animation:sb-rise linear infinite;opacity:0; }
+        @keyframes sb-rise { 0%{transform:translateY(0) translateX(0);opacity:0} 10%{opacity:.7} 90%{opacity:.15} 100%{transform:translateY(-620px) translateX(var(--dx,20px));opacity:0} }
+
         /* ── Floating particles ── */
-        @keyframes float-up {
-          0%   { transform: translateY(0) rotate(0deg); opacity: 0.15; }
-          50%  { opacity: 0.35; }
-          100% { transform: translateY(-120px) rotate(180deg); opacity: 0; }
-        }
-        .hero-particle {
-          position: absolute;
-          border-radius: 50%;
-          pointer-events: none;
-          z-index: 1;
-          animation: float-up linear infinite;
-        }
-        .hero-particle.p1 { width: 60px; height: 60px; background: rgba(201,168,76,.2); bottom: 20%; left: 12%; animation-duration: 9s; animation-delay: 0s; }
-        .hero-particle.p2 { width: 90px; height: 90px; background: rgba(239,68,68,.12); bottom: 10%; left: 30%; animation-duration: 13s; animation-delay: -4s; }
-        .hero-particle.p3 { width: 40px; height: 40px; background: rgba(255,255,255,.1); bottom: 30%; left: 55%; animation-duration: 7s; animation-delay: -2s; }
-        .hero-particle.p4 { width: 70px; height: 70px; background: rgba(201,168,76,.15); bottom: 5%; left: 70%; animation-duration: 11s; animation-delay: -6s; }
-        .hero-particle.p5 { width: 50px; height: 50px; background: rgba(239,68,68,.1); bottom: 40%; left: 85%; animation-duration: 8s; animation-delay: -1s; }
+        @keyframes float-up { 0%{transform:translateY(0) rotate(0deg);opacity:.15} 50%{opacity:.35} 100%{transform:translateY(-120px) rotate(180deg);opacity:0} }
+        .hero-particle { position:absolute;border-radius:50%;pointer-events:none;z-index:1;animation:float-up linear infinite; }
+        .hero-particle.p1 { width:60px;height:60px;background:rgba(201,168,76,.2);bottom:20%;left:12%;animation-duration:9s; }
+        .hero-particle.p2 { width:90px;height:90px;background:rgba(239,68,68,.12);bottom:10%;left:30%;animation-duration:13s;animation-delay:-4s; }
+        .hero-particle.p3 { width:40px;height:40px;background:rgba(255,255,255,.1);bottom:30%;left:55%;animation-duration:7s;animation-delay:-2s; }
+        .hero-particle.p4 { width:70px;height:70px;background:rgba(201,168,76,.15);bottom:5%;left:70%;animation-duration:11s;animation-delay:-6s; }
+        .hero-particle.p5 { width:50px;height:50px;background:rgba(239,68,68,.1);bottom:40%;left:85%;animation-duration:8s;animation-delay:-1s; }
 
-        /* ── Division cards hover glow (CSS fallback) ── */
-        .div-card { transition: all .3s ease; }
+        /* ── Custom cursor ── */
+        .sb-cur-dot { position:fixed;top:0;left:0;width:8px;height:8px;border-radius:50%;background:#EF4444;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .18s,height .18s,background .18s; }
+        .sb-cur-ring { position:fixed;top:0;left:0;width:36px;height:36px;border-radius:50%;border:1.5px solid rgba(201,168,76,.55);pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .22s,height .22s,border-color .22s; }
+        body.sb-cur-hover .sb-cur-dot { width:14px;height:14px;background:#C9A84C; }
+        body.sb-cur-hover .sb-cur-ring { width:54px;height:54px;border-color:rgba(201,168,76,.9); }
 
-        /* ── Service cards hover (CSS fallback) ── */
-        .svc-card { transition: all .3s ease; }
+        /* ── Click ripple ring ── */
+        .sb-click-fx { position:fixed;border-radius:50%;border:2px solid #EF4444;pointer-events:none;z-index:99997;transform:translate(-50%,-50%);animation:sb-clickfx .55s cubic-bezier(.22,.9,.3,1) forwards; }
+        @keyframes sb-clickfx { from{width:10px;height:10px;opacity:.9} to{width:72px;height:72px;opacity:0} }
+
+        /* ── Div / svc cards ── */
+        .div-card { transition:box-shadow .3s ease,border-bottom .3s ease; }
+        .svc-card { transition:background .3s ease,box-shadow .3s ease,transform .3s ease; }
+
+        /* ── CTA buttons shimmer + lift ── */
+        .magnet-btn { position:relative;overflow:hidden;transition:transform .15s ease,box-shadow .15s ease,background .2s; }
+        .magnet-btn::after { content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);animation:sb-shine 3.8s ease-in-out infinite;pointer-events:none; }
+        @keyframes sb-shine { 0%,60%{left:-80%} 85%,100%{left:130%} }
 
         /* ── CTA banner shimmer ── */
-        @keyframes shimmer-slide {
-          0%   { transform: translateX(-100%) skewX(-15deg); }
-          100% { transform: translateX(300%) skewX(-15deg); }
-        }
-        .cta-banner { position: relative; overflow: hidden; }
-        .cta-banner::after {
-          content: '';
-          position: absolute;
-          top: 0; left: 0;
-          width: 40%; height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
-          animation: shimmer-slide 3.5s ease-in-out infinite;
-          pointer-events: none;
-        }
+        @keyframes shimmer-slide { 0%{transform:translateX(-100%) skewX(-15deg)} 100%{transform:translateX(300%) skewX(-15deg)} }
+        .cta-banner { position:relative;overflow:hidden; }
+        .cta-banner::after { content:'';position:absolute;top:0;left:0;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);animation:shimmer-slide 3.5s ease-in-out infinite;pointer-events:none; }
 
         /* ── Trust bar pulse icons ── */
-        @keyframes pulse-dot {
-          0%, 100% { transform: scale(1); }
-          50%       { transform: scale(1.2); }
-        }
-        .trust-icon { animation: pulse-dot 2.5s ease-in-out infinite; }
+        @keyframes pulse-dot { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
+        .trust-icon { animation:pulse-dot 2.5s ease-in-out infinite; }
 
-        /* ── Section heading underline grow ── */
-        @keyframes bar-grow { from{width:0} to{width:44px} }
-        .gold-bar-anim { animation: bar-grow .8s ease forwards; animation-play-state: paused; }
-        .reveal.revealed .gold-bar-anim { animation-play-state: running; }
+        /* ── Spotlight glow on dark sections ── */
+        .spotlight-section { position:relative; }
+        .spotlight-section::before { content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.09) 0%,transparent 70%);transform:translate(-50%,-50%);left:var(--sx,50%);top:var(--sy,50%);pointer-events:none;z-index:0; }
+        .spotlight-section > * { position:relative;z-index:1; }
 
         /* ── Responsive ── */
         @media(max-width:768px){
@@ -592,42 +597,19 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
           .why-cards{grid-template-columns:1fr 1fr!important}
           .services-grid{grid-template-columns:1fr 1fr!important}
           .articles-grid{grid-template-columns:1fr!important}
+          .sb-cur-dot,.sb-cur-ring{display:none}
         }
         @media(max-width:480px){
           .divisions-grid{grid-template-columns:1fr!important}
           .why-cards{grid-template-columns:1fr!important}
           .services-grid{grid-template-columns:1fr!important}
-          .hero-particle{display:none}
+          .hero-particle,.hero-dust{display:none}
         }
-        @media(max-width:900px){
-          .steps-grid{grid-template-columns:1fr 1fr!important}
-        }
-        @media(max-width:480px){
-          .steps-grid{grid-template-columns:1fr!important}
-        }
+        @media(max-width:900px){.steps-grid{grid-template-columns:1fr 1fr!important}}
+        @media(max-width:480px){.steps-grid{grid-template-columns:1fr!important}}
+        @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 
         body{overflow-x:hidden}
-
-        /* ── Spotlight glow on dark sections ── */
-        .spotlight-section {
-          position: relative;
-        }
-        .spotlight-section::before {
-          content: '';
-          position: absolute;
-          width: 500px; height: 500px;
-          border-radius: 50%;
-          background: radial-gradient(circle, rgba(201,168,76,.08) 0%, transparent 70%);
-          transform: translate(-50%, -50%);
-          left: var(--sx, 50%); top: var(--sy, 50%);
-          pointer-events: none;
-          transition: left .1s, top .1s;
-          z-index: 0;
-        }
-        .spotlight-section > * { position: relative; z-index: 1; }
-
-        /* ── Magnetic btn transition ── */
-        .magnet-btn { transition: transform .15s ease, background .2s; }
       `}</style>
     </>
   );
