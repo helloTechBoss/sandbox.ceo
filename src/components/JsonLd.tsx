@@ -83,18 +83,24 @@ export function FaqPageJsonLd({ faqs }: { faqs: { question: string; answer: stri
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
 }
 
-export function ArticleJsonLd({ title, description, slug, publishedAt, modifiedAt }: {
+export function ArticleJsonLd({ title, description, slug, publishedAt, modifiedAt, url, inLanguage, section }: {
   title: string; description: string; slug: string; publishedAt?: Date | null; modifiedAt?: Date | null;
+  url?: string; inLanguage?: string; section?: string;
 }) {
+  const pageUrl = url ?? `${BASE}/insights/${slug}`;
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: title,
     description,
-    url: `${BASE}/insights/${slug}`,
+    url: pageUrl,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
+    inLanguage,
+    articleSection: section || undefined,
+    image: `${BASE}/opengraph-image`,
     datePublished: publishedAt?.toISOString(),
     dateModified: modifiedAt?.toISOString() ?? publishedAt?.toISOString(),
-    author: { '@type': 'Organization', name: 'Sandbox Group', url: BASE },
+    author: { '@type': 'Organization', name: 'Sandbox Group Compliance Team', url: `${BASE}/about` },
     publisher: {
       '@type': 'Organization',
       name: 'Sandbox Group',

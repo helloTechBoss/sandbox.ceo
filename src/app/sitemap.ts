@@ -1,5 +1,7 @@
 import { MetadataRoute } from 'next';
-import { prisma } from '@/lib/prisma';
+import { getPublishedArticles } from '@/lib/articles';
+
+export const revalidate = 3600;
 
 const BASE = 'https://www.sandbox.ceo';
 const locales = ['zh-Hant', 'en', 'zh-Hans'] as const;
@@ -41,10 +43,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   // Article pages
-  const articles = await prisma.article.findMany({
-    where: { published: true },
-    select: { slug: true, updatedAt: true },
-  }).catch(() => []);
+  const articles = await getPublishedArticles();
 
   for (const art of articles) {
     for (const locale of locales) {

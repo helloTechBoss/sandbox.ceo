@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;
 import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
@@ -6,16 +6,24 @@ import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
 import { ArticleJsonLd } from '@/components/JsonLd';
 import { hreflang, localeUrl } from '@/lib/seo';
+import { getArticleBySlug, getPublishedArticles } from '@/lib/articles';
+import { notFound } from 'next/navigation';
+import { setRequestLocale } from 'next-intl/server';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
+
+export async function generateStaticParams() {
+  const articles = await getPublishedArticles();
+  return articles.map(a => ({ slug: a.slug }));
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale; slug: string }> }): Promise<Metadata> {
   const { locale, slug } = await params;
   const lk = locale === 'zh-Hant' ? 'tc' : locale === 'en' ? 'en' : 'sc';
-  const article = await prisma.article.findUnique({ where: { slug } }).catch(() => null);
-  if (!article) return { title: 'Article Not Found' };
-  const title = (article.title as Record<string, string>)?.[lk] ?? '';
-  const description = (article.excerpt as Record<string, string>)?.[lk] ?? '';
+  const article = await getArticleBySlug(slug);
+  if (!article) return { title: 'Article Not Found', robots: { index: false } };
+  const title = article.title[lk] ?? '';
+  const description = article.excerpt[lk] ?? '';
   return {
     title,
     description,
@@ -26,6 +34,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
       description,
       url: localeUrl(`/insights/${slug}`, locale),
       publishedTime: article.publishedAt?.toISOString(),
+      modifiedTime: article.updatedAt.toISOString(),
+      authors: ['Sandbox Group Compliance Team'],
       images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: title }],
     },
     twitter: { card: 'summary_large_image', title, description },
@@ -38,6 +48,7 @@ export default async function ArticlePage({
   params: Promise<{ locale: Locale; slug: string }>;
 }) {
   const { locale, slug } = await params;
+  setRequestLocale(locale);
   const isEn = locale === 'en';
   const isSc = locale === 'zh-Hans';
   const lk = locale === 'zh-Hant' ? 'tc' : locale === 'en' ? 'en' : 'sc';
@@ -47,57 +58,33 @@ export default async function ArticlePage({
   const waBase = `https://wa.me/${waNumber.replace(/\D/g, '')}`;
   const waContact = `${waBase}?text=${encodeURIComponent('Hi，我想查詢合規及牌照服務')}`;
 
-  const article = await prisma.article.findUnique({ where: { slug } }).catch(() => null);
+  const article = await getArticleBySlug(slug);
+  if (!article) notFound();
 
   const t = (tc: string, en: string, sc?: string) => isEn ? en : isSc ? (sc ?? tc) : tc;
 
-  if (!article) {
-    return (
-      <>
-        <SiteHeader locale={locale} waNumber={waNumber} />
-        <main>
-          <div style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '80px 24px', textAlign: 'center' }}>
-            <div style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: '4rem', color: '#E2E8F0', lineHeight: 1, marginBottom: 16 }}>404</div>
-            <h1 style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '1.5rem', color: '#0F2557', marginBottom: 12 }}>
-              {t('文章未找到', 'Article Not Found', '文章未找到')}
-            </h1>
-            <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.9rem', color: '#64748B', marginBottom: 32 }}>
-              {t('您尋找的文章不存在或已被移除。', 'The article you are looking for does not exist or has been removed.', '您寻找的文章不存在或已被移除。')}
-            </p>
-            <a href={`/${locale}/insights`} style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8,
-              background: '#0F2557', color: '#fff', padding: '12px 24px',
-              fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.9rem',
-              textDecoration: 'none',
-            }}>
-              ← {t('返回 Insights', 'Back to Insights', '返回 Insights')}
-            </a>
-          </div>
-        </main>
-        <SiteFooter locale={locale} waNumber={waNumber} />
-      </>
-    );
-  }
-
-  const title = (article.title as Record<string, string>)?.[lk] ?? '';
-  const body = (article.body as Record<string, string>)?.[lk] ?? '';
-  const cat = (article.category as Record<string, string>)?.[lk] ?? '';
+  const title = article.title[lk] ?? '';
+  const body = article.body?.[lk] ?? '';
+  const cat = article.category[lk] ?? '';
   const catColor = article.categoryColor === 'gold' ? '#C9A84C' : article.categoryColor === 'navy' ? '#0F2557' : '#EF4444';
 
   // Detect if body looks like HTML
   const isHtml = body.trim().startsWith('<');
 
-  const excerpt = (article.excerpt as Record<string, string>)?.[lk] ?? '';
+  const excerpt = article.excerpt[lk] ?? '';
+  const dateLocale = locale === 'en' ? 'en-HK' : 'zh-HK';
+  const fmt = (d: Date) => new Date(d).toLocaleDateString(dateLocale, { year: 'numeric', month: 'long', day: 'numeric' });
+  const showUpdated = article.publishedAt && fmt(article.updatedAt) !== fmt(article.publishedAt);
 
   return (
     <>
-      <ArticleJsonLd title={title} description={excerpt} slug={slug} publishedAt={article.publishedAt} modifiedAt={article.updatedAt} />
+      <ArticleJsonLd title={title} description={excerpt} slug={slug} publishedAt={article.publishedAt} modifiedAt={article.updatedAt} url={localeUrl(`/insights/${slug}`, locale)} inLanguage={locale} section={cat} />
       <SiteHeader locale={locale} waNumber={waNumber} />
       <main>
         {/* ── ARTICLE HEADER ── */}
         <section style={{ background: '#0F2557', padding: '80px 0 60px' }}>
           <div style={{ maxWidth: 860, margin: '0 auto', padding: '0 24px' }}>
-            <a href={`/${locale}/insights`} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: "'Montserrat',sans-serif", fontSize: '.75rem', fontWeight: 600, color: '#C9A84C', textDecoration: 'none', marginBottom: 24, letterSpacing: '.05em', textTransform: 'uppercase' }}>
+            <a href={`${locale === 'zh-Hant' ? '' : `/${locale}`}/insights`} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: "'Montserrat',sans-serif", fontSize: '.75rem', fontWeight: 600, color: '#C9A84C', textDecoration: 'none', marginBottom: 24, letterSpacing: '.05em', textTransform: 'uppercase' }}>
               ← {t('返回 Insights', 'Back to Insights', '返回 Insights')}
             </a>
             {cat && (
@@ -112,14 +99,15 @@ export default async function ArticlePage({
             <h1 style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: 'clamp(1.5rem,3.5vw,2.2rem)', color: '#fff', lineHeight: 1.45, marginBottom: 20 }}>
               {title}
             </h1>
-            {article.publishedAt && (
-              <div style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.78rem', fontWeight: 600, color: '#94A3B8' }}>
-                {new Date(article.publishedAt).toLocaleDateString(
-                  locale === 'en' ? 'en-HK' : 'zh-HK',
-                  { year: 'numeric', month: 'long', day: 'numeric' }
-                )}
-              </div>
-            )}
+            <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.8rem', fontWeight: 600, color: '#94A3B8', display: 'flex', flexWrap: 'wrap', gap: '6px 18px' }}>
+              <span>{t('作者：Sandbox Group 合規團隊', 'By the Sandbox Group Compliance Team', '作者：Sandbox Group 合规团队')}</span>
+              {article.publishedAt && (
+                <time dateTime={article.publishedAt.toISOString()}>{t('發布：', 'Published: ', '发布：')}{fmt(article.publishedAt)}</time>
+              )}
+              {showUpdated && (
+                <time dateTime={article.updatedAt.toISOString()}>{t('更新：', 'Updated: ', '更新：')}{fmt(article.updatedAt)}</time>
+              )}
+            </div>
           </div>
         </section>
 
@@ -127,10 +115,23 @@ export default async function ArticlePage({
         <section style={{ padding: '60px 0 80px' }}>
           <div style={{ maxWidth: 860, margin: '0 auto', padding: '0 24px' }}>
             {isHtml ? (
-              <div
-                style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.95rem', color: '#334155', lineHeight: 1.95 }}
-                dangerouslySetInnerHTML={{ __html: body }}
-              />
+              <>
+                <style>{`
+                  .article-body h2{font-size:1.25rem;font-weight:700;color:#0F2557;margin:2em 0 .6em;line-height:1.5}
+                  .article-body h3{font-size:1.05rem;font-weight:700;color:#0F2557;margin:1.6em 0 .5em}
+                  .article-body p{margin:0 0 1em}
+                  .article-body ul,.article-body ol{margin:0 0 1.2em;padding-left:1.4em}
+                  .article-body ul{list-style:disc}.article-body ol{list-style:decimal}
+                  .article-body li{margin:.3em 0}
+                  .article-body a{color:#C0392B;text-decoration:underline;text-underline-offset:2px}
+                  .article-body em{color:#64748B}
+                `}</style>
+                <div
+                  className="article-body"
+                  style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.95rem', color: '#334155', lineHeight: 1.95 }}
+                  dangerouslySetInnerHTML={{ __html: body }}
+                />
+              </>
             ) : (
               <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.95rem', color: '#334155', lineHeight: 1.95, whiteSpace: 'pre-wrap' }}>
                 {body}

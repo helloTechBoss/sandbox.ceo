@@ -1,10 +1,12 @@
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;
 import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import InquiryForm from '@/components/InquiryForm';
 import HomeAnimations from '@/components/HomeAnimations';
 import { prisma } from '@/lib/prisma';
+import { getPublishedArticles } from '@/lib/articles';
+import { setRequestLocale } from 'next-intl/server';
 import { OrgJsonLd } from '@/components/JsonLd';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
@@ -46,7 +48,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
 }
 
 async function getSetting(key: string): Promise<string> {
-  const s = await prisma.setting.findUnique({ where: { key } });
+  const s = await prisma.setting.findUnique({ where: { key } }).catch(() => null);
   return s?.value ?? '';
 }
 
@@ -60,18 +62,16 @@ async function getSection(pageSlug: string, key: string, locale: Locale): Promis
 }
 
 async function getArticles() {
-  return prisma.article.findMany({
-    where: { published: true },
-    orderBy: [{ order: 'asc' }, { publishedAt: 'desc' }],
-    take: 3,
-  });
+  return getPublishedArticles(3);
 }
 
 export default async function HomePage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
+  setRequestLocale(locale);
   const lk = locale === 'zh-Hant' ? 'tc' : locale === 'en' ? 'en' : 'sc';
   const isEn = locale === 'en';
   const isSc = locale === 'zh-Hans';
+  const lp = locale === 'zh-Hant' ? '' : `/${locale}`;
   const [waNumber, articles, heroTagline, heroDesc] = await Promise.all([
     getSetting('whatsapp_number').then(v => v || '+85292318254'),
     getArticles(),
@@ -118,6 +118,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
               </div>
               <h1 style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: 'clamp(2.4rem,5.5vw,4rem)', color: '#fff', letterSpacing: '.04em', lineHeight: 1.05, marginBottom: 14 }}>
                 SANDBOX<br /><span style={{ color: '#EF4444' }}>GROUP</span>
+                <span style={{ display: 'block', fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: 'clamp(1rem,2.2vw,1.35rem)', letterSpacing: '.02em', lineHeight: 1.5, color: '#fff', marginTop: 16 }}>
+                  {isEn ? 'Hong Kong MSO, TCSP & Virtual Asset Licensing and AML Compliance' : isSc ? '香港 MSO、TCSP 及虚拟资产牌照申请与 AML 合规服务' : '香港 MSO、TCSP 及虛擬資產牌照申請與 AML 合規服務'}
+                </span>
               </h1>
               <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: 'clamp(1rem,2vw,1.3rem)', color: '#E8D28A', marginBottom: 10 }}>
                 {heroTagline || (isEn ? 'Your Compliance & Business Growth Partner' : isSc ? '您的合规与业务增长伙伴' : '您的合規與業務增長夥伴')}
@@ -428,7 +431,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
                   <h2 style={sectionTitle}>{isEn ? 'Regulatory Updates & Industry Insights' : isSc ? '监管动向与行业洞察' : '監管動向與行業洞察'}</h2>
                   <div style={goldBar} />
                 </div>
-                <a href="/insights" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.8rem', fontWeight: 700, color: '#0F2557', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                <a href={`${lp}/insights`} style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.8rem', fontWeight: 700, color: '#0F2557', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                   {isEn ? 'All Insights' : isSc ? '全部文章' : '全部文章'} →
                 </a>
               </div>
@@ -437,10 +440,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
                   const cat = (art.category as Record<string, string>)?.[lk] ?? '';
                   const title = (art.title as Record<string, string>)?.[lk] ?? '';
                   const excerpt = (art.excerpt as Record<string, string>)?.[lk] ?? '';
-                  const cta = (art.ctaLabel as Record<string, string>)?.[lk] ?? (isEn ? 'Read More →' : isSc ? '阅读更多 →' : '閱讀更多 →');
-                  const waMsg = art.ctaWhatsappMessage ? `${waBase}?text=${encodeURIComponent(art.ctaWhatsappMessage)}` : waDefault;
+                  const cta = isEn ? 'Read article →' : isSc ? '阅读全文 →' : '閱讀全文 →';
+                  const href = `${lp}/insights/${art.slug}`;
                   return (
-                    <div key={art.id} style={{ border: '1px solid #E2E8F0', background: '#fff', transition: 'box-shadow .2s' }}>
+                    <a key={art.id} href={href} style={{ border: '1px solid #E2E8F0', background: '#fff', transition: 'box-shadow .2s', display: 'block', textDecoration: 'none' }}>
                       <div style={{ padding: '12px 20px 0' }}>
                         <span style={{
                           fontFamily: "'Montserrat',sans-serif", fontSize: '.65rem', fontWeight: 700,
@@ -457,11 +460,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
                         )}
                         <h3 style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.95rem', color: '#0F2557', marginBottom: 8, lineHeight: 1.5 }}>{title}</h3>
                         <p style={{ fontSize: '.83rem', color: '#64748B', lineHeight: 1.75 }}>{excerpt}</p>
-                        <a href={waMsg} target="_blank" rel="noopener noreferrer" style={{ marginTop: 14, fontFamily: "'Montserrat',sans-serif", fontSize: '.75rem', fontWeight: 700, color: '#EF4444', display: 'inline-flex', alignItems: 'center', gap: 4, textDecoration: 'none' }}>
+                        <span style={{ marginTop: 14, fontFamily: "'Montserrat',sans-serif", fontSize: '.75rem', fontWeight: 700, color: '#EF4444', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                           {cta}
-                        </a>
+                        </span>
                       </div>
-                    </div>
+                    </a>
                   );
                 })}
               </div>

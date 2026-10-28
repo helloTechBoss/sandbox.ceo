@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;
 import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
@@ -6,6 +6,8 @@ import { prisma } from '@/lib/prisma';
 import { OrgJsonLd, BreadcrumbJsonLd } from '@/components/JsonLd';
 import { hreflang, localeUrl, ogImage } from '@/lib/seo';
 import { getSeoMeta } from '@/lib/getSeoMeta';
+import { getPublishedArticles } from '@/lib/articles';
+import { setRequestLocale } from 'next-intl/server';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
 
@@ -35,6 +37,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
 
 export default async function InsightsPage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
+  setRequestLocale(locale);
   const isEn = locale === 'en';
   const isSc = locale === 'zh-Hans';
   const lk = locale === 'zh-Hant' ? 'tc' : locale === 'en' ? 'en' : 'sc';
@@ -42,10 +45,8 @@ export default async function InsightsPage({ params }: { params: Promise<{ local
   const waSetting = await prisma.setting.findUnique({ where: { key: 'whatsapp_number' } }).catch(() => null);
   const waNumber = waSetting?.value || '+85292318254';
 
-  const articles = await prisma.article.findMany({
-    where: { published: true },
-    orderBy: [{ order: 'asc' }, { publishedAt: 'desc' }],
-  });
+  const articles = await getPublishedArticles();
+  const lp = locale === 'zh-Hant' ? '' : `/${locale}`;
 
   const t = (tc: string, en: string, sc?: string) => isEn ? en : isSc ? (sc ?? tc) : tc;
 
@@ -53,8 +54,8 @@ export default async function InsightsPage({ params }: { params: Promise<{ local
     <>
       <OrgJsonLd />
       <BreadcrumbJsonLd items={[
-        { name: isEn ? 'Home' : '主頁', item: 'https://www.sandbox.ceo' },
-        { name: isEn ? 'Insights' : isSc ? '专业见解' : '專業見解', item: 'https://www.sandbox.ceo/insights' },
+        { name: isEn ? 'Home' : isSc ? '主页' : '主頁', item: localeUrl('/', locale) },
+        { name: isEn ? 'Insights' : isSc ? '专业见解' : '專業見解', item: localeUrl('/insights', locale) },
       ]} />
       <SiteHeader locale={locale} waNumber={waNumber} />
       <main>
@@ -70,7 +71,7 @@ export default async function InsightsPage({ params }: { params: Promise<{ local
               <div style={{ width: 28, height: 2, background: '#C9A84C' }} />
             </div>
             <h1 style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 800, fontSize: 'clamp(2rem,5vw,3.2rem)', color: '#fff', letterSpacing: '.04em', marginBottom: 16 }}>
-              Insights
+              {t('監管動向與行業洞察', 'Regulatory Updates & Industry Insights', '监管动向与行业洞察')}
             </h1>
             <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: 'clamp(.95rem,2vw,1.15rem)', color: '#C9A84C', fontWeight: 600 }}>
               {t('合規及牌照最新資訊', 'Latest Compliance & Licensing News', '合规及牌照最新资讯')}
@@ -101,14 +102,14 @@ export default async function InsightsPage({ params }: { params: Promise<{ local
             ) : (
               <div className="insights-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
                 {articles.map(art => {
-                  const cat = (art.category as Record<string, string>)?.[lk] ?? '';
-                  const title = (art.title as Record<string, string>)?.[lk] ?? '';
-                  const excerpt = (art.excerpt as Record<string, string>)?.[lk] ?? '';
+                  const cat = art.category[lk] ?? '';
+                  const title = art.title[lk] ?? '';
+                  const excerpt = art.excerpt[lk] ?? '';
                   const catColor = art.categoryColor === 'gold' ? '#C9A84C' : art.categoryColor === 'navy' ? '#0F2557' : '#EF4444';
                   return (
                     <a
                       key={art.id}
-                      href={`/insights/${art.slug}`}
+                      href={`${lp}/insights/${art.slug}`}
                       style={{ background: '#fff', border: '1px solid #E2E8F0', textDecoration: 'none', display: 'block', transition: 'border-color .2s, box-shadow .2s' }}
                     >
                       <div style={{ padding: '16px 20px 0' }}>

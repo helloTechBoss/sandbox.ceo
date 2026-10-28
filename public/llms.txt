@@ -14,6 +14,13 @@
 - [Corporate services fee calculator](https://www.sandbox.ceo/quotation/corporate)
 - [Compliance technology](https://www.sandbox.ceo/tech)
 
+## Latest regulatory insights (sourced, updated 28 Oct 2026)
+- [Policy Address 2026: Five Compliance Implications for MSOs, TCSPs and Virtual Asset Firms](https://www.sandbox.ceo/en/insights/hk-policy-address-2026-compliance-impact): The 16 September 2026 Policy Address covers virtual asset licensing, a consultation on tackling AI-enabled fraud content, and a 2026 consultation on beneficial ownership transparency for companies and express trusts. Here is what it means for licensed firms.
+- [Virtual Asset Dealing, Custody, Advisory and Management Licensing: Bill Due Within 2026](https://www.sandbox.ceo/en/insights/hk-virtual-asset-dealing-custody-licensing-bill-2026): On 5 October 2026 the Secretary for Financial Services and the Treasury said an amendment bill creating licensing regimes for virtual asset dealing, custody, advisory and management services will be submitted this year. OTC dealers and related businesses should prepare now.
+- [Hong Kong's First Stablecoin Issuer Licences: What Payment Firms and MSOs Should Note](https://www.sandbox.ceo/en/insights/hk-stablecoin-licences-2026-what-it-means): On 10 April 2026 the HKMA granted the first stablecoin issuer licences to Anchorpoint Financial Limited and HSBC, followed by SFC and HKMA circulars on 27 May. Here is what it means for payment and money-changing businesses.
+- [MSO Compliance Reminder for H2 2026: New Fees, Unlicensed Operator Enforcement and Sanctions Screening](https://www.sandbox.ceo/en/insights/mso-compliance-reminder-h2-2026): Customs and Excise Department MSO fees changed from 15 May 2026; Customs continues to target unlicensed money services offered via social media and regularly circulates UN sanctions updates. Licensees should review these three areas.
+- [HKMA's "ART" Framework: Accountability, Resilience and Trust for Compliance Teams Using AI](https://www.sandbox.ceo/en/insights/hkma-art-ai-framework-compliance-2026): On 15 October 2026 the HKMA announced its "ART" Framework and updated supervisory guidance on responsible AI adoption. Aimed at banks, it is also a useful benchmark for MSOs and TCSPs using AI in KYC and transaction monitoring.
+
 ## About and contact
 - [About Sandbox Group](https://www.sandbox.ceo/about)
 - [Insights](https://www.sandbox.ceo/insights)
