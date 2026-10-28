@@ -5,7 +5,7 @@ import SiteFooter from '@/components/SiteFooter';
 import SubTabNav from '@/components/SubTabNav';
 import FaqAccordion from '@/components/FaqAccordion';
 import { OrgJsonLd, ServiceJsonLd, BreadcrumbJsonLd, FaqPageJsonLd } from '@/components/JsonLd';
-import { hreflang, ogImage } from '@/lib/seo';
+import { hreflang, localeUrl, ogImage } from '@/lib/seo';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
 import { getSeoMeta } from '@/lib/getSeoMeta';
@@ -30,8 +30,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     title,
     description,
     keywords,
-    alternates: hreflang('/mso'),
-    openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/mso', images: ogImage(title) },
+    alternates: hreflang('/mso', locale),
+    openGraph: { type: 'website', title, description, url: localeUrl('/mso', locale), images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },
   };
 }
@@ -353,7 +353,7 @@ function NewAppContent({ isEn, isSc }: { isEn: boolean; isSc: boolean }) {
       <div style={{ marginTop: 32 }}>
         <CategoryTitle text={isEn ? 'Key Requirements' : isSc ? '主要申请要求' : '主要申請要求'} />
         <div className="mso-req-grid">
-          <ReqBox title="公司要求" items={['香港註冊有限公司', '在港有實際業務地址', '至少一名在港董事', '最低實繳股本 HK$500,000']} />
+          <ReqBox title="經營者及地址" items={['個人、合夥或公司均可申請', '香港合適的營業地點（非純住宅樓宇）', '每個營業地點須列於牌照', '持牌前不得經營金錢服務']} />
           <ReqBox title="人員要求" items={['合規主任 (MLRO)', '負責人通過適當人選評核', '相關業務經驗', '無刑事定罪記錄']} />
           <ReqBox title="系統要求" items={['AML/KYC系統', '交易監控系統', '制裁名單篩查', '可疑交易申報機制']} />
           <ReqBox title="政策文件" items={['AML/CFT政策手冊', '客戶盡職審查程序', '交易記錄保存政策', '員工培訓計劃']} />
@@ -423,12 +423,12 @@ function SystemContent({ isEn, isSc }: { isEn: boolean; isSc: boolean }) {
 const FAQ_NEW = [
   { question: '申請 MSO 新牌需時多久？', answer: '一般約 3–6 個月。視乎申請文件是否齊備及海關審批速度而定。準備充分的申請通常較快獲批。' },
   { question: '申請期間可以開始營業嗎？', answer: '不可以。在海關批准前從事貨幣兌換或匯款業務屬違法行為，可被檢控及罰款。' },
-  { question: '最低股本要求是多少？', answer: '根據《打擊洗錢及恐怖分子資金籌集條例》，申請 MSO 牌照須有最低實繳股本 HK$500,000。' },
+  { question: '申請 MSO 牌照有最低股本要求嗎？', answer: '《打擊洗錢及恐怖分子資金籌集條例》並無訂明 MSO 牌照的最低實繳股本。海關主要審視申請人及其合夥人、董事和最終擁有人是否適當人選，以及營業地點是否合適。實際所需資金應按業務規模及計劃評估。' },
   { question: '如果申請被拒，可以重新申請嗎？', answer: '可以。被拒後可在補足文件或更改業務安排後重新申請，但需重新繳交申請費。' },
 ];
 
 const FAQ_RENEWAL = [
-  { question: 'MSO 牌照何時須要續期？', answer: 'MSO 牌照有效期為一年，須於到期前最少 3 個月提交續期申請，建議提前 4 個月開始準備。' },
+  { question: 'MSO 牌照何時須要續期？', answer: 'MSO 牌照有效期為兩年，持牌人應於牌照屆滿前不少於 45 日申請續期，建議提前約 3 個月開始準備。' },
   { question: '續期時需要提交哪些文件？', answer: '主要包括：最新的 AML/CFT 政策文件、年度風險評估報告、業務情況聲明及繳費。' },
   { question: '牌照過期後仍可申請續期嗎？', answer: '不可以。牌照到期後即告失效，繼續營業屬違法。屆時須重新申請新牌，對業務影響較大。' },
 ];

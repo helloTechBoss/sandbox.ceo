@@ -5,7 +5,7 @@ import SiteFooter from '@/components/SiteFooter';
 import SubTabNav from '@/components/SubTabNav';
 import FaqAccordion from '@/components/FaqAccordion';
 import { OrgJsonLd, ServiceJsonLd, BreadcrumbJsonLd, FaqPageJsonLd } from '@/components/JsonLd';
-import { hreflang, ogImage } from '@/lib/seo';
+import { hreflang, localeUrl, ogImage } from '@/lib/seo';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
 import { getSeoMeta } from '@/lib/getSeoMeta';
@@ -30,8 +30,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     title,
     description,
     keywords,
-    alternates: hreflang('/corporate'),
-    openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/corporate', images: ogImage(title) },
+    alternates: hreflang('/corporate', locale),
+    openGraph: { type: 'website', title, description, url: localeUrl('/corporate', locale), images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },
   };
 }

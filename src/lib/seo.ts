@@ -1,8 +1,13 @@
 const BASE = 'https://www.sandbox.ceo';
 
-export function hreflang(path: string) {
+export function localeUrl(path: string, locale: string = 'zh-Hant') {
+  const prefix = locale === 'zh-Hant' ? '' : `/${locale}`;
+  return `${BASE}${prefix}${path === '/' ? '' : path}`;
+}
+
+export function hreflang(path: string, locale: string = 'zh-Hant') {
   return {
-    canonical: `${BASE}${path === '/' ? '' : path}`,
+    canonical: localeUrl(path, locale),
     languages: {
       'zh-Hant': `${BASE}${path === '/' ? '' : path}`,
       'en': `${BASE}/en${path === '/' ? '' : path}`,

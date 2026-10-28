@@ -1,0 +1,24 @@
+# Sandbox Group (sandbox.ceo)
+
+> Hong Kong compliance, licensing and corporate services provider. Company listed on the website: Tech Boss Limited (TCSP licence TC011116). Services include Money Service Operator (MSO) licence applications and renewals with Hong Kong Customs and Excise Department, AML/CFT compliance, other licensing support, company secretarial and corporate services. Pages are available in Traditional Chinese (default), English (/en) and Simplified Chinese (/zh-Hans).
+
+## MSO licensing
+- [MSO licensing overview](https://www.sandbox.ceo/mso): services, requirements and FAQs for Hong Kong money service operators
+- [MSO new licence application](https://www.sandbox.ceo/mso/new-application): process, documents and current government fees (effective 15 May 2026)
+- [MSO licence renewal](https://www.sandbox.ceo/mso/renewal): 2-year validity, 45-day renewal deadline, renewal fees
+
+## Other services
+- [Licensing](https://www.sandbox.ceo/licensing)
+- [Compliance](https://www.sandbox.ceo/compliance)
+- [Corporate services](https://www.sandbox.ceo/corporate)
+- [Corporate services fee calculator](https://www.sandbox.ceo/quotation/corporate)
+- [Compliance technology](https://www.sandbox.ceo/tech)
+
+## About and contact
+- [About Sandbox Group](https://www.sandbox.ceo/about)
+- [Insights](https://www.sandbox.ceo/insights)
+- [Contact](https://www.sandbox.ceo/contact)
+
+## Language versions
+- English: https://www.sandbox.ceo/en
+- Simplified Chinese: https://www.sandbox.ceo/zh-Hans

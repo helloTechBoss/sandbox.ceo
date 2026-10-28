@@ -3,6 +3,7 @@ import { getSeoMeta } from '@/lib/getSeoMeta';
 import CorporateCalculator from '@/components/CorporateCalculator';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import { hreflang } from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
 
@@ -40,6 +41,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title: seo.title,
     description: seo.description,
+    alternates: hreflang('/quotation/corporate', locale),
   };
 }
 

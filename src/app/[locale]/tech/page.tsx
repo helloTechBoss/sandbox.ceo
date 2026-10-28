@@ -5,7 +5,7 @@ import SiteFooter from '@/components/SiteFooter';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
 import { OrgJsonLd, ServiceJsonLd, BreadcrumbJsonLd } from '@/components/JsonLd';
-import { hreflang, ogImage } from '@/lib/seo';
+import { hreflang, localeUrl, ogImage } from '@/lib/seo';
 import { getSeoMeta } from '@/lib/getSeoMeta';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
@@ -28,8 +28,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     title,
     description,
     keywords,
-    alternates: hreflang('/tech'),
-    openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/tech', images: ogImage(title) },
+    alternates: hreflang('/tech', locale),
+    openGraph: { type: 'website', title, description, url: localeUrl('/tech', locale), images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },
   };
 }

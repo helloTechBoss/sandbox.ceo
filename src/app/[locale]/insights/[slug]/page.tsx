@@ -5,7 +5,7 @@ import SiteFooter from '@/components/SiteFooter';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
 import { ArticleJsonLd } from '@/components/JsonLd';
-import { hreflang } from '@/lib/seo';
+import { hreflang, localeUrl } from '@/lib/seo';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
 
@@ -19,12 +19,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title,
     description,
-    alternates: hreflang(`/insights/${slug}`),
+    alternates: hreflang(`/insights/${slug}`, locale),
     openGraph: {
       type: 'article',
       title,
       description,
-      url: `https://www.sandbox.ceo/insights/${slug}`,
+      url: localeUrl(`/insights/${slug}`, locale),
       publishedTime: article.publishedAt?.toISOString(),
       images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: title }],
     },

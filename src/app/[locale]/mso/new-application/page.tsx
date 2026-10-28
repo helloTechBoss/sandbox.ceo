@@ -5,7 +5,7 @@ import SiteFooter from '@/components/SiteFooter';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
 import { OrgJsonLd, ServiceJsonLd, BreadcrumbJsonLd, FaqPageJsonLd } from '@/components/JsonLd';
-import { hreflang, ogImage } from '@/lib/seo';
+import { hreflang, localeUrl, ogImage } from '@/lib/seo';
 import { getSeoMeta } from '@/lib/getSeoMeta';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
@@ -28,17 +28,17 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     title,
     description,
     keywords,
-    alternates: hreflang('/mso/new-application'),
-    openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/mso/new-application', images: ogImage(title) },
+    alternates: hreflang('/mso/new-application', locale),
+    openGraph: { type: 'website', title, description, url: localeUrl('/mso/new-application', locale), images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },
   };
 }
 
 const FAQ_EN = [
-  { question: 'Who needs an MSO licence in Hong Kong?', answer: 'Any person or company carrying on a money service business in Hong Kong — including currency exchange, money transfer, and remittance services — requires a licence from Hong Kong Customs under the Anti-Money Laundering Ordinance (AMLO).' },
+  { question: 'Who needs an MSO licence in Hong Kong?', answer: 'Any person or company carrying on a money service business in Hong Kong — including currency exchange, money transfer, and remittance services — requires a licence from the Commissioner of Customs and Excise under the Anti-Money Laundering and Counter-Terrorist Financing Ordinance (Cap. 615, AMLO).' },
   { question: 'How long does an MSO new licence application take?', answer: 'Typically 3–6 months from submission to approval, depending on the completeness of your application and Customs workload. Our team ensures all documents are correct before submission to minimise delays.' },
   { question: 'What documents are required for MSO licence application?', answer: 'Key documents include: business plan with AML/CFT programme, proof of premises, fit and proper declarations for all responsible persons, source of funds evidence, and AML system evidence. We prepare all documents on your behalf.' },
-  { question: 'What is the MSO licence application fee?', answer: 'The government fee is HK$2,770 for a new MSO licence. Our professional service fee is quoted separately based on your business scope — contact us for a quote.' },
+  { question: 'What is the MSO licence application fee?', answer: 'Since 15 May 2026, the government fee for a new MSO licence application is HK$3,810, plus HK$945 for each person subject to the fit-and-proper test and HK$2,440 for each additional business premises (source: HKSAR Government press release, 13 March 2026). Government fees are not refunded if an application is unsuccessful. Our professional service fee is separate and quoted based on your business scope.' },
   { question: 'Can a foreign national or overseas company apply for an MSO licence?', answer: 'Yes. Foreign nationals and overseas-incorporated companies can apply for an MSO licence in Hong Kong, subject to meeting fit-and-proper criteria and providing required documentation.' },
 ];
 
@@ -46,7 +46,7 @@ const FAQ_TC = [
   { question: '誰需要申請香港MSO牌照？', answer: '任何在香港從事金錢服務業務的人士或公司，包括貨幣兌換、匯款及資金轉移服務，均須根據《打擊洗錢及恐怖分子資金籌集條例》（AMLO）向香港海關申請牌照。' },
   { question: 'MSO新牌照申請需要多長時間？', answer: '由遞交申請至獲批通常需要3至6個月，視乎申請文件的完整性及海關工作量。我們的團隊確保所有文件在遞交前均正確無誤，以減少延誤。' },
   { question: 'MSO牌照申請需要哪些文件？', answer: '主要文件包括：包含AML/CFT計劃的業務計劃書、營業地點證明、所有負責人的適當人選聲明、資金來源證明及AML系統證據。我們代您準備所有文件。' },
-  { question: 'MSO牌照申請費用是多少？', answer: '政府申請費用為HK$2,770。我們的專業服務費用根據您的業務範圍另行報價，請聯絡我們查詢。' },
+  { question: 'MSO牌照申請費用是多少？', answer: '自2026年5月15日起，MSO新牌照申請的政府費用為HK$3,810，另每名須接受適當人選審查的人士加HK$945，每個額外營業地點加HK$2,440（資料來源：香港特區政府新聞公報，2026年3月13日）。申請不獲批准，政府費用不予退還。我們的專業服務費用另行按業務範圍報價。' },
   { question: '外籍人士或海外公司可以申請MSO牌照嗎？', answer: '可以。外籍人士及在海外註冊的公司均可申請香港MSO牌照，前提是符合適當人選標準並提供所需文件。' },
 ];
 
@@ -54,7 +54,7 @@ const FAQ_SC = [
   { question: '谁需要申请香港MSO牌照？', answer: '任何在香港从事金钱服务业务的人士或公司，包括货币兑换、汇款及资金转移服务，均须根据《打击洗钱及恐怖分子资金筹集条例》（AMLO）向香港海关申请牌照。' },
   { question: 'MSO新牌照申请需要多长时间？', answer: '由递交申请至获批通常需要3至6个月，视乎申请文件的完整性及海关工作量。我们的团队确保所有文件在递交前均正确无误，以减少延误。' },
   { question: 'MSO牌照申请需要哪些文件？', answer: '主要文件包括：包含AML/CFT计划的业务计划书、营业地点证明、所有负责人的适当人选声明、资金来源证明及AML系统证据。我们代您准备所有文件。' },
-  { question: 'MSO牌照申请费用是多少？', answer: '政府申请费用为HK$2,770。我们的专业服务费用根据您的业务范围另行报价，请联络我们查询。' },
+  { question: 'MSO牌照申请费用是多少？', answer: '自2026年5月15日起，MSO新牌照申请的政府费用为HK$3,810，另每名须接受适当人选审查的人士加HK$945，每个额外营业地点加HK$2,440（资料来源：香港特区政府新闻公报，2026年3月13日）。申请不获批准，政府费用不予退还。我们的专业服务费用另行按业务范围报价。' },
   { question: '外籍人士或海外公司可以申请MSO牌照吗？', answer: '可以。外籍人士及在海外注册的公司均可申请香港MSO牌照，前提是符合适当人选标准并提供所需文件。' },
 ];
 
@@ -122,8 +122,8 @@ export default async function MsoNewApplicationPage({ params }: { params: Promis
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16, marginBottom: 40 }}>
                 {[
                   { label: isEn ? 'Approval Time' : isSc ? '审批期' : '審批期', value: '3–6 months' },
-                  { label: isEn ? 'Gov. Fee' : isSc ? '政府费用' : '政府費用', value: 'HK$2,770' },
-                  { label: isEn ? 'Regulator' : isSc ? '监管机构' : '監管機構', value: isEn ? 'HK Customs' : '香港海關' },
+                  { label: isEn ? 'Gov. Fee' : isSc ? '政府费用' : '政府費用', value: isEn ? 'From HK$3,810' : isSc ? 'HK$3,810 起' : 'HK$3,810 起' },
+                  { label: isEn ? 'Regulator' : isSc ? '监管机构' : '監管機構', value: isEn ? 'HK Customs' : isSc ? '香港海关' : '香港海關' },
                 ].map(f => (
                   <div key={f.label} style={{ border: '1px solid #E2E8F0', padding: 20, background: '#F8FAFC', borderTop: '3px solid #0F2557' }}>
                     <div style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.65rem', fontWeight: 700, letterSpacing: '.12em', color: '#C9A84C', textTransform: 'uppercase', marginBottom: 8 }}>{f.label}</div>

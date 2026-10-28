@@ -5,7 +5,7 @@ import SiteFooter from '@/components/SiteFooter';
 import InquiryForm from '@/components/InquiryForm';
 import { prisma } from '@/lib/prisma';
 import { OrgJsonLd, ServiceJsonLd, BreadcrumbJsonLd, FaqPageJsonLd } from '@/components/JsonLd';
-import { hreflang, ogImage } from '@/lib/seo';
+import { hreflang, localeUrl, ogImage } from '@/lib/seo';
 import { getSeoMeta } from '@/lib/getSeoMeta';
 
 type Locale = 'zh-Hant' | 'en' | 'zh-Hans';
@@ -28,34 +28,34 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     title,
     description,
     keywords,
-    alternates: hreflang('/mso/renewal'),
-    openGraph: { type: 'website', title, description, url: 'https://www.sandbox.ceo/mso/renewal', images: ogImage(title) },
+    alternates: hreflang('/mso/renewal', locale),
+    openGraph: { type: 'website', title, description, url: localeUrl('/mso/renewal', locale), images: ogImage(title) },
     twitter: { card: 'summary_large_image', title, description },
   };
 }
 
 const FAQ_EN = [
-  { question: 'When should I start my MSO licence renewal?', answer: 'Start the renewal process at least 3 months before your licence expiry date. Hong Kong Customs requires renewal applications to be submitted before expiry — operating with an expired licence is an offence under the AMLO.' },
+  { question: 'When should I start my MSO licence renewal?', answer: 'We recommend starting about 3 months before expiry. Hong Kong Customs states that a licensee should apply for renewal not later than 45 days before the licence expires. Operating a money service without a valid licence is an offence under the AMLO.' },
   { question: 'What is required for MSO licence renewal?', answer: 'Renewal requires updated AML/CFT programme, evidence of ongoing compliance, updated fit-and-proper declarations, audited accounts, and premises confirmation. Our team reviews everything and prepares the renewal submission.' },
-  { question: 'What is the MSO renewal fee?', answer: 'The government renewal fee is HK$2,770 per renewal period. Our professional fee is quoted based on your business complexity — contact us for a quote.' },
+  { question: 'What is the MSO renewal fee?', answer: 'Since 15 May 2026, the government fee for a licence renewal application is HK$910, plus HK$945 for each person subject to the fit-and-proper test and HK$410 for each additional business premises (source: HKSAR Government press release, 13 March 2026). Our professional fee is separate and quoted based on your business complexity.' },
   { question: 'Can I renew if I have had compliance issues?', answer: 'Yes, but you should address and document remediation of any past issues before renewal. Customs may ask about prior compliance matters. Our team can advise on how to approach this.' },
-  { question: 'How long is an MSO licence valid?', answer: 'An MSO licence is typically valid for 2 years. It must be renewed before expiry or operations must cease.' },
+  { question: 'How long is an MSO licence valid?', answer: 'An MSO licence is valid for 2 years. Apply for renewal not later than 45 days before expiry; without a valid licence, the money service must stop.' },
 ];
 
 const FAQ_TC = [
-  { question: '何時應該開始辦理MSO牌照續期？', answer: '應在牌照到期日前至少3個月開始辦理續期。香港海關要求在到期前遞交續期申請——持有已到期牌照繼續經營屬《打擊洗錢條例》下的罪行。' },
+  { question: '何時應該開始辦理MSO牌照續期？', answer: '建議在牌照到期前約3個月開始準備。香港海關指明，持牌人應於牌照屆滿前不少於45日申請續期。沒有有效牌照經營金錢服務屬《打擊洗錢及恐怖分子資金籌集條例》下的罪行。' },
   { question: 'MSO牌照續期需要哪些文件？', answer: '續期須提供更新的AML/CFT計劃、持續合規證明、更新的適當人選聲明、經審計賬目及營業地點確認。我們的團隊審閱所有文件並準備續期申請。' },
-  { question: 'MSO續期費用是多少？', answer: '政府續期費用為每個續期期間HK$2,770。我們的專業費用根據您的業務複雜程度另行報價，請聯絡我們查詢。' },
+  { question: 'MSO續期費用是多少？', answer: '自2026年5月15日起，MSO牌照續期申請的政府費用為HK$910，另每名須接受適當人選審查的人士加HK$945，每個額外營業地點加HK$410（資料來源：香港特區政府新聞公報，2026年3月13日）。我們的專業費用另行按業務複雜程度報價。' },
   { question: '如曾有合規問題，可否申請續期？', answer: '可以，但應在續期前解決並記錄任何過往問題的補救措施。海關可能就過往合規事宜提問。我們的團隊可就如何應對提供建議。' },
-  { question: 'MSO牌照有效期多長？', answer: 'MSO牌照通常有效期為2年，必須在到期前申請續期，否則須停止業務。' },
+  { question: 'MSO牌照有效期多長？', answer: 'MSO牌照有效期為2年，應於屆滿前不少於45日申請續期；沒有有效牌照須停止經營金錢服務。' },
 ];
 
 const FAQ_SC = [
-  { question: '何时应该开始办理MSO牌照续期？', answer: '应在牌照到期日前至少3个月开始办理续期。香港海关要求在到期前递交续期申请——持有已到期牌照继续经营属《打击洗钱条例》下的罪行。' },
+  { question: '何时应该开始办理MSO牌照续期？', answer: '建议在牌照到期前约3个月开始准备。香港海关指明，持牌人应于牌照届满前不少于45日申请续期。没有有效牌照经营金钱服务属《打击洗钱及恐怖分子资金筹集条例》下的罪行。' },
   { question: 'MSO牌照续期需要哪些文件？', answer: '续期须提供更新的AML/CFT计划、持续合规证明、更新的适当人选声明、经审计账目及营业地点确认。我们的团队审阅所有文件并准备续期申请。' },
-  { question: 'MSO续期费用是多少？', answer: '政府续期费用为每个续期期间HK$2,770。我们的专业费用根据您的业务复杂程度另行报价，请联络我们查询。' },
+  { question: 'MSO续期费用是多少？', answer: '自2026年5月15日起，MSO牌照续期申请的政府费用为HK$910，另每名须接受适当人选审查的人士加HK$945，每个额外营业地点加HK$410（资料来源：香港特区政府新闻公报，2026年3月13日）。我们的专业费用另行按业务复杂程度报价。' },
   { question: '如曾有合规问题，可否申请续期？', answer: '可以，但应在续期前解决并记录任何过往问题的补救措施。海关可能就过往合规事宜提问。我们的团队可就如何应对提供建议。' },
-  { question: 'MSO牌照有效期多长？', answer: 'MSO牌照通常有效期为2年，必须在到期前申请续期，否则须停止业务。' },
+  { question: 'MSO牌照有效期多长？', answer: 'MSO牌照有效期为2年，应于届满前不少于45日申请续期；没有有效牌照须停止经营金钱服务。' },
 ];
 
 const CHECKLIST_EN = ['AML/CFT programme review and update', 'Fit & Proper declarations (all responsible persons)', 'Audited accounts for renewal period', 'Premises confirmation', 'Compliance record review', 'Government fee payment', 'Submission to Hong Kong Customs'];
@@ -121,7 +121,7 @@ export default async function MsoRenewalPage({ params }: { params: Promise<{ loc
               {/* Warning box */}
               <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', borderLeft: '4px solid #EF4444', padding: '16px 20px', marginBottom: 32 }}>
                 <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontWeight: 700, fontSize: '.88rem', color: '#991B1B', marginBottom: 6 }}>
-                  {isEn ? '⚠ Start renewal at least 3 months before expiry' : isSc ? '⚠ 至少在到期前3个月开始办理续期' : '⚠ 至少在到期前3個月開始辦理續期'}
+                  {isEn ? '⚠ Apply no later than 45 days before expiry — we recommend starting 3 months ahead' : isSc ? '⚠ 须于届满前不少于45日申请续期，建议提前3个月准备' : '⚠ 須於屆滿前不少於45日申請續期，建議提前3個月準備'}
                 </div>
                 <div style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.83rem', color: '#7F1D1D', lineHeight: 1.7 }}>
                   {isEn
