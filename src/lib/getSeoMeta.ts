@@ -9,9 +9,11 @@ export async function getSeoMeta(
 ) {
   try {
     const seo = await prisma.seoMeta.findFirst({ where: { page: { slug } } });
+    const storedDescription = (seo?.description as Record<string, string> | null)?.[lk];
+    const hasUnsupportedMsoClaim = slug.startsWith('mso') && /Customs[- ]approved|fast approval|海[關关][認认]可|快速[審审]批|CSTB/i.test(storedDescription || '');
     return {
       title: (seo?.title as Record<string, string> | null)?.[lk] || defaults.title,
-      description: (seo?.description as Record<string, string> | null)?.[lk] || defaults.description,
+      description: hasUnsupportedMsoClaim ? defaults.description : storedDescription || defaults.description,
       keywords: (seo?.keywords as string[] | null) || defaults.keywords || [],
     };
   } catch {

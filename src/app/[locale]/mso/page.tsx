@@ -20,11 +20,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const { title, description, keywords } = await getSeoMeta('mso', lk, {
     title: isEn ? 'MSO Licence Application Hong Kong' : isSc ? 'MSO牌照申请香港' : 'MSO牌照申請香港',
     description: isEn
-      ? 'Expert MSO (Money Service Operator) licence application, renewal and transfer in Hong Kong. Former Customs-approved compliance officers — fast approval, full AML system setup.'
+      ? 'Expert MSO (Money Service Operator) licence application, renewal and transfer in Hong Kong. Application documentation, regulator liaison and AML/CFT system preparation. Approval is determined by Hong Kong Customs.'
       : isSc
-      ? '由前香港海关认可合规从业员提供专业MSO（金钱服务经营者）牌照新申请、续期及转让，快速审批、全套AML系统设置。'
-      : '由前香港海關認可合規從業員提供專業MSO（金錢服務經營者）牌照新申請、續期及轉讓，快速審批、全套AML系統設置。',
-    keywords: ['MSO牌照', '金錢服務經營者', 'MSO申請', 'AML合規系統', '匯款牌照', '海關MSO', 'MSO牌照費用', 'MSO licensing Hong Kong', 'money service operator Hong Kong', 'MSO application', 'AMLO compliance', 'customs MSO licence', 'CSTB MSO'],
+      ? '提供香港MSO（金钱服务经营者）牌照申请、续期及相关变更支持，包括文件准备、海关联络及AML/CFT系统设置。审批由香港海关决定。'
+      : '提供香港MSO（金錢服務經營者）牌照申請、續期及相關變更支援，包括文件準備、海關聯絡及AML/CFT系統設置。審批由香港海關決定。',
+    keywords: ['MSO牌照', '金錢服務經營者', 'MSO申請', 'AML合規系統', '匯款牌照', '海關MSO', 'MSO牌照費用', 'MSO licensing Hong Kong', 'money service operator Hong Kong', 'MSO application', 'AMLO compliance', 'customs MSO licence'],
   });
   return {
     title,
@@ -78,10 +78,21 @@ export default async function MsoPage({
     prisma.faq.findMany({ where: { pageSlug: 'mso' }, orderBy: { order: 'asc' } }).catch(() => []),
   ]);
   const waNumber = waNum?.value || '+85292318254';
-  const faqItems = dbFaqs.map((f: any) => ({
-    question: (f.question as any)[lk] || (f.question as any).tc,
-    answer: (f.answer as any)[lk] || (f.answer as any).tc,
-  }));
+  const currentFeeAnswers: Record<string, string> = {
+    en: 'From 15 May 2026, a new MSO licence application costs HK$3,810, plus HK$945 for each person subject to the fit-and-proper test and HK$2,440 for each additional business premises. Professional service fees are separate. Source: HKSAR Government press release, 13 March 2026: https://www.info.gov.hk/gia/general/202603/13/P2026031200616.htm',
+    sc: '自2026年5月15日起，新MSO牌照申请政府费用为HK$3,810，另每名须接受适当人选审查的人士加HK$945，每个额外营业地点加HK$2,440。专业服务费另计。来源：香港政府2026年3月13日新闻公报：https://www.info.gov.hk/gia/general/202603/13/P2026031200616.htm',
+    tc: '自2026年5月15日起，新MSO牌照申請政府費用為HK$3,810，另每名須接受適當人選審查的人士加HK$945，每個額外營業地點加HK$2,440。專業服務費另計。來源：香港政府2026年3月13日新聞公報：https://www.info.gov.hk/gia/general/202603/13/P2026031200616.htm',
+  };
+  const faqItems = dbFaqs.map((f: any) => {
+    const question = (f.question as any)[lk] || (f.question as any).tc;
+    const answer = (f.answer as any)[lk] || (f.answer as any).tc;
+    return {
+      question,
+      answer: /3,?010|2,?770/.test(answer) && /申請|申请|application/i.test(question)
+        ? currentFeeAnswers[lk]
+        : answer,
+    };
+  });
   const waBase = `https://wa.me/${waNumber.replace(/\D/g, '')}`;
 
   const waMessages: Record<string, string> = {
@@ -135,7 +146,7 @@ export default async function MsoPage({
             </p>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(201,168,76,.15)', border: '1px solid rgba(201,168,76,.4)', padding: '8px 18px' }}>
               <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '.75rem', fontWeight: 700, color: '#E8D28A' }}>
-                {isEn ? '✓ Customs-licensed practitioners' : isSc ? '✓ 海关认可持牌从业员' : '✓ 海關認可持牌從業員'}
+                {isEn ? '✓ MSO application and AML/CFT support' : isSc ? '✓ MSO申请及反洗钱合规支持' : '✓ MSO申請及反洗錢合規支援'}
               </span>
             </div>
           </div>
@@ -338,10 +349,10 @@ function NewAppContent({ isEn, isSc }: { isEn: boolean; isSc: boolean }) {
     <div>
       <SectionIntro text={
         isEn
-          ? 'A new MSO licence application involves submitting Form 1 to Hong Kong Customs, along with detailed AML/CFT policies, business plans, and fit-and-proper assessments of key personnel. Our team has managed hundreds of successful submissions.'
+          ? 'A new MSO licence application involves submitting Form 1 to Hong Kong Customs, along with detailed AML/CFT policies, business plans, and fit-and-proper assessments of key personnel. We assist with document preparation and responses to regulator enquiries.'
           : isSc
-          ? '新MSO牌照申请涉及向香港海关提交表格1，以及详细的AML/CFT政策、业务计划及关键人员的适当人选评估。我们的团队已成功处理数百份申请。'
-          : '新 MSO 牌照申請涉及向香港海關提交表格 1，連同詳細的 AML/CFT 政策、業務計劃及關鍵人員的適當人選評估。我們的團隊已成功處理數百份申請。'
+          ? '新MSO牌照申请涉及向香港海关提交表格1，以及详细的AML/CFT政策、业务计划及关键人员的适当人选评估。我们协助准备文件及回复监管机构查询。'
+          : '新 MSO 牌照申請涉及向香港海關提交表格 1，連同詳細的 AML/CFT 政策、業務計劃及關鍵人員的適當人選評估。我們協助準備文件及回覆監管機構查詢。'
       } />
       <CategoryTitle text={isEn ? 'Services Included' : isSc ? '服务范畴' : '服務範疇'} />
       <SvcItem icon="📄" tc="申請文件準備" en="Document Preparation" desc="全套申請文件整理，包括公司架構圖、業務流程、股東資料及董事履歷。" />

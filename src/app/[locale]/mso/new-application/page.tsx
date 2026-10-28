@@ -18,10 +18,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const { title, description, keywords } = await getSeoMeta('mso-new-application', lk, {
     title: isEn ? 'MSO New Licence Application Hong Kong' : isSc ? 'MSO新牌照申请香港' : 'MSO新牌照申請香港',
     description: isEn
-      ? 'Step-by-step MSO (Money Service Operator) new licence application in Hong Kong. Former Customs-approved professionals — typical approval in 3–6 months, full document preparation and AML system setup included.'
+      ? 'Step-by-step MSO (Money Service Operator) new licence application in Hong Kong. Document preparation, AML/CFT policies and regulator liaison. Processing time depends on application completeness and Customs assessment.'
       : isSc
-      ? '由前香港海关认可从业员协助办理MSO新牌照申请，典型审批期3-6个月，全套文件准备及AML系统设置。'
-      : '由前香港海關認可從業員協助辦理MSO新牌照申請，典型審批期3-6個月，全套文件準備及AML系統設置。',
+      ? '香港MSO新牌照申请支持，包括文件准备、AML/CFT政策及海关联络。处理时间取决于资料完整程度及海关评估。'
+      : '香港MSO新牌照申請支援，包括文件準備、AML/CFT政策及海關聯絡。處理時間取決於資料完整程度及海關評估。',
     keywords: ['MSO新牌照申請', 'MSO牌照申請香港', '金錢服務經營者牌照', 'MSO申請費用', 'MSO申請時間', 'MSO new licence Hong Kong', 'money service operator application', 'MSO application process', 'customs MSO licence', 'AMLO MSO application'],
   });
   return {
@@ -105,10 +105,10 @@ export default async function MsoNewApplicationPage({ params }: { params: Promis
             </p>
             <p style={{ fontFamily: "'Noto Sans TC',sans-serif", fontSize: '.88rem', color: 'rgba(255,255,255,.6)', maxWidth: 560, lineHeight: 1.85 }}>
               {isEn
-                ? 'Full-service MSO new licence application — from AML programme drafting to Customs submission and liaison. Led by former Customs-approved compliance professionals.'
+                ? 'Full-service MSO new licence application — from AML programme drafting to Customs submission and liaison. Approval and processing times are determined by Hong Kong Customs.'
                 : isSc
-                ? '全套MSO新牌照申请服务，由草拟AML计划至递交海关及联络，由前海关认可合规从业员领导。'
-                : '全套MSO新牌照申請服務，由草擬AML計劃至遞交海關及聯絡，由前海關認可合規從業員領導。'}
+                ? '全套MSO新牌照申请服务，由草拟AML计划至递交海关及联络。审批结果及处理时间由香港海关决定。'
+                : '全套MSO新牌照申請服務，由草擬AML計劃至遞交海關及聯絡。審批結果及處理時間由香港海關決定。'}
             </p>
           </div>
         </div>
