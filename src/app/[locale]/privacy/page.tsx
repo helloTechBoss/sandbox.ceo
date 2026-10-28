@@ -1,5 +1,6 @@
 export const dynamic = 'force-dynamic';
 import SiteHeader from '@/components/SiteHeader';
+import { hreflang } from '@/lib/seo';
 import SiteFooter from '@/components/SiteFooter';
 import { prisma } from '@/lib/prisma';
 import type { Metadata } from 'next';
@@ -13,6 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title: isEn ? 'Privacy Policy | Sandbox Group' : isSc ? '隐私政策 | Sandbox Group' : '私隱政策 | Sandbox Group',
     description: isEn ? 'Privacy Policy for Sandbox Group compliance and licensing services.' : isSc ? 'Sandbox Group 合规及牌照服务隐私政策。' : 'Sandbox Group 合規及牌照服務私隱政策。',
+    alternates: hreflang('/privacy', locale),
   };
 }
 

@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic';
 import { prisma } from '@/lib/prisma';
 import SiteHeader from '@/components/SiteHeader';
+import { hreflang } from '@/lib/seo';
 import SiteFooter from '@/components/SiteFooter';
 import PackagesShell, { PkgItem, CptItem } from './PackagesShell';
 
@@ -12,6 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title: t(locale, 'Sandbox Marketplace — 服務市場', 'Sandbox Marketplace', 'Sandbox Marketplace — 服务市场'),
     description: t(locale, '一站式選購企業服務及 CPT 培訓課程。多項服務同時選擇，一次付款。', 'Browse and purchase corporate services and CPT training in one place.', '一站式选购企业服务及 CPT 培训课程。'),
+    alternates: hreflang('/packages', locale),
   };
 }
 

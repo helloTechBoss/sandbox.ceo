@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import "./globals.css";
 
-export const metadata: Metadata = {
+export const siteMetadata: Metadata = {
   metadataBase: new URL('https://www.sandbox.ceo'),
   title: {
     default: 'Sandbox Group | 香港企業合規與牌照申請專家',
@@ -37,19 +36,3 @@ export const metadata: Metadata = {
     images: ['/opengraph-image'],
   },
 };
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="zh-Hant">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Noto+Sans+TC:wght@300;400;500;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body>{children}</body>
-    </html>
-  );
-}

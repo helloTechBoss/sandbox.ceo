@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic';
 import { prisma } from '@/lib/prisma';
 import SiteHeader from '@/components/SiteHeader';
+import { hreflang } from '@/lib/seo';
 import SiteFooter from '@/components/SiteFooter';
 import Link from 'next/link';
 
@@ -22,6 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title: t(locale, 'CPT 持續專業培訓課程 — Sandbox Compliance', 'CPT Training Marketplace — Sandbox Compliance', 'CPT 持续专业培训课程 — Sandbox Compliance'),
     description: t(locale, 'SFC 認可持續專業培訓課程。即時購買，立即觀看。', 'SFC-approved CPT courses. Buy instantly, watch immediately.', 'SFC 认可持续专业培训课程。即时购买，立即观看。'),
+    alternates: hreflang('/compliance/cpt-marketplace', locale),
   };
 }
 
